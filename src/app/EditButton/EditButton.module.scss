@@ -1,0 +1,23 @@
+.button {
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &__icon {
+    width: 24px;
+    aspect-ratio: 1;
+    path {
+      fill: var(--color-secondary--light);
+      transition: fill 2s --transition-power--in-out;
+    }
+  }
+
+  &:hover {
+    .button__icon {
+      path {
+        fill: var(--color-primary);
+      }
+    }
+  }
+}

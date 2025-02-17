@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  &__necessary-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__sections {
+    margin-bottom: 1000px;
+  }
+}

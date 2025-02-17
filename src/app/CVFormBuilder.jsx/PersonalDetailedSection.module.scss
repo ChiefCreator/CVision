@@ -1,0 +1,13 @@
+.section {
+  &__header {
+    margin-bottom: 15px;
+  }
+  &__form-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__button-add-wrapper {
+    margin-top: 20px;
+  }
+}

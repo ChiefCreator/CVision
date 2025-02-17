@@ -1,0 +1,24 @@
+.cv-builder {
+  &__container {
+    display: flex;
+
+  }
+  &__info {
+    flex: 0 0 45%;
+    overflow: hidden;
+    padding: 40px;
+  }
+  &__title-wrapper {
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  &__preview {
+    position: sticky;
+    top: 0;
+    flex: 0 0 55%;
+    height: 100vh;
+    background-color: rgb(101, 110, 131);
+  }
+}
