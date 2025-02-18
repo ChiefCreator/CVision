@@ -21,6 +21,7 @@ export default function SectionOfSubSections({ title, description, SubSectionCom
       sectionId: sectionId,
       subSectionId: generateUUID(),
       order: subSectionsCount,
+      documentFields: { parameterId: "expert" }
     });
 
     setOpenIndex({ current: subSectionsCount, beforeDragStart: subSectionsCount });

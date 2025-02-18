@@ -20,3 +20,8 @@
   --color-scroll-thumb: #1d1c1c;
   --color-scroll-track: #dedede;
 }
+
+@mixin parameter-tracker-theme-novice {
+  --color-primary-parameter-tracker-novice: rgb(255, 0, 106);
+  --color-secondary-parameter-tracker-novice: rgb(240, 92, 154);
+}

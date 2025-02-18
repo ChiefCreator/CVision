@@ -156,7 +156,7 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_RESUME_SUB_SECTION: {
-      const { resumeId, sectionId, subSectionId, order } = action;
+      const { resumeId, sectionId, subSectionId, order, documentFields } = action;
 
       const resume = draft.resumes.find((resume) => resume.id === resumeId);
 
@@ -165,9 +165,14 @@ const resumeReducer = (draft, action) => {
       }
 
       const section = resume.sections.find((section) => section.id === sectionId);
-      section.subSections.push({ id: subSectionId, order });
 
-      addResumeSubSection(resumeId, sectionId, subSectionId, order);
+      if (!section.subSections) {
+        section.subSections = [];
+      }
+
+      section.subSections.push({ id: subSectionId, order, ...documentFields });
+
+      addResumeSubSection(resumeId, sectionId, subSectionId, order, documentFields);
 
       break;
     }

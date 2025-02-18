@@ -136,11 +136,11 @@ export async function updateResumeSubSectionField(resumeId, sectionId, subSectio
     console.error("Ошибка обновления документа:", error);
   }
 }
-export async function addResumeSubSection(resumeId, sectionId, subSectionId, order) {
+export async function addResumeSubSection(resumeId, sectionId, subSectionId, order, documentFields) {
   try {
     const docRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}/subSections/${subSectionId}`);
 
-    await setDoc(docRef, { order });
+    await setDoc(docRef, { order, ...documentFields });
   } catch (error) {
     console.error("Ошибка обновления документа:", error);
   }
