@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllResumes, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections } from "../api/resumeService";
+import { getAllResumes, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
 
 const initialState = {
   resumes: [],
@@ -18,6 +18,7 @@ const actionTypes = {
   UPDATE_RESUME_SECTION_CONFIGURABLE_FIELD: "UPDATE_RESUME_SECTION_CONFIGURABLE_FIELD",
   ADD_RESUME_SECTION_CONFIGURABLE_FIELD: "ADD_RESUME_SECTION_CONFIGURABLE_FIELD",
   UPDATE_RESUME_SUB_SECTION_FIELD: "UPDATE_RESUME_SUB_SECTION_FIELD",
+  UPDATE_RESUME_SUB_SECTION_DATE_FIELD: "UPDATE_RESUME_SUB_SECTION_DATE_FIELD",
   ADD_RESUME_SUB_SECTION: "ADD_RESUME_SUB_SECTION",
   UPDATE_RESUME_SUB_SECTION_ORDER: "UPDATE_RESUME_SUB_SECTION_ORDER",
   DELETE_RESUME_SUB_SECTION: "DELETE_RESUME_SUB_SECTION",
@@ -152,6 +153,29 @@ const resumeReducer = (draft, action) => {
       subSection[key] = value;
 
       updateResumeSubSectionField(resumeId, sectionId, subSectionId, key, value);
+
+      break;
+    }
+    case actionTypes.UPDATE_RESUME_SUB_SECTION_DATE_FIELD: {
+      const { resumeId, sectionId, subSectionId, key, value } = action;
+
+      const resume = draft.resumes.find((resume) => resume.id === resumeId);
+
+      if (resume.sections.length === 0) {
+        resume.sections.push({ id: sectionId });
+      }
+
+      const section = resume.sections.find((section) => section.id === sectionId);
+
+      if (section.subSections.length === 0) {
+        section.subSections.push({ id: subSectionId });
+      }
+
+      const subSection = section.subSections.find((subSection) => subSection.id === subSectionId);
+
+      subSection[key] = value;
+
+      updateResumeSubSectionDateField(resumeId, sectionId, subSectionId, key, value);
 
       break;
     }

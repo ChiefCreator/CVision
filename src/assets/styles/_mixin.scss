@@ -25,3 +25,13 @@
   --color-primary-parameter-tracker-novice: rgb(255, 0, 106);
   --color-secondary-parameter-tracker-novice: rgb(240, 92, 154);
 }
+
+@mixin resume-template-1 {
+  --font-title: "Helvetica";
+  --font-sub-title: "Helvetica";
+  --font-text: "Roboto", sans-serif;
+
+  --font-title-size: 16px;
+  --font-sub-title-size: 14px;
+  --font-text-size: 9px;
+}

@@ -17,7 +17,7 @@ export default function App() {
     <>
       <ResumeProvider>
         <ImageUploaderProvider>
-          <CVBuilder />
+          <CVBuilder resumeId="resume#1" />
           <ImageUploader />
         </ImageUploaderProvider>
       </ResumeProvider>

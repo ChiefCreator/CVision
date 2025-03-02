@@ -42,6 +42,12 @@ export default function buildLoaders(options) {
         },
       },
       "sass-loader",
+      {
+        loader: "sass-resources-loader",
+        options: {
+          resources: [paths.styleMixins],
+        },
+      },
     ],
   };
   const expansionLoader = {

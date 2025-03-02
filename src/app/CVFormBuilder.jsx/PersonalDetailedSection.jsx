@@ -171,8 +171,8 @@ export default function PersonalDetailedSection() {
               <FormField 
                 label="Национальность"
                 inputPlaceholder="Введите национальность" 
-                inputValue={isResumeDataLoaded && resumeSectionData.natiaonality ? resumeSectionData.natiaonality : ""}
-                onChangeInputCallback={(value) => handleFormFieldInputChange("natiaonality", value)} 
+                inputValue={isResumeDataLoaded && resumeSectionData.nationality ? resumeSectionData.nationality : ""}
+                onChangeInputCallback={(value) => handleFormFieldInputChange("nationality", value)} 
               />
             </FormGroupCell>
           </FormGroup>

@@ -1,0 +1,14 @@
+.formField {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 7.5px;
+  }
+  &__label-wrapper {
+  }
+  &__label {
+    display: inline-block;
+    color: var(--color-neutral-contrast--light);
+  }
+}

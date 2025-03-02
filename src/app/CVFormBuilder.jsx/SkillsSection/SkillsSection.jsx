@@ -7,6 +7,8 @@ import FormFieldParameterTracker from "../../FormFieldParameterTracker/FormField
 
 import { useResumeContext } from "../../../context/ResumeContext";
 
+import skillsData from "../../../data/SkillsData";
+
 export default function SkillsSection({ resumeId, isResumeDataLoaded, data }) {
   const { dispatchOfResumesDataState } = useResumeContext();
   const sectionId = "skills";
@@ -39,33 +41,7 @@ export default function SkillsSection({ resumeId, isResumeDataLoaded, data }) {
               <FormFieldParameterTracker
                 label="Уровень"
                 selectedParameterId={isResumeDataLoaded && data.parameterId ? data.parameterId : "expert"}
-                parameters={[
-                  {
-                    id: "novice",
-                    title: "Новичок",
-                    colorTheme: "parameter-tracker-theme-novice"
-                  },
-                  {
-                    id: "beginner",
-                    title: "Начинающий",
-                    colorTheme: "parameter-tracker-theme-beginner"
-                  },
-                  {
-                    id: "skillful",
-                    title: "Умелый",
-                    colorTheme: "parameter-tracker-theme-skillful"
-                  },
-                  {
-                    id: "experienced",
-                    title: "Опытный",
-                    colorTheme: "parameter-tracker-theme-experienced"
-                  },
-                  {
-                    id: "expert",
-                    title: "Эксперт",
-                    colorTheme: "parameter-tracker-theme-expert"
-                  },
-                ]}
+                parameters={skillsData}
                 onSelectCallback={(value) => handleFormFieldInputChange("parameterId", value)} 
               />
             </FormGroupCell>

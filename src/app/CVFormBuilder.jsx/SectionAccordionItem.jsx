@@ -6,7 +6,6 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(useGSAP);
 
 import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 export default function SectionAccordionItem({ title, id, index, subTitle, children, isOpen, isDragging, onClickCallback, onClickButtonDeleteCallback }) {
   const {

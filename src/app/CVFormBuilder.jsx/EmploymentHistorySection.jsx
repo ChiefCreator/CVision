@@ -3,7 +3,7 @@ import styles from "./EmploymentHistorySection.module.scss";
 import FormGroup from "../FormGroup/FormGroup";
 import FormGroupCell from "../FormGroup/FormGroupCell";
 import FormField from "../FormField/FormField";
-import EditableText from "../EditableText/EditableText";
+import FormFieldText from "../FormFieldText/FormFieldText";
 import MonthRangeFormField from "../MonthRangeFormField/MonthRangeFormField";
 
 import { useResumeContext } from "../../context/ResumeContext";
@@ -22,12 +22,22 @@ export default function EmploymentHistorySection({ resumeId, isResumeDataLoaded,
       value
     })
   }
+  function handleFormFieldDateInputChange(key, value) {
+    dispatchOfResumesDataState({ 
+      type: "UPDATE_RESUME_SUB_SECTION_DATE_FIELD",
+      resumeId: resumeId,
+      sectionId: sectionId,
+      subSectionId: data.id,
+      key,
+      value
+    })
+  }
   
   return (
     <div className={styles.section}>
       <div className={styles.sectionBody}>
         <div className={styles.sectionFormGroups}>
-          <FormGroup gridTemplateColumns="1fr 1fr" gridTemplateRows="1fr 1fr">
+          <FormGroup gridTemplateColumns="1fr 1fr" gridTemplateRows="1fr 1fr 1fr">
             <FormGroupCell>
               <FormField
                 label="Профессия"
@@ -44,13 +54,15 @@ export default function EmploymentHistorySection({ resumeId, isResumeDataLoaded,
                 onChangeInputCallback={(value) => handleFormFieldInputChange("employer", value)} 
               />
             </FormGroupCell>
-            {/* <FormGroupCell>
+            <FormGroupCell gridArea="2 / 1 / 2 / 3">
               <MonthRangeFormField
                 label="Начальная & Конечная Даты"
-                startInputData={{ value: "", placeholder:"ММ / ГГГГ" }}
-                endInputData={{ value: "", placeholder:"ММ / ГГГГ" }}
+                startDate={{ value: isResumeDataLoaded && data.startDate ? data.startDate : "" }}
+                endDate={{ value: isResumeDataLoaded && data.endDate ? data.endDate : "" }}
+                onChangeStartInputCallback={(value) => handleFormFieldDateInputChange("startDate", value)} 
+                onChangeEndInputCallback={(value) => handleFormFieldDateInputChange("endDate", value)} 
               />
-            </FormGroupCell> */}
+            </FormGroupCell>
             <FormGroupCell>
               <FormField
                 label="Город"
@@ -62,13 +74,13 @@ export default function EmploymentHistorySection({ resumeId, isResumeDataLoaded,
           </FormGroup>
         </div>
         <div className={styles.sectionDescriptionWrapper}>
-          <EditableText
-            placeholder="Введите описание"
-            onChangeCallback={(value) => handleFormFieldInputChange("description", value)} 
+          <FormFieldText
+            label="Описание"
+            placeholder="Опишите ваши обязанности и достижения"
             isContentLoaded={isResumeDataLoaded}
-          >
-            {data.description ? data.description : ""}
-          </EditableText>
+            onChangeCallback={(value) => handleFormFieldInputChange("description", value)}
+            value={isResumeDataLoaded ? data.description : ""}
+          ></FormFieldText>
         </div> 
       </div>
     </div>

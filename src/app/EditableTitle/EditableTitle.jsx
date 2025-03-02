@@ -24,7 +24,7 @@ export default function EditableTitle({ children, onChangeCallback, placeholder 
 
   // Обработчики событий
   function handleInputChange(event) {
-    onChangeCallback(event.target.value);
+    if (onChangeCallback) onChangeCallback(event.target.value);
   }
   function handleInputFocus() {
     setIsFocused(true);

@@ -1,5 +1,6 @@
 import { db } from "./../../firebase";
 import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where, orderBy, deleteDoc, arrayRemove, addDoc } from "firebase/firestore";
+import { convertFromObjectMonthYearFormatToTimestamp, convertFromTimestampToObjectMonthYearFormat, isDateValidMMYYYYFormat } from "../lib/dateUtils";
 
 export async function getAllResumes() {
   try {
@@ -22,9 +23,17 @@ export async function getAllResumes() {
         
         let subSections = [];
         subSectionsSnapshot.forEach((subSectionDoc) => {
+          const subSectionData = subSectionDoc.data();
+
+          Object.keys(subSectionData).forEach((key) => {
+            if (subSectionData[key] && subSectionData[key].toDate) {
+              subSectionData[key] = convertFromTimestampToObjectMonthYearFormat(subSectionData[key]);
+            }
+          });
+
           subSections.push({
             id: subSectionDoc.id,
-            ...subSectionDoc.data(),
+            ...subSectionData,
           });
         })
 
@@ -131,6 +140,17 @@ export async function updateResumeSubSectionField(resumeId, sectionId, subSectio
 
     await setDoc(docRef, {
       [key]: newValue,
+    }, { merge: true });
+  } catch (error) {
+    console.error("Ошибка обновления документа:", error);
+  }
+}
+export async function updateResumeSubSectionDateField(resumeId, sectionId, subSectionId, key, newValue) {
+  try {
+    const docRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}/subSections/${subSectionId}`);
+
+    await setDoc(docRef, {
+      [key]: convertFromObjectMonthYearFormatToTimestamp(newValue),
     }, { merge: true });
   } catch (error) {
     console.error("Ошибка обновления документа:", error);

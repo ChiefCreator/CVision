@@ -2,10 +2,13 @@ import EditableTitle from "../EditableTitle/EditableTitle"
 import styles from "./CVBuilder.module.scss";
 
 import CVFormBuilder from "../CVFormBuilder.jsx/CVFormBuilder";
+import CVBuilderPreview from "../CVBuilderPreview/CVBuilderPreview";
 import { useResumeContext } from "../../context/ResumeContext";
 
-export default function CVBuilder() {
+export default function CVBuilder({ resumeId }) {
   const { resumesDataState, dispatchOfResumesDataState } = useResumeContext();
+  const isResumeDataLoaded = resumesDataState.loadingState === "loaded";
+  const resumeData = isResumeDataLoaded && resumesDataState.resumes.find(resume => resume.id === resumeId);
 
   function handleEditableTitleChange(value) {
     dispatchOfResumesDataState({ 
@@ -32,9 +35,7 @@ export default function CVBuilder() {
           </div>
           <CVFormBuilder resumeId="resume#1" />
         </div>
-        <div className={styles.cvBuilderPreview}>
-          
-        </div>
+        <CVBuilderPreview resumeData={resumeData} isResumeDataLoaded={isResumeDataLoaded} />
       </div>
     </div>
   )

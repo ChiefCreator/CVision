@@ -19,7 +19,7 @@ export default function Input({ value, placeholder, onChangeCallback }) {
   function handleFocus() {
     contextSafe(() => timelineOfFirstLine.current.restart())();
   }
-  function handleBlur() {
+  function handleBlur(event) {
     contextSafe(() => timelineOfFirstLine.current.reverse())();
   }
   function handleMouseenter() {

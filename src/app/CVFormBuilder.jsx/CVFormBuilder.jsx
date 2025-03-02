@@ -5,6 +5,7 @@ import ProfessionalSummarySection from "./ProfessionalSummarySection";
 import EmploymentHistorySection from "./EmploymentHistorySection";
 import SectionOfSubSections from "./SectionOfSubSections";
 import SkillsSection from "./SkillsSection/SkillsSection";
+import HobbiesSection from "./HobbiesSection/HobbiesSection";
 
 import { useResumeContext } from "../../context/ResumeContext";
 
@@ -15,6 +16,18 @@ export default function CVFormBuilder({ resumeId }) {
 
   const employmentHistorySectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "employmentHistory");
   const skillsSectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "skills");
+  const hobbiesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "hobbies");
+
+  // dispatch-функции
+  function handleSectionFieldChange(sectionId, key, value) {
+    dispatchOfResumesDataState({
+      type: "UPDATE_RESUME_SECTION_FIELD",
+      resumeId: resumeId,
+      sectionId,
+      key,
+      value,
+    });
+  }
 
   return (
     <form className={styles.form}>
@@ -32,8 +45,8 @@ export default function CVFormBuilder({ resumeId }) {
           isResumeDataLoaded={isResumeDataLoaded}
           subSectionsData={isResumeDataLoaded ? employmentHistorySectionData.subSections : []}
           subSectionTitleAndSubTitlePattern={{
-            title: `[profession] ?employer?в компании?employer? ?employer?"?employer?[employer]?employer?"?employer?`,
-            subTitle: `[startDate] ?endDate?-?endDate? [endDate]`,
+            title: `{profession} ?employer?в компании?employer? ?employer?"?employer?{employer}?employer?"?employer?`,
+            subTitle: `{startDate.month}?startDate.month?.?startDate.month?{startDate.year} ?endDate?-?endDate? {endDate.month}?endDate.year?.?endDate.year?{endDate.year}`,
           }}
         >
         </SectionOfSubSections>
@@ -46,11 +59,12 @@ export default function CVFormBuilder({ resumeId }) {
           isResumeDataLoaded={isResumeDataLoaded}
           subSectionsData={isResumeDataLoaded && skillsSectionData?.subSections ? skillsSectionData.subSections : []}
           subSectionTitleAndSubTitlePattern={{
-            title: `[skill]`,
-            subTitle: `[parameterId]`,
+            title: `{skill}`,
+            subTitle: `{parameterId}`,
           }}
         >
         </SectionOfSubSections>
+        <HobbiesSection data={hobbiesData} isResumeDataLoaded={isResumeDataLoaded} handleSectionFieldChange={handleSectionFieldChange} />
       </div>
     </form>
   );

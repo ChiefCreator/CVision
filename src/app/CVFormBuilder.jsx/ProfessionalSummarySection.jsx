@@ -12,24 +12,24 @@ export default function ProfessionalSummarySection() {
   const resumeSectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "professionalSummary");
   
    // обработчики
-   function handleEditableTitleChange(value) {
+  function handleSectionFieldChange(key, value) {
     dispatchOfResumesDataState({ 
       type: "UPDATE_RESUME_SECTION_FIELD",
       resumeId: resumeData.id,
       sectionId: "professionalSummary",
-      key: "description",
-      value: value,
+      key,
+      value,
     })
   }
 
   return (
     <div className={styles.section}>
       <header className={styles.sectionHeader}>
-        <EditableTitle placeholder="Без названия" fontSize={22}>Профессиональное резюме</EditableTitle>
+        <EditableTitle placeholder="Без названия" fontSize={22} onChangeCallback={(value) => handleSectionFieldChange("title", value)}>{isResumeDataLoaded && resumeSectionData.title}</EditableTitle>
         <p className={styles.sectionDescription}>Напишите 2-4 коротких, энергичных предложения о том, какой вы замечательный. Упомяните о своей роли и о том, что вы сделали. Каковы были ваши главные достижения? Опишите свою мотивацию и перечислите свои навыки.</p>
       </header>
       <div className={styles.sectionBody}>
-        <EditableText placeholder="Введите описание" isContentLoaded={isResumeDataLoaded} onChangeCallback={(value) => handleEditableTitleChange(value)}>{isResumeDataLoaded ? resumeSectionData.description : ""}</EditableText>
+        <EditableText placeholder="Введите описание" isContentLoaded={isResumeDataLoaded} onChangeCallback={(value) => handleSectionFieldChange("description", value)}>{isResumeDataLoaded ? resumeSectionData.description : ""}</EditableText>
       </div>
     </div>
   );

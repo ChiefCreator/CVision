@@ -4,13 +4,38 @@ import SectionAccordionItem from "./SectionAccordionItem";
 
 import { useResumeContext } from "../../context/ResumeContext";
 
-import { DndContext, closestCorners  } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, closestCorners } from "@dnd-kit/core";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 
 function getTitleByPattern(template, data) {
-  template = template.replace(/\?(\w+)\?(.*?)\?\1\?/g, (_, key, text) => data[key] ? text : '');
+  template = template.replace(/\?([\w\.]+)\?(.*?)\?\1\?/g, (_, key, text) => {
+    const keys = key.split(".");
+    const value = getValueByKeys(data, keys);
 
-  return template.replace(/\[(\w+)\]/g, (_, key) => data[key] || '');
+    return value ? text : '';
+  });
+
+  function getValueByKeys(obj, keys) {
+    let currentValue = obj;
+  
+    for (const key of keys) {
+      if (currentValue && currentValue.hasOwnProperty(key)) {
+        currentValue = currentValue[key];
+      } else {
+        return undefined;
+      }
+    }
+  
+    return currentValue;
+  }
+
+  function getProperty(obj, path) {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+  }
+
+  return template.replace(/{([^}]+)}/g, (_, path) => {
+    return getProperty(data, path) ?? `{${path}}`;
+  });
 }
 
 export default function SectionAccordion({ openIndex, setOpenIndex, draggingIndex, setDraggingIndex, ContentComponent, contentComponentsData, resumeId, sectionId, isResumeDataLoaded, titleAndSubTitlePattern }) {
@@ -24,7 +49,7 @@ export default function SectionAccordion({ openIndex, setOpenIndex, draggingInde
     }
 
     setDraggingIndex(+accordionItem.dataset.index);
-  };
+  }
   function handleDragEnd(event) {
     const { active, over } = event;
 
@@ -34,8 +59,8 @@ export default function SectionAccordion({ openIndex, setOpenIndex, draggingInde
     if (!over) return;
 
     if (active.id !== over.id) {
-      const oldIndex = contentComponentsData.findIndex(item => item.id === active.id);
-      const newIndex = contentComponentsData.findIndex(item => item.id === over.id);
+      const oldIndex = contentComponentsData.findIndex((item) => item.id === active.id);
+      const newIndex = contentComponentsData.findIndex((item) => item.id === over.id);
       const newContentComponentsData = arrayMove(contentComponentsData, oldIndex, newIndex);
 
       if (openIndex.beforeDragStart !== null) {
@@ -49,7 +74,7 @@ export default function SectionAccordion({ openIndex, setOpenIndex, draggingInde
         data: newContentComponentsData,
       });
     }
-  };
+  }
 
   function toggle(index) {
     setOpenIndex(openIndex.current === index ? { current: null, beforeDragStart: null } : { current: index, beforeDragStart: index });
@@ -62,31 +87,17 @@ export default function SectionAccordion({ openIndex, setOpenIndex, draggingInde
       order: index,
     });
   }
-  
+
   return (
     <div className={styles.accordion}>
-      <DndContext
-      collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext collisionDetection={closestCorners} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <SortableContext items={contentComponentsData} strategy={verticalListSortingStrategy}>
           {contentComponentsData.map((data, index) => {
             const title = getTitleByPattern(titleAndSubTitlePattern.title, data).trim() || "Не указано";
             const subTitle = getTitleByPattern(titleAndSubTitlePattern.subTitle, data);
 
             return (
-              <SectionAccordionItem
-                title={title}
-                subTitle={subTitle}
-                key={data.id}
-                id={data.id}
-                isOpen={openIndex.current === index}
-                isDragging={draggingIndex === index}
-                index={index}
-                onClickCallback={() => toggle(index)}
-                onClickButtonDeleteCallback={() => deleteByIndex(index)}
-              >
+              <SectionAccordionItem title={title} subTitle={subTitle} key={data.id} id={data.id} isOpen={openIndex.current === index} isDragging={draggingIndex === index} index={index} onClickCallback={() => toggle(index)} onClickButtonDeleteCallback={() => deleteByIndex(index)}>
                 <ContentComponent data={data} resumeId={resumeId} isResumeDataLoaded={isResumeDataLoaded} />
               </SectionAccordionItem>
             );

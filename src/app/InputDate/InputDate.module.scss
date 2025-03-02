@@ -1,5 +1,58 @@
-.input {
+.input-date {
+  width: 100%;
   position: relative;
+}
+
+.input {
+  width: 100%;
+  background-color: var(--color-secondary--lighten);
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px;
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  &__item {
+    flex: 0 1 auto;
+    font-size: inherit;
+    height: auto;
+    background-color: transparent;
+    caret-color: var(--color-primary);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 2.5px 0;
+    text-align: center;
+    transition: border .5s var(--transition-power--in-out);
+    &::placeholder {
+      color: var(--color-secondary--light);
+    }
+    &:hover {
+      border: 1px solid var(--color-secondary--light);
+    }
+    &:focus {
+      border: 1px solid var(--color-secondary--light);
+    }
+  }
+  &__separator {
+    color: var(--color-secondary--light);
+    margin-bottom: 4px;
+  }
+  &__calendar-trigger {
+    flex: 0 0 20px;
+    height: 100%;
+    aspect-ratio: 1;
+    cursor: pointer;
+    &__icon {
+      fill: var(--color-secondary--light);
+    }
+  }
 }
 
 .calendar {
@@ -12,6 +65,8 @@
   border: 1px solid var(--color-secondary--light);
   padding: 10px;
   border-radius: 5px;
+  transform: scale(0);
+  transition: transform 0.5s var(--transition-power--in-out);
   &__header {
     display: flex;
     align-items: center;
@@ -23,12 +78,11 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: fill .5s var(--transition-power--in-out);
+    transition: fill 0.5s var(--transition-power--in-out);
     &_left {
       transform: rotate(180deg);
     }
     &_right {
-      
     }
     &:hover {
       path {
@@ -58,7 +112,7 @@
     cursor: pointer;
     padding: 5px 7px;
     border-radius: 5px;
-    transition: background-color .5s var(--transition-power--in-out), color .5s var(--transition-power--in-out);
+    transition: background-color 0.5s var(--transition-power--in-out), color 0.5s var(--transition-power--in-out);
     &_selected {
       background-color: var(--color-primary--light);
       color: var(--color-primary);
@@ -67,5 +121,8 @@
       background-color: var(--color-primary--light);
       color: var(--color-primary);
     }
+  }
+  &_open {
+    transform: scale(1);
   }
 }
