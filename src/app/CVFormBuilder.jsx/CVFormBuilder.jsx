@@ -6,6 +6,7 @@ import EmploymentHistorySection from "./EmploymentHistorySection";
 import SectionOfSubSections from "./SectionOfSubSections";
 import SkillsSection from "./SkillsSection/SkillsSection";
 import HobbiesSection from "./HobbiesSection/HobbiesSection";
+import LanguagesSection from "./LanguagesSection/LanguagesSection";
 import CoursesSection from "./CoursesSection/CoursesSection";
 
 import { useResumeContext } from "../../context/ResumeContext";
@@ -19,6 +20,7 @@ export default function CVFormBuilder({ resumeId }) {
   const skillsSectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "skills");
   const hobbiesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "hobbies");
   const coursesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "courses");
+  const languagesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "languages");
 
   // dispatch-функции
   function handleSectionFieldChange(sectionId, key, value) {
@@ -79,6 +81,19 @@ export default function CVFormBuilder({ resumeId }) {
           }}
         >
         </SectionOfSubSections>
+        <SectionOfSubSections
+          title="Языки"
+          description={null}
+          SubSectionComponent={LanguagesSection}
+          resumeId={resumeId}
+          sectionId="languages"
+          isResumeDataLoaded={isResumeDataLoaded}
+          subSectionsData={isResumeDataLoaded && languagesData?.subSections ? languagesData.subSections : []}
+          subSectionTitleAndSubTitlePattern={{
+            title: "{language}",
+            subTitle: "{languageLevel}"
+          }}
+        ></SectionOfSubSections>
         <HobbiesSection data={hobbiesData} isResumeDataLoaded={isResumeDataLoaded} handleSectionFieldChange={handleSectionFieldChange} />
       </div>
     </form>

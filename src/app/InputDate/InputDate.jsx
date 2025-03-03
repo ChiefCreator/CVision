@@ -30,12 +30,9 @@ export default function InputDate({ date, changeDate, calendarPosRegardingInputD
   }
   function handleClickCalendar(event) {
     if (buttonCalendarTriggerRef.current && buttonCalendarTriggerRef.current.contains(event.target)) {
-      setShowCalendar(true);
+      setShowCalendar(prev => !prev);
 
-      handleMonthsPanelOpen();
-
-      const calendarPosition = getCalendarPosition();
-      setCalendarPosition(calendarPosition);
+      setCalendarPosition(getCalendarPosition());
     }
     else if (calendarRef.current && !calendarRef.current.contains(event.target)) {
       setShowCalendar(false);
@@ -89,6 +86,9 @@ export default function InputDate({ date, changeDate, calendarPosRegardingInputD
       document.removeEventListener("click", handleClickCalendar);
     };
   }, []);
+  useEffect(() => {
+    showCalendar && handleMonthsPanelOpen();
+  }, [showCalendar]);
 
   return (
     <div className={styles.inputDate}>

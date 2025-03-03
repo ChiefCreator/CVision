@@ -1,0 +1,121 @@
+.select {
+  width: 100%;
+  position: relative;
+
+  &__head {
+    background-color: var(--color-secondary--lighten);
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-radius .5s var(--transition-power--in-out);
+  }
+
+  &__head-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+  }
+
+  &__label {
+
+    &__default {
+      color: var(--color-secondary--light);
+    }
+  }
+
+  &__line {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.5px;
+  }
+
+  &__sub-line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transform: scale(0);
+    height: 100%;
+
+    &_first {
+      background-color: var(--color-primary);
+      z-index: 2;
+    }
+
+    &_second {
+      background-color: var(--color-secondary--light);
+      z-index: 1;
+    }
+  }
+
+  &_open {
+    .select__head {
+      border-radius: 5px 5px 0 0;
+    }
+  }
+}
+
+.select-arrow {
+  display: flex;
+  height: auto;
+  transition: transform .5s var(--transition-power--in-out);
+
+  &__icon {
+    width: 18px;
+    aspect-ratio: 1;
+    transform: rotate(90deg);
+    fill: var(--color-primary);
+  }
+
+  &_active {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  background-color: var(--color-secondary--lighten);
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .5s var(--transition-power--in-out);
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(228, 230, 233);
+
+  &__container {
+    min-height: 0;
+  }
+
+  &__options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 0;
+  }
+
+  &__option {
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .3s var(--transition-power--in-out);
+
+    &_default {
+      color: var(--color-secondary--light);
+    }
+
+    &:hover {
+      background-color: rgb(226, 229, 237);
+    }
+  }
+
+  &_open {
+    grid-template-rows: 1fr;
+  }
+}

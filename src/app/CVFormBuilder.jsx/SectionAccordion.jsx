@@ -34,7 +34,7 @@ function getTitleByPattern(template, data) {
   }
 
   return template.replace(/{([^}]+)}/g, (_, path) => {
-    return getProperty(data, path) ?? `{${path}}`;
+    return getProperty(data, path) ?? "";
   });
 }
 

@@ -6,7 +6,9 @@ import Input from "../Input/Input";
 import EditableTitle from "../EditableTitle/EditableTitle";
 import DropdownControlMenu from "../DropdownControlMenu/DropdownControlMenu";
 
-export default function FormField({ type = "general", className = "", label, inputPlaceholder, inputValue, onChangeInputCallback, onChangeEditableTitleCallback, inputLabelValue, onClickButtonDeleteFieldCallback }) {
+import { generateUUID } from "../../lib/mathUtils";
+
+export default function FormField({ type = "general", Component, data, className = "", label, inputPlaceholder, inputValue, onChangeInputCallback, onChangeEditableTitleCallback, inputLabelValue, onClickButtonDeleteFieldCallback }) {
   const editableTitleInputRef = useRef(null);
   const isGeneral = type === "general";
   const controlsData = [
@@ -31,6 +33,17 @@ export default function FormField({ type = "general", className = "", label, inp
     }
   };
 
+  function renderComponent() {
+    switch(Component?.type) {
+      case "select": {
+        return <Component key={generateUUID} selectedValue={inputValue} onChangeCallback={onChangeInputCallback} data={data} />
+      }
+      default: {
+        return <Input value={inputValue} placeholder={inputPlaceholder} onChangeCallback={onChangeInputCallback} />
+      }
+    }
+  }
+
   return (
     <div className={`${styles.formField} ${className}`}>
       <header className={styles.formFieldHeader}>
@@ -41,7 +54,7 @@ export default function FormField({ type = "general", className = "", label, inp
           {!isGeneral && <DropdownControlMenu controls={controlsData} />}
         </div>
       </header>
-      <Input value={inputValue} placeholder={inputPlaceholder} onChangeCallback={onChangeInputCallback} />
+      {renderComponent()}
     </div>
   );
 }

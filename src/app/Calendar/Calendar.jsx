@@ -51,8 +51,6 @@ export default function Calendar({ date, changeDate, showCalendar, ref, pos, onM
     }
   }
 
-  // if (!showCalendar) return null;
-
   return createPortal(
     <div className={`${styles.calendar} ${showCalendar ? styles.calendarOpen : ""}`} style={pos} ref={ref}>
       {activePanel === "months" ? (
