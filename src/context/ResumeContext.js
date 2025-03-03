@@ -190,7 +190,7 @@ const resumeReducer = (draft, action) => {
 
       const section = resume.sections.find((section) => section.id === sectionId);
 
-      if (!section.subSections) {
+      if (!section?.subSections) {
         section.subSections = [];
       }
 

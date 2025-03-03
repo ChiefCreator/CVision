@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 import styles from "./Calendar.module.scss";
 
@@ -7,9 +8,15 @@ const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
 
 export default function Calendar({ date, changeDate, showCalendar, ref, pos, onMonthsPanelOpenCallback, onYearsPanelOpenCallback }) {
   const [activePanel, setActivePanel] = useState("months");
+  const defaultDate = { month: new Date().getMonth(), year: new Date().getFullYear() };
 
   function handleYearChange(direction) {
-    changeDate({ ...date, year: +date.year + direction });
+    if (date.year) {
+      changeDate({ ...date, year: +date.year + direction });
+    } else {
+      changeDate({ ...date, year: +defaultDate.year + direction });
+    }
+
     onYearsPanelOpenCallback();
   };
   function handleMonthCellClick(event) {
@@ -44,10 +51,10 @@ export default function Calendar({ date, changeDate, showCalendar, ref, pos, onM
     }
   }
 
-  if (!showCalendar) return null;
+  // if (!showCalendar) return null;
 
-  return (
-    <div className={styles.calendar} style={pos} ref={ref}>
+  return createPortal(
+    <div className={`${styles.calendar} ${showCalendar ? styles.calendarOpen : ""}`} style={pos} ref={ref}>
       {activePanel === "months" ? (
         <div className={styles.monthsPanel}>
           <header className={styles.monthsPanelHeader}>
@@ -57,7 +64,7 @@ export default function Calendar({ date, changeDate, showCalendar, ref, pos, onM
               </svg>
             </button>
             <span className={styles.monthsPanelYear} onClick={() => setTimeout(() => openPanel("years"))}>
-              {date.year}
+              {date.year ? date.year : defaultDate.year}
             </span>
             <button className={`${styles.button} ${styles.buttonNext}`} type="button" onClick={() => handleYearChange(1)}>
               <svg className={styles.buttonIcon} xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 128 128">
@@ -101,6 +108,7 @@ export default function Calendar({ date, changeDate, showCalendar, ref, pos, onM
           </div>
         </div>
       ) : null}
-    </div>
-  );
+    </div>,
+    document.body
+  )
 }

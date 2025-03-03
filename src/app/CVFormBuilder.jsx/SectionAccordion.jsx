@@ -94,7 +94,7 @@ export default function SectionAccordion({ openIndex, setOpenIndex, draggingInde
         <SortableContext items={contentComponentsData} strategy={verticalListSortingStrategy}>
           {contentComponentsData.map((data, index) => {
             const title = getTitleByPattern(titleAndSubTitlePattern.title, data).trim() || "Не указано";
-            const subTitle = getTitleByPattern(titleAndSubTitlePattern.subTitle, data);
+            const subTitle = titleAndSubTitlePattern.subTitle && getTitleByPattern(titleAndSubTitlePattern.subTitle, data);
 
             return (
               <SectionAccordionItem title={title} subTitle={subTitle} key={data.id} id={data.id} isOpen={openIndex.current === index} isDragging={draggingIndex === index} index={index} onClickCallback={() => toggle(index)} onClickButtonDeleteCallback={() => deleteByIndex(index)}>

@@ -77,8 +77,8 @@ export default function SectionAccordionItem({ title, id, index, subTitle, child
           <svg className={styles.dragHandleIcon} width="20" height="20" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 4c0 .82843-.67157 1.5-1.5 1.5S5.5 4.82843 5.5 4 6.17157 2.5 7 2.5s1.5.67157 1.5 1.5zM7 11.5c.82843 0 1.5-.6716 1.5-1.5 0-.82843-.67157-1.5-1.5-1.5s-1.5.67157-1.5 1.5c0 .8284.67157 1.5 1.5 1.5zm0 6c.82843 0 1.5-.6716 1.5-1.5s-.67157-1.5-1.5-1.5-1.5.6716-1.5 1.5.67157 1.5 1.5 1.5zm6 0c.8284 0 1.5-.6716 1.5-1.5s-.6716-1.5-1.5-1.5-1.5.6716-1.5 1.5.6716 1.5 1.5 1.5zm1.5-7.5c0 .8284-.6716 1.5-1.5 1.5s-1.5-.6716-1.5-1.5c0-.82843.6716-1.5 1.5-1.5s1.5.67157 1.5 1.5zM13 5.5c.8284 0 1.5-.67157 1.5-1.5s-.6716-1.5-1.5-1.5-1.5.67157-1.5 1.5.6716 1.5 1.5 1.5z"></path></svg>
         </div>
         <div className={styles.accordionItemHeaderContent}>
-          <span className={styles.accordionItemTitle}>{title}</span>
-          <span className={styles.accordionItemSubTitle}>{subTitle}</span>
+          {title && <span className={styles.accordionItemTitle}>{title}</span>}
+          {subTitle && <span className={styles.accordionItemSubTitle}>{subTitle}</span>}
         </div>
         <div className={styles.accordionItemControls}>
           <button className={styles.buttonToggle} type="button" onClick={onClickCallback}>

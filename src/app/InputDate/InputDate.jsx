@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 
 import Calendar from "../Calendar/Calendar";
 
-export default function InputDate({ date, changeDate, calendarPos }) {
+export default function InputDate({ date, changeDate, calendarPosRegardingInputDate }) {
   const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarPosition, setCalendarPosition] = useState({ left: 0, top: 0 });
 
   const buttonCalendarTriggerRef = useRef();
+  const inputRef = useRef();
   const calendarRef = useRef();
   const inputMonthRef = useRef();
   const inputYearRef = useRef();
@@ -29,6 +31,11 @@ export default function InputDate({ date, changeDate, calendarPos }) {
   function handleClickCalendar(event) {
     if (buttonCalendarTriggerRef.current && buttonCalendarTriggerRef.current.contains(event.target)) {
       setShowCalendar(true);
+
+      handleMonthsPanelOpen();
+
+      const calendarPosition = getCalendarPosition();
+      setCalendarPosition(calendarPosition);
     }
     else if (calendarRef.current && !calendarRef.current.contains(event.target)) {
       setShowCalendar(false);
@@ -41,6 +48,40 @@ export default function InputDate({ date, changeDate, calendarPos }) {
     inputYearRef.current.focus();
   }
 
+  function getCalendarPosition() {
+    const inputRect = inputRef.current.getBoundingClientRect();
+
+    const getPosRegardingInputDate = (posVal, componentLength) => {
+      if (Array.isArray(posVal)) {
+        return posVal.reduce((acc, item) => {
+          let val = null;
+  
+          if (typeof item === "number") {
+            val = item;
+          } else if (typeof item === "string" && item.includes("%")) {
+            val = componentLength * parseInt(item) / 100;
+          }
+  
+          acc += val;
+  
+          return acc;
+        }, 0)
+      } else if (typeof posVal === "number") {
+        return posVal;
+      } else if (typeof posVal === "string" && posVal.includes("%")) {
+        return componentLength * parseInt(posVal) / 100;
+      }
+    }
+
+    const posXRegardingInputDate = getPosRegardingInputDate(calendarPosRegardingInputDate.left, inputRect.width);
+    const posYRegardingInputDate = getPosRegardingInputDate(calendarPosRegardingInputDate.top, inputRect.height);
+
+    return {
+      top: inputRect.top + window.scrollY + posYRegardingInputDate,
+      left: inputRect.left + window.scrollX + posXRegardingInputDate,
+    }
+  }
+
   useEffect(() => {
     document.addEventListener("click", handleClickCalendar);
 
@@ -51,13 +92,13 @@ export default function InputDate({ date, changeDate, calendarPos }) {
 
   return (
     <div className={styles.inputDate}>
-      <div className={styles.input}>
+      <div className={styles.input} ref={inputRef}>
         <div className={styles.inputContainer}>
           <input className={styles.inputItem} value={date.month} ref={inputMonthRef} placeholder="MM" maxLength={2} style={{ width: "32px" }} onChange={handleMonthChange}></input>
           <span className={styles.inputSeparator}>/</span>
           <input className={styles.inputItem} value={date.year} ref={inputYearRef} placeholder="YYYY" maxLength={4} style={{ width: "52px" }} onChange={handleYearChange}></input>
         </div>
-        <button className={styles.inputCalendarTrigger} type="button" ref={buttonCalendarTriggerRef} onClick={handleClickCalendar}>
+        <button className={styles.inputCalendarTrigger} type="button" ref={buttonCalendarTriggerRef}>
           <svg className={styles.inputCalendarTriggerIcon} xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 48 48">
             <g>
               <rect width="4" height="6" x="11" y="3" rx="2"></rect>
@@ -73,7 +114,7 @@ export default function InputDate({ date, changeDate, calendarPos }) {
         changeDate={changeDate}
         showCalendar={showCalendar}
         ref={calendarRef}
-        pos={calendarPos}
+        pos={calendarPosition}
         onMonthsPanelOpenCallback={handleMonthsPanelOpen}
         onYearsPanelOpenCallback={handleYearsPanelOpen}
       />

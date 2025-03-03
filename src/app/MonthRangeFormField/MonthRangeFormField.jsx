@@ -11,8 +11,8 @@ export default function MonthRangeFormField({ className = "", label, startDate, 
         </div>
       </header>
       <div className={styles.formFieldInputsWrapper}>
-        <InputDate date={startDate.value} changeDate={onChangeStartInputCallback} calendarPos={{ left: 0, top: "calc(100% + 10px)" }} />
-        <InputDate date={endDate.value} changeDate={onChangeEndInputCallback} calendarPos={{ right: 0, top: "calc(100% + 10px)" }} />
+        <InputDate date={startDate.value} changeDate={onChangeStartInputCallback} calendarPosRegardingInputDate={{ left: 0, top: ["100%", 10] }} />
+        <InputDate date={endDate.value} changeDate={onChangeEndInputCallback} calendarPosRegardingInputDate={{ left: 0, top: ["100%", 10] }} />
       </div>
     </div>
   );

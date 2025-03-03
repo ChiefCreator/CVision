@@ -7,6 +7,13 @@
   box-shadow: 0 0 4px rgb(228, 230, 233);
   padding: 15px;
   border-radius: 8px;
+  transform: scale(0);
+  transform-origin: 100% 0;
+  transition: transform .5s var(--transition-power--in-out);
+  
+  &_open {
+    transform: scale(1);
+  }
 }
 .months-panel {
   display: flex;

@@ -6,6 +6,7 @@ import EmploymentHistorySection from "./EmploymentHistorySection";
 import SectionOfSubSections from "./SectionOfSubSections";
 import SkillsSection from "./SkillsSection/SkillsSection";
 import HobbiesSection from "./HobbiesSection/HobbiesSection";
+import CoursesSection from "./CoursesSection/CoursesSection";
 
 import { useResumeContext } from "../../context/ResumeContext";
 
@@ -17,6 +18,7 @@ export default function CVFormBuilder({ resumeId }) {
   const employmentHistorySectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "employmentHistory");
   const skillsSectionData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "skills");
   const hobbiesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "hobbies");
+  const coursesData = isResumeDataLoaded && resumeData.sections.find(section => section.id === "courses");
 
   // dispatch-функции
   function handleSectionFieldChange(sectionId, key, value) {
@@ -61,6 +63,19 @@ export default function CVFormBuilder({ resumeId }) {
           subSectionTitleAndSubTitlePattern={{
             title: `{skill}`,
             subTitle: `{parameterId}`,
+          }}
+        >
+        </SectionOfSubSections>
+        <SectionOfSubSections
+          title="Курсы"
+          description={null}
+          SubSectionComponent={CoursesSection}
+          resumeId={resumeId}
+          sectionId="courses"
+          isResumeDataLoaded={isResumeDataLoaded}
+          subSectionsData={isResumeDataLoaded && coursesData?.subSections ? coursesData.subSections : []}
+          subSectionTitleAndSubTitlePattern={{
+            title: `{cource}?institute?,?institute? {institute}`,
           }}
         >
         </SectionOfSubSections>
