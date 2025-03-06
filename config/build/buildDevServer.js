@@ -4,5 +4,8 @@ export default function buildDevServer({ port, paths }) {
     port: port ?? 3000,
     open: true,
     compress: true,
+    historyApiFallback: {
+      index: "/index.html",
+    },
   };
 }

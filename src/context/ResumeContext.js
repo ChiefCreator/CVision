@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllResumes, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
+import { getAllResumes, addResume, deleteResume, updateResumeField, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
 
 const initialState = {
   resumes: [],
@@ -38,23 +38,29 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_RESUME: {
-      draft.resumes.push(action.resume);
+      const { resumeId, resume } = action;
+
+      if (!draft.resumes) draft.resumes = [];
+
+      if (resume) {
+        draft.resumes.push(resume);
+      } else {
+        draft.resumes.push({ id: resumeId });
+      }
+
+      addResume(resumeId, resume);
+
       break;
     }
     case actionTypes.UPDATE_RESUME_FIELD: {
-      const { id, path, key, value, dbPath } = action;
+      const { resumeId, key, value } = action;
 
-      const resume = draft.resumes.find((resume) => resume.id === id);
+      const resume = draft.resumes.find((resume) => resume.id === resumeId);
 
-      if (resume) {
-        let current = resume;
-        for (let i = 0; i < path.length - 1; i++) {
-          current = current[path[i]];
-        }
-        current[path[path.length - 1]] = value;
+      resume[key] = value;
 
-        updateWholeFieldInDocument(dbPath, key, value);
-      }
+      updateResumeField(resumeId, key, value);
+
       break;
     }
     case actionTypes.UPDATE_RESUME_SECTION_FIELD: {
@@ -62,7 +68,9 @@ const resumeReducer = (draft, action) => {
 
       const resume = draft.resumes.find((resume) => resume.id === resumeId);
 
-      if (resume.sections.length === 0) {
+      if (!resume.sections) resume.sections = [];
+
+      if (!resume.sections.find(section => section.id === sectionId)) {
         resume.sections.push({ id: sectionId });
       }
 
@@ -184,7 +192,9 @@ const resumeReducer = (draft, action) => {
 
       const resume = draft.resumes.find((resume) => resume.id === resumeId);
 
-      if (resume.sections.length === 0) {
+      if (!resume.sections) resume.sections = [];
+
+      if (!resume.sections.find((section) => section.id === sectionId)) {
         resume.sections.push({ id: sectionId });
       }
 
@@ -240,7 +250,11 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.DELETE_RESUME: {
-      draft.resumes = draft.resumes.filter((resume) => resume.id !== action.id);
+      const { resumeId } = action;
+
+      draft.resumes = draft.resumes.filter((resume) => resume.id !== resumeId);
+
+      deleteResume(resumeId);
       break;
     }
     case actionTypes.CLEAR_RESUMES: {

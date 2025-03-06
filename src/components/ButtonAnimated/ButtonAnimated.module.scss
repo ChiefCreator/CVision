@@ -1,0 +1,52 @@
+.button {
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 12px;
+  position: relative;
+  transition: border-radius .2s var(--transition-power--in-out);
+
+  &__container {
+    position: relative;
+    z-index: 2;
+  }
+
+  &__title {
+
+  }
+
+  &::after, &::before {
+    position: absolute;
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    z-index: 1;
+    background-color: var(--color-primary);
+    transition: opacity .2s var(--transition-power--in-out), left .5s var(--transition-power--in-out), top .5s var(--transition-power--in-out), border-radius .2s var(--transition-power--in-out);
+  }
+
+  &:hover {
+    border-radius: 0 20px 0 20px;
+  }
+
+  &:hover::after, &:hover::before {
+    opacity: .2;
+  }
+
+  &:hover::before {
+    left: -6px;
+    top: -6px;
+  }
+
+  &:hover::after {
+    left: 6px;
+    top: 6px;
+  }
+}

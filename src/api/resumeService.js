@@ -13,18 +13,21 @@ export async function getAllResumes() {
       const resumeData = doc.data();
 
       const sectionsRef = collection(doc.ref, "sections");
-      const sectionsSnapshot = await getDocs(sectionsRef);
+      const sectionsSnapshot = await getDocs(sectionsRef, { source: "cache" });
 
       let sections = [];
-      sectionsSnapshot.forEach(async (sectionDoc) => {
+
+      for (const sectionDoc of sectionsSnapshot.docs) {
         const subSectionsRef = collection(sectionDoc.ref, "subSections");
         const q = query(subSectionsRef, orderBy("order", "asc"));
         const subSectionsSnapshot = await getDocs(q);
         
         let subSections = [];
-        subSectionsSnapshot.forEach((subSectionDoc) => {
-          const subSectionData = subSectionDoc.data();
 
+        for (const subSectionDoc of subSectionsSnapshot.docs) {
+          let subSectionData = subSectionDoc.data();
+
+          // Конвертируем поля с timestamp
           Object.keys(subSectionData).forEach((key) => {
             if (subSectionData[key] && subSectionData[key].toDate) {
               subSectionData[key] = convertFromTimestampToObjectMonthYearFormat(subSectionData[key]);
@@ -35,14 +38,14 @@ export async function getAllResumes() {
             id: subSectionDoc.id,
             ...subSectionData,
           });
-        })
+        }
 
         sections.push({
           id: sectionDoc.id,
           ...sectionDoc.data(),
           subSections: subSections,
         });
-      });
+      }
 
       resumesData.push({
         id: doc.id,
@@ -54,6 +57,37 @@ export async function getAllResumes() {
     return resumesData;
   } catch (error) {
     throw error;
+  }
+}
+
+// resume operations
+export async function deleteResume(resumeId) {
+  try {
+    const docRef = doc(db, `users/userId/resumes/${resumeId}`);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error("Ошибка при удалении документа:", error);
+  }
+}
+export async function addResume(resumeId, resumeData) {
+  try {
+    const docRef = doc(db, `users/userId/resumes/${resumeId}`);
+    const data = resumeData ?? {};
+
+    await setDoc(docRef, data);
+  } catch (error) {
+    console.error("Ошибка при добавлении документа:", error);
+  }
+}
+export async function updateResumeField(resumeId, key, newValue) {
+  try {
+    const docRef = doc(db, `users/userId/resumes/${resumeId}`);
+
+    await setDoc(docRef, {
+      [key]: newValue,
+    }, { merge: true });
+  } catch (error) {
+    console.error("Ошибка обновления документа:", error);
   }
 }
 
@@ -158,8 +192,14 @@ export async function updateResumeSubSectionDateField(resumeId, sectionId, subSe
 }
 export async function addResumeSubSection(resumeId, sectionId, subSectionId, order, documentFields) {
   try {
-    const docRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}/subSections/${subSectionId}`);
+    const sectionDocRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}`);
+    const sectionDocSnapshot = await getDoc(sectionDocRef);
 
+    if (!sectionDocSnapshot.exists()) {
+      await setDoc(sectionDocRef, {});
+    }
+
+    const docRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}/subSections/${subSectionId}`);
     await setDoc(docRef, { order, ...documentFields });
   } catch (error) {
     console.error("Ошибка обновления документа:", error);
