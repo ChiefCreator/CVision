@@ -2,12 +2,9 @@ import styles from "./CVFormBuilder.module.scss"
 
 import PersonalDetailedSection from "./PersonalDetailedSection/PersonalDetailedSection";
 import ProfessionalSummarySection from "./ProfessionalSummarySection/ProfessionalSummarySection";
-import EmploymentHistorySection from "./EmploymentHistorySection/EmploymentHistorySection";
 import SectionOfSubSections from "./SectionOfSubSections/SectionOfSubSections";
-import SkillsSection from "./SkillsSection/SkillsSection";
-import HobbiesSection from "./HobbiesSection/HobbiesSection";
-import LanguagesSection from "./LanguagesSection/LanguagesSection";
-import CoursesSection from "./CoursesSection/CoursesSection";
+
+import sectionsConfig from "../../data/sectionsConfig";
 
 import { useResumeContext } from "../../context/ResumeContext";
 
@@ -20,11 +17,7 @@ export default function CVFormBuilder({ resumeId }) {
 
   const personalInformationSectionData = sectionsData && sectionsData.find(section => section.id === "personalInformation");
   const professionalSummarySectionData = sectionsData && sectionsData.find(section => section.id === "professionalSummary");
-  const employmentHistorySectionData = sectionsData && sectionsData.find(section => section.id === "employmentHistory");
-  const skillsSectionData = sectionsData && sectionsData.find(section => section.id === "skills");
-  const coursesData = sectionsData && sectionsData.find(section => section.id === "courses");
-  const hobbiesData = sectionsData && sectionsData.find(section => section.id === "hobbies");
-  const languagesData = sectionsData && sectionsData.find(section => section.id === "languages");
+  const optionalSectionsData = sectionsData && sectionsData?.filter(data => data.id !== "personalInformation" && data.id !== "professionalSummary").sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
 
   // dispatch-функции
   function handleSectionFieldChange(sectionId, key, value) {
@@ -44,65 +37,38 @@ export default function CVFormBuilder({ resumeId }) {
         <ProfessionalSummarySection resumeId={resumeId} isResumeDataLoaded={isResumeDataLoaded} data={professionalSummarySectionData} changeField={handleSectionFieldChange} />
       </div>
       <div className={styles.formSections}>
-        <SectionOfSubSections
-          title={employmentHistorySectionData?.title}
-          defaultTitle="Трудовой стаж"
-          description="Покажите свой соответствующий опыт (за последние 10 лет). Отмечайте свои достижения пунктами, по возможности - цифрами /фактами (достиг X, измерил по Y, выполнил Z)."
-          SubSectionComponent={EmploymentHistorySection}
-          sectionId="employmentHistory"
-          resumeId={resumeId}
-          isResumeDataLoaded={isResumeDataLoaded}
-          subSectionsData={employmentHistorySectionData?.subSections}
-          subSectionTitleAndSubTitlePattern={{
-            title: `{profession} ?employer?в компании?employer? ?employer?"?employer?{employer}?employer?"?employer?`,
-            subTitle: `{startDate.month}?startDate.month?.?startDate.month?{startDate.year} ?endDate?-?endDate? {endDate.month}?endDate.year?.?endDate.year?{endDate.year}`,
-          }}
-        >
-        </SectionOfSubSections>
-        <SectionOfSubSections
-          title={skillsSectionData?.title}
-          defaultTitle="Навыки"
-          description="Выберите 5 важных навыков, которые показывают, что вы подходите на эту должность. Убедитесь, что они соответствуют ключевым навыкам, указанным в списке вакансий (особенно при подаче заявления через онлайн-систему)."
-          SubSectionComponent={SkillsSection}
-          resumeId={resumeId}
-          sectionId="skills"
-          isResumeDataLoaded={isResumeDataLoaded}
-          subSectionsData={skillsSectionData?.subSections}
-          subSectionTitleAndSubTitlePattern={{
-            title: `{skill}`,
-            subTitle: `{parameterId}`,
-          }}
-        >
-        </SectionOfSubSections>
-        <SectionOfSubSections
-          title={coursesData?.title}
-          defaultTitle="Курсы"
-          description={null}
-          SubSectionComponent={CoursesSection}
-          resumeId={resumeId}
-          sectionId="courses"
-          isResumeDataLoaded={isResumeDataLoaded}
-          subSectionsData={coursesData?.subSections}
-          subSectionTitleAndSubTitlePattern={{
-            title: `{cource}?institute?,?institute? {institute}`,
-          }}
-        >
-        </SectionOfSubSections>
-        <SectionOfSubSections
-          title={languagesData?.title}
-          defaultTitle="Языки"
-          description={null}
-          SubSectionComponent={LanguagesSection}
-          resumeId={resumeId}
-          sectionId="languages"
-          isResumeDataLoaded={isResumeDataLoaded}
-          subSectionsData={languagesData?.subSections}
-          subSectionTitleAndSubTitlePattern={{
-            title: "{language}",
-            subTitle: "{languageLevel}"
-          }}
-        ></SectionOfSubSections>
-        <HobbiesSection data={hobbiesData} isResumeDataLoaded={isResumeDataLoaded} handleSectionFieldChange={handleSectionFieldChange} />
+        {optionalSectionsData?.map(data => {
+          const sectionConfig = sectionsConfig[data.id];
+          const isSectionOfSubSections = sectionConfig.SubSectionComponent;
+
+          if (isSectionOfSubSections) {
+            return (
+              <SectionOfSubSections
+                key={data.id}
+                {...sectionConfig}
+                title={data.title}
+                subSectionsData={data.subSections}
+                resumeId={resumeId}
+                isResumeDataLoaded={isResumeDataLoaded}
+              >
+              </SectionOfSubSections>
+            );
+          }
+
+          const SectionComponent = sectionConfig?.Component;
+
+          if (SectionComponent) {
+            return (
+              <SectionComponent
+                key={data.id}
+                data={data}
+                isResumeDataLoaded={isResumeDataLoaded}
+                handleSectionFieldChange={handleSectionFieldChange}
+              >
+              </SectionComponent>
+            );
+          }
+        })}
       </div>
     </form>
   );

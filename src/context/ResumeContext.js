@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
 import { getAllResumes, addResume, deleteResume, updateResumeField, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
+import { createDefaultResume } from "../lib/resumeUtils";
 
 const initialState = {
   resumes: [],
@@ -38,17 +39,23 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_RESUME: {
-      const { resumeId, resume } = action;
+      const { resumeId, resumeData, isAddDefaultResumeData } = action;
 
       if (!draft.resumes) draft.resumes = [];
 
-      if (resume) {
-        draft.resumes.push(resume);
+      let newResumeData = null;
+
+      if (resumeData) {
+        newResumeData = resumeData;
+      } else if (isAddDefaultResumeData) {
+        newResumeData = createDefaultResume(resumeId);
       } else {
-        draft.resumes.push({ id: resumeId });
+        newResumeData = { id: resumeId };
       }
 
-      addResume(resumeId, resume);
+      draft.resumes.push(newResumeData);
+
+      addResume(resumeId, newResumeData);
 
       break;
     }
@@ -56,10 +63,12 @@ const resumeReducer = (draft, action) => {
       const { resumeId, key, value } = action;
 
       const resume = draft.resumes.find((resume) => resume.id === resumeId);
+      
+      if (resume) {
+        resume[key] = value;
 
-      resume[key] = value;
-
-      updateResumeField(resumeId, key, value);
+        updateResumeField(resumeId, key, value);
+      }
 
       break;
     }

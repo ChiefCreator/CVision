@@ -1,0 +1,21 @@
+.button {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  color: white;
+  fill: white;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s var(--transition-power--in-out);
+
+  &__icon {
+    display: flex;
+    width: 24px;
+    aspect-ratio: 1;
+  }
+
+  &:hover {
+    background-color: rgb(84, 91, 108);
+  }
+}

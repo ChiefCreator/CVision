@@ -7,7 +7,7 @@ import { useResumeContext } from "../../../context/ResumeContext";
 import { generateUUID } from "three/src/math/MathUtils.js";
 import { useState } from "react";
 
-export default function SectionOfSubSections({ title, defaultTitle, description, SubSectionComponent, subSectionsData = [], resumeId, sectionId, isResumeDataLoaded, subSectionTitleAndSubTitlePattern }) {
+export default function SectionOfSubSections({ title, defaultTitle, description, SubSectionComponent, subSectionsData = [], buttonAddTitle = "Добавить", resumeId, sectionId, isResumeDataLoaded, subSectionTitleAndSubTitlePattern }) {
   const { dispatchOfResumesDataState } = useResumeContext();
   const [openIndex, setOpenIndex] = useState({ current: 0, beforeDragStart: 0 });
   const [draggingIndex, setDraggingIndex] = useState(null);
@@ -45,7 +45,7 @@ export default function SectionOfSubSections({ title, defaultTitle, description,
       <div className={styles.sectionBody}>
       <SectionAccordion openIndex={openIndex} setOpenIndex={setOpenIndex} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} ContentComponent={SubSectionComponent} contentComponentsData={subSectionsData} resumeId={resumeId} sectionId={sectionId} isResumeDataLoaded={isResumeDataLoaded} titleAndSubTitlePattern={subSectionTitleAndSubTitlePattern} />
         <div className={styles.sectionButtonAddWrapper}>
-          <ButtonAdd callbackOnClick={addNewItem}>Добавить занятость</ButtonAdd>
+          <ButtonAdd callbackOnClick={addNewItem}>{buttonAddTitle}</ButtonAdd>
         </div>
       </div>
     </div>

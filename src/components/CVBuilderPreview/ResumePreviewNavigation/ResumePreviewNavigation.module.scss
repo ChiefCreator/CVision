@@ -1,0 +1,40 @@
+.resume-preview-navigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  &__title {
+    color: white;
+  }
+}
+
+.button {
+  display: inline-flex;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 8px;
+  transition: background-color 0.3s var(--transition-power--in-out);
+  svg {
+    width: 24px;
+    aspect-ratio: 1;
+    fill: white;
+  }
+
+  &_prev {
+    transform: rotate(180deg);
+  }
+  &_next {
+  }
+
+  &:hover {
+    background-color: rgb(84, 91, 108);
+  }
+
+  &:disabled {
+    cursor: auto;
+    background-color: transparent;
+
+    svg {
+      fill: rgb(84, 91, 108);
+    }
+  }
+}

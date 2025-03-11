@@ -9,6 +9,8 @@ import ButtonAdd from "../../ButtonAdd/ButtonAdd";
 import { useImageUploaderContext } from "../../../context/ImageUploaderContext";
 import { useResumeContext } from "../../../context/ResumeContext";
 
+import { generateUUID } from "../../../lib/mathUtils";
+
 export default function PersonalDetailedSection({ resumeId, data, isResumeDataLoaded, changeField }) {
   const { dispatchOfResumesDataState } = useResumeContext();
   const sectionId = "personalInformation";
@@ -130,7 +132,7 @@ export default function PersonalDetailedSection({ resumeId, data, isResumeDataLo
             </FormGroupCell>
           </FormGroup>
           <FormGroup gridTemplateColumns="1fr 1fr">
-            <FormGroupCell gridArea="1 / 1 / 3 / 2">
+            <FormGroupCell gridArea="1 / 1 / 2 / 2">
               <FormField
                 label="Пол"
                 inputPlaceholder="Введите пол"
@@ -157,7 +159,7 @@ export default function PersonalDetailedSection({ resumeId, data, isResumeDataLo
                   <FormGroupCell key={id}>
                     <FormField
                       type="editable"
-                      label="Чето"
+                      label={null}
                       inputValue={value}
                       inputLabelValue={label}
                       onChangeInputCallback={(value) => handleFormConfigurableFieldChange(id, "value", value)}
@@ -171,7 +173,7 @@ export default function PersonalDetailedSection({ resumeId, data, isResumeDataLo
           }
         </div>
         <div className={styles.sectionButtonAddWrapper}>
-          <ButtonAdd callbackOnClick={() => handleButtonAddFormFieldClick({ id: "generated-id-new", label: "", value: "" })}>Настраиваемое поле</ButtonAdd>
+          <ButtonAdd callbackOnClick={() => handleButtonAddFormFieldClick({ id: generateUUID(), label: "", value: "" })}>Настраиваемое поле</ButtonAdd>
         </div>
       </div>
     </div>

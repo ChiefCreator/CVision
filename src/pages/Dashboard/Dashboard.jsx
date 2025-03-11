@@ -41,6 +41,7 @@ export default function Dashboard() {
     dispatchOfResumesDataState({
       type: "ADD_RESUME",
       resumeId,
+      isAddDefaultResumeData: true,
     })
 
     navigate(`/create-resume/${resumeId}`);
@@ -68,7 +69,7 @@ export default function Dashboard() {
                 <DocumentCard
                   key={resume.id}
                   data={resume}
-                  documentPreview={<ResumePreview resumeData={resume} isResumeDataLoaded={isResumesLoaded} />}
+                  isResumeDataLoaded={isResumesLoaded}
                   onChangeTitleCallback={(value) => handleDocumentCardTitleChange(resume.id, "title", value)}
                   onEditButtonClick={() => handleEditButtonClick("create-resume", resume.id)}
                   onDeleteButtonClick={() => handleDeleteButtonClick(resume.id)}
@@ -79,7 +80,7 @@ export default function Dashboard() {
         </TabPanel>
         <TabPanel title="Резюме" id="resumes">
           <DocumentCardList>
-            {isResumesLoaded && resumes.map(resume => {
+            {/* {isResumesLoaded && resumes.map(resume => {
               return (
                 <DocumentCard
                   key={resume.id}
@@ -88,7 +89,7 @@ export default function Dashboard() {
                   documentPreview={<ResumePreview resumeData={resume} isResumeDataLoaded={isResumesLoaded} />}
                 />
               );
-            })}
+            })} */}
           </DocumentCardList>
         </TabPanel>
         <TabPanel title="Сопроводительные письма" id="cover-letters">

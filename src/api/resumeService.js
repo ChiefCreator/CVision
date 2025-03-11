@@ -72,9 +72,18 @@ export async function deleteResume(resumeId) {
 export async function addResume(resumeId, resumeData) {
   try {
     const docRef = doc(db, `users/userId/resumes/${resumeId}`);
-    const data = resumeData ?? {};
+    const sectionsCollection = collection(db, `users/userId/resumes/${resumeId}/sections`);
 
-    await setDoc(docRef, data);
+    const { sections: sectionsData, ...resumeWithoutSections } = resumeData;
+
+    await setDoc(docRef, resumeWithoutSections);
+    
+    if (Array.isArray(sectionsData)) {
+      for (const sectionData of sectionsData) {
+        const sectionDocRef = doc(sectionsCollection, sectionData.id);
+        await setDoc(sectionDocRef, { title: sectionData.title, order: sectionData.order });
+    }
+    }
   } catch (error) {
     console.error("Ошибка при добавлении документа:", error);
   }

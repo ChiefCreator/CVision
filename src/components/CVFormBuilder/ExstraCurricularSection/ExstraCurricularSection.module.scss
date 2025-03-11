@@ -1,0 +1,16 @@
+.section {
+  &__header {
+    margin-bottom: 15px;
+  }
+  &__description {
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--color-secondary--light);
+  }
+  &__body {
+    margin-top: 20px;
+  }
+  &__description-wrapper {
+    margin-top: 20px;
+  }
+}

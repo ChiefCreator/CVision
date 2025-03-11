@@ -3,13 +3,18 @@ import { useRef, useState } from 'react';
 import DocumentContainer from '../DocumentContainer/DocumentContainer';
 
 import img from "./../../assets/images/portrait.jpg"
+import jsPDF from 'jspdf';
+import html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+
+import ResumePreview from "../ResumePreview/ResumePreview";
 
 import styles from './DocumentCard.module.scss';
 
 import EditableTitle from "./../EditableTitle/EditableTitle";
 import ActionButton from './ActionButton';
 
-export default function DocumentCard({ data, documentPreview, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
+export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
   const [isPreviewHovered, setIsPreviewHovered] = useState(false);
   const [previewRotation, setPreviewRotation] = useState({ rotateX: 0, rotateY: 0 });
   const documentPreviewRef = useRef();
@@ -65,8 +70,35 @@ export default function DocumentCard({ data, documentPreview, onChangeTitleCallb
 
   }
   function downLoadPDFDocument() {
-
+    handleConvertToCanvas()
   }
+  function handleConvertToCanvas() {
+    const content = documentPreviewRef.current;
+
+    html2canvas(content).then((canvas) => {
+      // Получаем размеры страницы PDF A4 в миллиметрах
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.width; // Ширина страницы A4
+      const pageHeight = pdf.internal.pageSize.height; // Высота страницы A4
+
+      // Получаем размеры canvas
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+
+      // Масштабируем canvas, чтобы он поместился на всю страницу
+      const scale = Math.min(pageWidth / canvasWidth, pageHeight / canvasHeight);
+
+      // Рассчитываем новые размеры изображения, чтобы оно поместилось на странице
+      const imgWidth = canvasWidth * scale;
+      const imgHeight = canvasHeight * scale;
+
+      // Добавляем canvas в PDF (масштабируя изображение)
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+
+      // Сохраняем PDF
+      pdf.save('document.pdf');
+    });
+  };
   function deleteDocument() {
     if (onDeleteButtonClick) onDeleteButtonClick();
   }
@@ -82,8 +114,7 @@ export default function DocumentCard({ data, documentPreview, onChangeTitleCallb
           onMouseEnter={handlePreviewMouseenter} 
           style={{ transform: `rotateX(${previewRotation.rotateX}deg) rotateY(${previewRotation.rotateY}deg)` }}
         >
-          {/* <img width={"100%"} height={"100%"} src={img}></img> */}
-          <DocumentContainer>{documentPreview}</DocumentContainer>
+          <ResumePreview resumeData={data} isResumeDataLoaded={isResumeDataLoaded} />
         </div>
       </div>
 

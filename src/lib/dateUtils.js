@@ -33,3 +33,15 @@ export function isDateValidMMYYYYFormat(dateStr) {
   const regex = /^(0[1-9]|1[0-2])\.(\d{4})$/;
   return regex.test(dateStr);
 }
+
+export function convertFromObjectStartDateAndEndDateToStringRangeFormat(startDate, endDate) {
+  const isStartDateHasMonth = startDate?.month;
+  const isStartDateHasYear = startDate?.year;
+  const isEndDateHasMonth = endDate?.month;
+  const isEndDateHasYear = endDate?.year;
+  
+  const startDateStr = isStartDateHasYear && `${isStartDateHasMonth && `${startDate.month}.`}${startDate?.year}`;
+  const endDateStr = isEndDateHasYear && `${isEndDateHasMonth && `${endDate.month}.`}${endDate?.year}`;
+
+  return `${startDateStr ? startDateStr : ""}${(startDateStr && endDateStr) ? " - " : ""}${endDateStr ? endDateStr : ""}`;
+}
