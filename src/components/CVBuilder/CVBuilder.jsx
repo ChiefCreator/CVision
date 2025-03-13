@@ -1,14 +1,20 @@
+import { useState } from "react";
+
 import EditableTitle from "../EditableTitle/EditableTitle"
 import styles from "./CVBuilder.module.scss";
 
 import CVFormBuilder from "../CVFormBuilder/CVFormBuilder";
 import CVBuilderPreview from "../CVBuilderPreview/CVBuilderPreview";
+import ModalSidebarTrigger from "../ModalSidebarTrigger/ModalSidebarTrigger";
+import Sidebar from "../Sidebar/Sidebar";
 import { useResumeContext } from "../../context/ResumeContext";
 
 export default function CVBuilder({ resumeId }) {
   const { resumesDataState, dispatchOfResumesDataState } = useResumeContext();
   const isResumeDataLoaded = resumesDataState.loadingState === "loaded";
   const resumeData = isResumeDataLoaded && resumesDataState.resumes.find(resume => resume.id === resumeId);
+
+  const [isSidebarModalOpen, setIsSidebarModalOpen] = useState(false);
 
   function handleResumeFieldChange(key, value) {
     dispatchOfResumesDataState({ 
@@ -21,6 +27,10 @@ export default function CVBuilder({ resumeId }) {
 
   return (
     <div className={styles.cvBuilder}>
+
+      <ModalSidebarTrigger isSidebarModalOpen={isSidebarModalOpen} setIsSidebarModalOpen={setIsSidebarModalOpen} />
+      <Sidebar defaultActiveItemId="none" isModal={true} isModalOpen={isSidebarModalOpen} isHeaderRendered={true} />
+
       <div className={styles.cvBuilderContainer}>
         <div className={styles.cvBuilderInfo}>
           <div className={styles.cvBuilderTitleWrapper}>

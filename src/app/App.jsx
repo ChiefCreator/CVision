@@ -7,6 +7,7 @@ import CreateResume from "../pages/CreateResume/CreateResume";
 import { ImageUploaderProvider } from "../context/ImageUploaderContext";
 import { ResumeProvider } from "../context/ResumeContext";
 import { AsideProvider } from "../context/AsideContext";
+import { HeaderProvider } from "../context/HeaderContext";
 
 import "./../assets/styles/_vars.scss";
 import "./../assets/styles/_mixin.scss";
@@ -20,18 +21,20 @@ export default function App() {
   return (
     <ResumeProvider>
       <ImageUploaderProvider>
-        <AsideProvider>
-          <BrowserRouter>
-            <Routes future={{ v7_relativeSplatPath: true }}>
-              <Route path="/" element={<HomeLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="settings" element={<div>Настройки</div>} />
-              </Route>
-              <Route path="create-resume/:resumeId" element={<CreateResume />} />
-            </Routes>
-          </BrowserRouter>
-        </AsideProvider>
+        <HeaderProvider>
+          <AsideProvider>
+            <BrowserRouter>
+              <Routes future={{ v7_relativeSplatPath: true }}>
+                <Route path="/" element={<HomeLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="settings" element={<div>Настройки</div>} />
+                </Route>
+                <Route path="create-resume/:resumeId" element={<CreateResume />} />
+              </Routes>
+            </BrowserRouter>
+          </AsideProvider>
+        </HeaderProvider>
       </ImageUploaderProvider>
     </ResumeProvider>
   )

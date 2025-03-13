@@ -4,10 +4,12 @@ import { useImmerReducer } from "use-immer";
 const initialState = {
   rect: null,
   state: "full",
+  isModal: false,
 };
 
 const actionTypes = {
   SET_STATE: "SET_STATE",
+  SET_IS_MODAL: "SET_IS_MODAL",
   SET_RECT: "SET_RECT",
 };
 
@@ -19,6 +21,10 @@ const asideReducer = (draft, action) => {
     }
     case actionTypes.SET_STATE: {
       draft.state = action.state;
+      break;
+    }
+    case actionTypes.SET_IS_MODAL: {
+      draft.isModal = action.isModal;
       break;
     }
     default:

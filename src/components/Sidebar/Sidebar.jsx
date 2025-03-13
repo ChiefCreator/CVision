@@ -1,11 +1,12 @@
 import styles from "./Sidebar.module.scss";
 
+import { useHeaderContext } from "../../context/HeaderContext";
 import { useAsideContext } from "../../context/AsideContext";
 import { useEffect, useRef, useState } from "react";
 
 import Menu from "./Menu";
 
-export default function Sidebar() {
+export default function Sidebar({ defaultActiveItemId, isModal = false, isModalOpen = false, isHeaderRendered }) {
   const { asideState, dispatchOfAsideState } = useAsideContext();
   const { state, rect } = asideState;
   const [buttonTriggerPosY, setButtonTriggerPosY] = useState(false);
@@ -34,16 +35,22 @@ export default function Sidebar() {
   }
 
   useEffect(() => {
+    if (!isHeaderRendered) return;
+
     sidebarRectRef.current = sidebarRef.current.getBoundingClientRect();
-    triggerButtonHeightRef.current = triggerButtonRef.current.offsetHeight;
+    if (!isModal) triggerButtonHeightRef.current = triggerButtonRef.current.offsetHeight;
 
     dispatchOfAsideState({ 
       type: "SET_RECT",
       rect: sidebarRef.current.getBoundingClientRect(),
-    })
-  }, []);
+    });
+    dispatchOfAsideState({ 
+      type: "SET_IS_MODAL",
+      isModal,
+    });
+  }, [isHeaderRendered]);
   useEffect(() => {
-    if (state === "partial") {
+    if (state === "partial" && !isModal) {
       sidebarRef.current.querySelectorAll("[data-hide='true']").forEach(item => item.style.display = "none");
     } else {
       sidebarRef.current.querySelectorAll("[data-hide='true']").forEach(item => item.style.display = "flex");
@@ -56,7 +63,13 @@ export default function Sidebar() {
   }, [state]);
 
   return (
-    <aside className={`${styles.sidebar} ${isHovered ? styles.sidebarHovered : ""}`} ref={sidebarRef} onMouseMove={handleMousemove} onMouseEnter={handleMouseenter} onMouseLeave={handleMouseleave}>
+    <aside
+      className={`${styles.sidebar} ${isHovered ? styles.sidebarHovered : ""} ${isModal ? styles.sidebarModal : ""} ${isModalOpen ? styles.sidebarModalOpen : ""}`}
+      ref={sidebarRef}
+      onMouseMove={isModal ? null : isHeaderRendered ? handleMousemove : null}
+      onMouseEnter={isModal ? null : isHeaderRendered ? handleMouseenter : null}
+      onMouseLeave={isModal ? null : isHeaderRendered ? handleMouseleave : null}
+    >
       <div className={styles.sidebarContainer}>
         <div className={styles.sidebarContent}>
           <div className={styles.account}>
@@ -70,17 +83,18 @@ export default function Sidebar() {
           </div>
 
           <nav className={styles.sidebarNavigation}>
-            <Menu />
+            <Menu defaultActiveItemId={defaultActiveItemId} />
           </nav>
         </div>
-        <div className={styles.sidebarTriggerButtonWrapper}>
-          <span className={styles.sidebarLine}></span>
-          <button className={`${styles.triggerButton} ${state === "partial" ? styles.triggerButtonAsidePartial : ""}`} ref={triggerButtonRef} style={{ transform: `translateY(${buttonTriggerPosY}px)` }} onClick={toggle}>
-            <svg className={styles.triggerButtonIcon} width={16} height={16} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.431 7.257l1.352-1.474 5.893 5.48a1 1 0 0 1 0 1.474l-5.893 5.45-1.352-1.475L14.521 12 9.43 7.257z"></path>
-            </svg>
-          </button>
-        </div>
+        {!isModal && 
+          <div className={styles.sidebarTriggerButtonWrapper}>
+            <span className={styles.sidebarLine}></span>
+            <button className={`${styles.triggerButton} ${state === "partial" ? styles.triggerButtonAsidePartial : ""}`} ref={triggerButtonRef} style={{ transform: `translateY(${buttonTriggerPosY}px)` }} onClick={toggle}>
+              <svg className={styles.triggerButtonIcon} width={16} height={16} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.431 7.257l1.352-1.474 5.893 5.48a1 1 0 0 1 0 1.474l-5.893 5.45-1.352-1.475L14.521 12 9.43 7.257z"></path>
+              </svg>
+            </button>
+          </div>}
       </div>
     </aside>
   );

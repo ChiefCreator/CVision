@@ -1,0 +1,57 @@
+.trigger {
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  transition: background-color .3s var(--transition-power--in-out);
+
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  &__point {
+    display: block;
+    width: 4px;
+    aspect-ratio: 1;
+    background-color: var(--color-neutral-contrast);
+    border-radius: 50%;
+  }
+
+  &:hover {
+    background-color: var(--color-secondary--lighten);
+  }
+}
+
+.trigger-cross {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+
+  &__line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    transform-origin: center center;
+    display: block;
+    width: 0;
+    height: 2px;
+    border-radius: 5px;
+    background-color: var(--color-neutral-contrast);
+
+    &:first-child {
+      rotate: 45deg;
+    }
+    &:last-child {
+      rotate: -45deg;
+    }
+  }
+}
