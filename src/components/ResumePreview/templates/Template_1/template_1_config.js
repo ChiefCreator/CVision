@@ -1,4 +1,5 @@
 const template_1_config = {
+  blocksOverSections: ["header"],
   asideSectionsIds: ["skills", "languages", "hobbies", "gender", "nationality", "configurableFields"],
   mainSectionsIds: ["professionalSummary", "employmentHistory", "courses", "exstraCurricular"],
 

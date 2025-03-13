@@ -11,7 +11,7 @@ function checkIsSubSectionEmpty(sectionData) {
 }
 
 function Progress({ level, levelsCount = 5 }) {
-  if (level === 0) return null;
+  if (level === 0 || !level) return null;
 
   return (
     <div className={styles.progress}>
@@ -33,15 +33,15 @@ function SectionSkills({ sectionData, ref }) {
 
   return (
     <section className={`${styles.asideSection} ${styles.skillsSection}`} id={sectionData.id} key={sectionData.id} ref={ref}>
-      <h2 className={styles.asideSectionTitle}>{sectionData.title}</h2>
+      <h2 className={styles.asideSectionTitle} data-track>{sectionData.title}</h2>
       <div className={styles.asideSectionBody}>
         <div className={styles.asideSectionSubSections}>
           {sectionData?.subSections.map(subSectionData => {
             const achievedSkillLevel = skillsData.find(skill => skill.id === subSectionData.parameterId)?.level;
             if (subSectionData.skill) {
               return (
-                <div className={styles.subSectionSkill} key={subSectionData.id}>
-                  <h6 className={styles.subSectionSkillTitle}>{subSectionData.skill}</h6>
+                <div className={styles.subSectionSkill} key={subSectionData.id} data-split={JSON.stringify({ type: "text", dataPath: { sectionId: sectionData.id, subSectionId: subSectionData.id, splitField: "skill" }, necessaryFields: { currentPage: ["parameterId", "order"], nextPage: ["parameterId", "order"], currentAndNextPages: ["order"] } })}>
+                  <h6 className={styles.subSectionSkillTitle} >{subSectionData.skill}</h6>
                   
                   <Progress level={achievedSkillLevel} />
                 </div>
@@ -59,7 +59,7 @@ function SectionLanguages({ sectionData, ref }) {
 
   return (
     <section className={`${styles.asideSection} ${styles.languagesSection}`} id={sectionData.id} key={sectionData.id} ref={ref}>
-      <h2 className={styles.asideSectionTitle}>{sectionData.title}</h2>
+      <h2 className={styles.asideSectionTitle} data-track>{sectionData.title}</h2>
       <div className={styles.asideSectionBody}>
         <div className={styles.asideSectionSubSections}>
           {sectionData?.subSections.map(subSectionData => {
@@ -67,7 +67,7 @@ function SectionLanguages({ sectionData, ref }) {
 
             if (subSectionData.language) {
               return (
-                <div className={styles.subSectionLanguage} key={subSectionData.id}>
+                <div className={styles.subSectionLanguage} key={subSectionData.id} data-split={JSON.stringify({ type: "item", dataPath: { sectionId: sectionData.id, subSectionId: subSectionData.id }  })}>
                   <h6 className={styles.subSectionLanguageTitle}>{subSectionData.language}</h6>
 
                   <Progress level={achievedLanguageLevel} />
@@ -80,38 +80,38 @@ function SectionLanguages({ sectionData, ref }) {
     </section>
   );
 }
-function SectionProfessionalSummary({ sectionData }) {
+function SectionProfessionalSummary({ sectionData, ref }) {
   if (!sectionData.description || sectionData.description === "<br>") return null;
 
   return (
-    <section className={`${styles.mainSection} ${styles.professionalSummarySection}`} key={sectionData.id}>
-      <h2 className={styles.mainSectionTitle}>{sectionData.title}</h2>
+    <section className={`${styles.mainSection} ${styles.professionalSummarySection}`} key={sectionData.id} ref={ref}>
+      <h2 className={styles.mainSectionTitle} data-split={JSON.stringify({ type: "text", dataPath: { sectionId: sectionData.id, splitField: "title" }})}>{sectionData.title}</h2>
       <div className={styles.mainSectionBody}>
-        <p className={styles.mainSectionDescription} dangerouslySetInnerHTML={{ __html: sectionData.description }}></p>
+        <p className={styles.mainSectionDescription} dangerouslySetInnerHTML={{ __html: sectionData.description }} data-split={JSON.stringify({ type: "text", dataPath: { sectionId: sectionData.id, splitField: "description" }})}></p>
       </div>
     </section>
   );
 }
-function SectionEmploymentHistory({ sectionData }) {
+function SectionEmploymentHistory({ sectionData, ref }) {
   if (checkIsSubSectionEmpty(sectionData)) return null;
 
   return (
-    <section className={`${styles.mainSection} ${styles.professionalSummarySection}`} key={sectionData.id}>
-      <h2 className={styles.mainSectionTitle}>{sectionData.title}</h2>
+    <section className={`${styles.mainSection} ${styles.professionalSummarySection}`} key={sectionData.id} ref={ref}>
+      <h2 className={styles.mainSectionTitle} data-track>{sectionData.title}</h2>
       <div className={styles.mainSectionBody}>
         <div className={styles.mainSectionSubSections}>
           {sectionData.subSections.map(subSectionData => {
             return (
               <div className={styles.subSection} key={subSectionData.id}>
                 <div className={styles.subSectionHeader}>
-                  <h6 className={styles.subSectionTitle}>
+                  <h6 className={styles.subSectionTitle} data-track>
                     {subSectionData.profession && `${subSectionData.profession}`}
                     {subSectionData.employer && subSectionData.profession ? `, ${subSectionData.employer}` : subSectionData.employer ? subSectionData.employer : null}
                     {subSectionData.city && (subSectionData.employer || subSectionData.profession) ? `, ${subSectionData.city}` : subSectionData.city ? subSectionData.city : null}
                   </h6>
-                  <span className={styles.subSectionDate}>{convertFromObjectStartDateAndEndDateToStringRangeFormat(subSectionData.startDate, subSectionData.endDate)}</span>
+                  <span className={styles.subSectionDate} data-track>{convertFromObjectStartDateAndEndDateToStringRangeFormat(subSectionData.startDate, subSectionData.endDate)}</span>
                 </div>
-                <p className={styles.subSectionDescription} dangerouslySetInnerHTML={{ __html: subSectionData.description }}></p>
+                {(subSectionData.description && subSectionData.description !== "<br>") && <p className={styles.subSectionDescription} dangerouslySetInnerHTML={{ __html: subSectionData.description }} data-split={JSON.stringify({ type: "text", dataPath: { sectionId: sectionData.id, subSectionId: subSectionData.id, splitField: "description" }})}></p>}
               </div>
             );
           })}
@@ -125,16 +125,16 @@ function SectionHobbies({ sectionData, ref }) {
 
   return (
     <section className={`${styles.asideSection} ${styles.sectionHobbies}`} id={sectionData.id} key={sectionData.id} ref={ref}>
-      <h2 className={styles.asideSectionTitle}>{sectionData.title}</h2>
-      <p className={styles.asideSectionDescription} dangerouslySetInnerHTML={{ __html: sectionData.description }}></p>
+      <h2 className={styles.asideSectionTitle} data-track>{sectionData.title}</h2>
+      <p className={styles.asideSectionDescription} dangerouslySetInnerHTML={{ __html: sectionData.description }}  data-split={JSON.stringify({ type: "text", dataPath: { sectionId: sectionData.id, splitField: "description" }})}></p>
     </section>
   );
 }
-function SectionCourses({ sectionData }) {
+function SectionCourses({ sectionData, ref }) {
   if (checkIsSubSectionEmpty(sectionData)) return null;
 
   return (
-    <section className={`${styles.mainSection} ${styles.courcesSection}`} key={sectionData.id}>
+    <section className={`${styles.mainSection} ${styles.courcesSection}`} key={sectionData.id} ref={ref}>
       <h2 className={styles.mainSectionTitle}>{sectionData.title}</h2>
       <div className={styles.mainSectionBody}>
         <div className={styles.mainSectionSubSections}>
@@ -156,11 +156,11 @@ function SectionCourses({ sectionData }) {
     </section>
   );
 }
-function SectionExtraCurricular({ sectionData }) {
+function SectionExtraCurricular({ sectionData, ref }) {
   if (checkIsSubSectionEmpty(sectionData)) return null;
 
   return (
-    <section className={`${styles.mainSection} ${styles.exstraCurricularSection}`} key={sectionData.id}>
+    <section className={`${styles.mainSection} ${styles.exstraCurricularSection}`} key={sectionData.id} ref={ref}>
       <h2 className={styles.mainSectionTitle}>{sectionData.title}</h2>
       <div className={styles.mainSectionBody}>
         <div className={styles.mainSectionSubSections}>
@@ -185,6 +185,8 @@ function SectionExtraCurricular({ sectionData }) {
   );
 }
 function AsideSection({ id, title, value, ref }) {
+  if (!value) return null;
+
   return (
     <section className={styles.asideSection} key={id} ref={ref}>
       <h2 className={styles.asideSectionTitle}>{title}</h2>
@@ -193,7 +195,7 @@ function AsideSection({ id, title, value, ref }) {
   );
 }
 
-export default function Template_1({ resumeData, isHeader, asideSections, mainSections, asideSectionsRefs, isHiden }) {
+export default function Template_1({ resumeData, isHeader, asideSections, mainSections, asideSectionsRefs, mainSectionsRefs, blocksOverSectionsRefs, isHiden }) {
   const personalInformation = resumeData?.sections && resumeData.sections.find(section => section.id === "personalInformation");
   const lineSpacing = resumeData?.lineSpacing ?? 100;
 
@@ -202,8 +204,8 @@ export default function Template_1({ resumeData, isHeader, asideSections, mainSe
         <div className={styles.templateContainer}>
           <div className={styles.templateContent}>
             {isHeader && 
-              <header className={styles.templateHeader} style={{ backgroundColor: "orange" }}>
-                <div className={styles.personalInformation}>
+              <header className={styles.templateHeader} ref={blocksOverSectionsRefs ? (el) => (blocksOverSectionsRefs.current.header = el) : null}>
+                <div className={styles.personalInformation} style={{ backgroundColor: "orange" }}>
                   <div className={styles.personalInformationPhotoWrapper}>
                     <img className={styles.personalInformationPhoto} src={photo}></img>
                   </div>
@@ -257,13 +259,13 @@ export default function Template_1({ resumeData, isHeader, asideSections, mainSe
                   {mainSections?.map(sectionData => {
                     switch (sectionData.id) {
                       case "professionalSummary":
-                        return <SectionProfessionalSummary sectionData={sectionData} key={sectionData.id} />
+                        return <SectionProfessionalSummary sectionData={sectionData} key={sectionData.id} ref={mainSectionsRefs ? (el) => (mainSectionsRefs.current[sectionData.id] = el) : null} />
                       case "employmentHistory":
-                        return <SectionEmploymentHistory sectionData={sectionData} key={sectionData.id} />
+                        return <SectionEmploymentHistory sectionData={sectionData} key={sectionData.id} ref={mainSectionsRefs ? (el) => (mainSectionsRefs.current[sectionData.id] = el) : null} />
                       case "courses": 
-                        return <SectionCourses sectionData={sectionData} key={sectionData.id} />
+                        return <SectionCourses sectionData={sectionData} key={sectionData.id} ref={mainSectionsRefs ? (el) => (mainSectionsRefs.current[sectionData.id] = el) : null} />
                       case "exstraCurricular":
-                        return <SectionExtraCurricular sectionData={sectionData} key={sectionData.id} />
+                        return <SectionExtraCurricular sectionData={sectionData} key={sectionData.id} ref={mainSectionsRefs ? (el) => (mainSectionsRefs.current[sectionData.id] = el) : null} />
                       default:
                         return null;
                     }

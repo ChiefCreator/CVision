@@ -1,15 +1,15 @@
 import styles from "./ResumePreview.module.scss";
 
-export default function ResumePreviewPages({ pages, currentPageIndex, ref, TemplateComponent, mainSections, resumeData }) {
+export default function ResumePreviewPages({ pages, currentPageIndex, TemplateComponent, resumeData }) {
   return (
-    <div className={styles.pages} ref={ref}>
+    <div className={styles.pages}>
       {pages.map((page, pageIndex) => (
         <TemplateComponent
           isHiden={currentPageIndex !== pageIndex}
           key={pageIndex}
-          isHeader={page.header}
+          isHeader={page.isHeader}
           asideSections={page.asideSections}
-          mainSections={mainSections}
+          mainSections={page.mainSections}
           resumeData={resumeData}
         />
       ))}
