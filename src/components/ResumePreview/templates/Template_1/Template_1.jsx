@@ -207,7 +207,7 @@ export default function Template_1({ resumeData, isHeader, asideSections, mainSe
               <header className={styles.templateHeader} ref={blocksOverSectionsRefs ? (el) => (blocksOverSectionsRefs.current.header = el) : null}>
                 <div className={styles.personalInformation} style={{ backgroundColor: "orange" }}>
                   <div className={styles.personalInformationPhotoWrapper}>
-                    <img className={styles.personalInformationPhoto} src={photo}></img>
+                    {personalInformation?.photo && <img className={styles.personalInformationPhoto} src={personalInformation.photo}></img>}
                   </div>
                   <div className={styles.personalInformationContent}>
                     <div className={styles.personalInformationTitleBlock}>

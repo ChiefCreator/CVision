@@ -4,7 +4,7 @@ import HomeLayout from "../layouts/HomeLayout/HomeLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import CreateResume from "../pages/CreateResume/CreateResume";
 
-import { ImageUploaderProvider } from "../context/ImageUploaderContext";
+// import { ImageManagerProvider } from "../context/ImageManagerContext";
 import { ResumeProvider } from "../context/ResumeContext";
 import { AsideProvider } from "../context/AsideContext";
 import { HeaderProvider } from "../context/HeaderContext";
@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <ResumeProvider>
-      <ImageUploaderProvider>
+      {/* <ImageManagerProvider> */}
         <HeaderProvider>
           <AsideProvider>
             <BrowserRouter>
@@ -35,7 +35,7 @@ export default function App() {
             </BrowserRouter>
           </AsideProvider>
         </HeaderProvider>
-      </ImageUploaderProvider>
+      {/* </ImageManagerProvider> */}
     </ResumeProvider>
   )
 }

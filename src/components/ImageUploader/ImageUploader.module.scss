@@ -107,6 +107,11 @@
   &__whole-image {
     width: 100%;
     height: 100%;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
   }
   &__final-image {
     width: 240px;

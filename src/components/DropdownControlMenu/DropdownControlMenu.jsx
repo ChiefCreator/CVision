@@ -6,8 +6,9 @@ gsap.registerPlugin(useGSAP);
 
 import styles from "./DropdownControlMenu.module.scss";
 
-export default function DropdownControlMenu({ controls }) {
+export default function DropdownControlMenu({ controls, placement }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [placementStyles, setPlacementStyles] = useState({});
 
   const $triggerButton = useRef(null);
   const $dropdown = useRef(null);
@@ -21,6 +22,8 @@ export default function DropdownControlMenu({ controls }) {
     setIsOpen(false);
   }
   useEffect(() => {
+    setPlacementStyles(getObjectOfMenuPlacement());
+
     function handleClickOutside(event) {
       if ($dropdown.current && !$dropdown.current.contains(event.target) && !$triggerButton.current.contains(event.target)) {
         setIsOpen(false);
@@ -34,6 +37,47 @@ export default function DropdownControlMenu({ controls }) {
     };
   }, []);
 
+  // методы
+  function getObjectOfMenuPlacement() {
+    const { position = "bottom-right", offsetX = 0, offsetY = 0 } = placement || {};
+
+    const triggerRect = $triggerButton.current.getBoundingClientRect();
+    const menuRect = $dropdown.current.getBoundingClientRect();
+
+    switch (position) {
+      case "top-left":
+        return {
+          left: `${offsetX}px`,
+          top: `calc(${-menuRect.height + offsetY}px)`,
+          transformOrigin: "0 100%",
+        };
+      case "top-right":
+        return {
+          right: `${offsetX}px`,
+          top: `${offsetY}px`,
+          transformOrigin: "0 100%",
+        };
+      case "bottom-left":
+        return {
+          left: `${offsetX}px`,
+          top: `calc(100% + ${offsetY}px)`,
+          transformOrigin: "0 0",
+        };
+      case "bottom-right":
+        return {
+          right: `${offsetX}px`,
+          top: `calc(100% + ${offsetY}px)`,
+          transformOrigin: "100% 0",
+        };
+      default:
+        return {
+          right: `${offsetX}px`,
+          top: `${offsetY}px`,
+          transformOrigin: "100% 0",
+        };
+    }
+  }
+
   // инициализация анимаций
   const { contextSafe } = useGSAP(() => {
     timeline.current = gsap.timeline({ paused: true })
@@ -43,8 +87,6 @@ export default function DropdownControlMenu({ controls }) {
         duration: .75,
       })
   });
-
-  // методы
   const animateOnShow = contextSafe(() => timeline.current.restart());
   const animateOnHide = contextSafe(() => timeline.current.reverse());
 
@@ -59,7 +101,7 @@ export default function DropdownControlMenu({ controls }) {
           <path d="M480-189.233q-24.749 0-42.374-17.624-17.625-17.625-17.625-42.374t17.625-42.374T480-309.23t42.374 17.625 17.625 42.374-17.625 42.374Q504.749-189.233 480-189.233m0-230.768q-24.749 0-42.374-17.625T420.001-480t17.625-42.374T480-539.999t42.374 17.625T539.999-480t-17.625 42.374T480-420.001m0-230.769q-24.749 0-42.374-17.625-17.625-17.624-17.625-42.374 0-24.749 17.625-42.374 17.625-17.624 42.374-17.624t42.374 17.624 17.625 42.374-17.625 42.374T480-650.77"></path>
         </svg>
       </button>
-      <div className={styles.dropdownControlMenuDropdown} ref={$dropdown}>
+      <div className={styles.dropdownControlMenuDropdown} ref={$dropdown} style={placementStyles}>
         <div className={styles.dropdownControlMenuButtonsWrapper}>
           {controls.map((controlObj) => {
             const onClick = () => {

@@ -58,6 +58,7 @@
     "postprocessing": "^6.36.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-easy-crop": "^5.4.1",
     "use-immer": "^0.11.0",
     "uuid": "^11.0.5"
   }

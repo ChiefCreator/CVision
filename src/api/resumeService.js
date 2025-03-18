@@ -1,5 +1,5 @@
 import { db } from "./../../firebase";
-import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where, orderBy, deleteDoc, arrayRemove, addDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where, orderBy, deleteDoc, arrayRemove, addDoc, deleteField } from "firebase/firestore";
 import { convertFromObjectMonthYearFormatToTimestamp, convertFromTimestampToObjectMonthYearFormat, isDateValidMMYYYYFormat } from "../lib/dateUtils";
 
 export async function getAllResumes() {
@@ -95,6 +95,17 @@ export async function updateResumeField(resumeId, key, newValue) {
     await setDoc(docRef, {
       [key]: newValue,
     }, { merge: true });
+  } catch (error) {
+    console.error("Ошибка обновления документа:", error);
+  }
+}
+export async function deleteResumeSectionField(resumeId, sectionId, key) {
+  try {
+    const docRef = doc(db, `users/userId/resumes/${resumeId}/sections/${sectionId}`);
+
+    await updateDoc(docRef, {
+      [key]: deleteField()
+    });
   } catch (error) {
     console.error("Ошибка обновления документа:", error);
   }

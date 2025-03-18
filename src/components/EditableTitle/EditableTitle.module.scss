@@ -6,6 +6,7 @@
   letter-spacing: normal;
   white-space: pre;
   font-family: var(--font-primary);
+  overflow: hidden;
   &__content-wrapper {
     flex: 1 1 auto;
   }

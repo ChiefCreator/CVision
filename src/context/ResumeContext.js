@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllResumes, addResume, deleteResume, updateResumeField, updateResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
+import { getAllResumes, addResume, deleteResume, updateResumeField, updateResumeSectionField, deleteResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
 import { createDefaultResume } from "../lib/resumeUtils";
 
 const initialState = {
@@ -16,6 +16,7 @@ const actionTypes = {
   ADD_RESUME: "ADD_RESUME",
   UPDATE_RESUME_FIELD: "UPDATE_RESUME_FIELD",
   UPDATE_RESUME_SECTION_FIELD: "UPDATE_RESUME_SECTION_FIELD",
+  DELETE_RESUME_SECTION_FIELD: "DELETE_RESUME_SECTION_FIELD",
   UPDATE_RESUME_SECTION_CONFIGURABLE_FIELD: "UPDATE_RESUME_SECTION_CONFIGURABLE_FIELD",
   ADD_RESUME_SECTION_CONFIGURABLE_FIELD: "ADD_RESUME_SECTION_CONFIGURABLE_FIELD",
   UPDATE_RESUME_SUB_SECTION_FIELD: "UPDATE_RESUME_SUB_SECTION_FIELD",
@@ -88,6 +89,25 @@ const resumeReducer = (draft, action) => {
       section[key] = value;
 
       updateResumeSectionField(resumeId, sectionId, key, value);
+
+      break;
+    }
+    case actionTypes.DELETE_RESUME_SECTION_FIELD: {
+      const { resumeId, sectionId, key } = action;
+
+      const resume = draft.resumes.find((resume) => resume.id === resumeId);
+
+      if (!resume.sections) resume.sections = [];
+
+      if (!resume.sections.find(section => section.id === sectionId)) {
+        resume.sections.push({ id: sectionId });
+      }
+
+      const section = resume.sections.find((section) => section.id === sectionId);
+
+      delete section[key];
+
+      deleteResumeSectionField(resumeId, sectionId, key);
 
       break;
     }

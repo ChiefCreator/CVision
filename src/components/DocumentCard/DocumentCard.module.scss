@@ -1,19 +1,21 @@
 .card {
-  width: 100%;
   display: flex;
   gap: 25px;
   background-color: var(--color-secondary--lighten);
   padding: 25px;
   border-radius: 10px;
+  overflow: hidden;
 
   &__preview-wrapper {
-    flex: 0 1 400px;
+    flex: 0 0 55%;
+    max-width: 400px;
     perspective: 1000px;
     transform-style: preserve-3d;
   }
 
   &__info-wrapper {
-    flex: 1 1 auto;
+    flex: 0 1 45%;
+    overflow: hidden;
   }
 }
 
@@ -28,6 +30,7 @@
 }
 
 .card-info {
+  width: 100%;
   &__header {
     padding-bottom: 15px;
   }
@@ -39,7 +42,7 @@
 
   &__time {
     font-size: 14px;
-    display: inline-block;
+    display: block;
     color: var(--color-secondary--light);
   }
 

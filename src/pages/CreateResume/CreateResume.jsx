@@ -1,15 +1,18 @@
 import CVBuilder from "./../../components/CVBuilder/CVBuilder";
-import ImageUploader from "./../../components/ImageUploader/ImageUploader";
+import ImageManager from "../../components/ImageManager/ImageManager";
 
 import { useParams } from "react-router-dom";
+import { ImageManagerProvider } from "../../context/ImageManagerContext";
 
 export default function CreateResume() {
   const { resumeId } = useParams();
 
   return (
     <>
+    <ImageManagerProvider>
       <CVBuilder resumeId={resumeId} />
-      <ImageUploader />
+      <ImageManager resumeId={resumeId} />
+    </ImageManagerProvider>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useImageUploaderContext } from "../../context/ImageUploaderContext";
+import { useImageManagerContext } from "../../context/ImageManagerContext";
 import styles from "./ImageUploader.module.scss";
 
 import gsap from "gsap";
@@ -13,7 +13,8 @@ import ButtonClose from "../ButtonClose/ButtonClose";
 import RangeSlider from "../RangeSlider/RangeSlider";
 
 export default function ImageUploader() {
-  const { isOpen, setIsOpen } = useImageUploaderContext();
+  const { imageManagerState, dispatchOfImageManager } = useImageManagerContext();
+  const { isOpen } = imageManagerState;
   const [state, setState] = useState("upload");
   const [image, setImage] = useState(null);
   const [imageScale, setImageScale] = useState(1);
@@ -86,7 +87,8 @@ export default function ImageUploader() {
       deltaX = event.clientX - startX;
       deltaY = event.clientY - startY;
   
-      translateImage(deltaX, deltaY);
+      translateImage($wholeImage.current, canvasOfWholeImageRealSize.current, true, deltaX, deltaY);
+      translateImage($finalImage.current, canvasOfFinalImageRealSize.current, false, deltaX, deltaY);
     }
   }
 
@@ -166,6 +168,10 @@ export default function ImageUploader() {
       y_2: imgSizeInCanvas.height,
     }
 
+    if (isWholeImageCanvas) {
+      console.log("координаты whole image", imgCoordsOnCanvas)
+    }
+
     const ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
@@ -177,12 +183,12 @@ export default function ImageUploader() {
       ctx.fillRect(imgCoordsOnCanvas.x_1, imgCoordsOnCanvas.y_1, imgCoordsOnCanvas.x_2, imgCoordsOnCanvas.y_2);
     }
   }
-  function translateImage(deltaX, deltaY) {
-    const ctx = $wholeImage.current.getContext("2d");
+  function translateImage(canvas, canvasRealSize, isWholeImageCanvas, deltaX, deltaY) {
+    const ctx = canvas.getContext("2d");
     ctx.save();
     ctx.translate(deltaX, deltaY);
-    console.log(deltaX,deltaY)
-    previewImage(imageScale);
+    // console.log("transform whole image: ", deltaX, deltaY);
+    previewImageOnCanvas(canvas, canvasRealSize, imageScale, isWholeImageCanvas);
     ctx.restore();
   }
 
@@ -247,7 +253,7 @@ export default function ImageUploader() {
             <footer className={styles.editBlockFooter}></footer>
           </div>
         )}
-        <ButtonClose className={styles.imageUploaderButtonClose} onClickCallback={() => setIsOpen(false)} />
+        <ButtonClose className={styles.imageUploaderButtonClose} onClickCallback={() => dispatchOfImageManager({ type: "SET_IS_OPEN", isOpen: false })} />
       </div>
     </div>
   );
