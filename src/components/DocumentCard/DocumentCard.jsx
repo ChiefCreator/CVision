@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js';
 import html2canvas from 'html2canvas';
 
-import ResumePreview from "../ResumePreview/ResumePreview";
+import DocumentPreview from "../DocumentPreview/DocumentPreview";
 
 import styles from './DocumentCard.module.scss';
 
@@ -109,12 +109,14 @@ export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCa
         <div
           className={`${styles.preview} ${!isPreviewHovered ? styles.previewTransition : ""}`}
           ref={documentPreviewRef}
+          type="button"
+          onClick={onEditButtonClick}
           onMouseMove={handlePreviewMousemove}
           onMouseLeave={handlePreviewMouseleave}
           onMouseEnter={handlePreviewMouseenter} 
           style={{ transform: `rotateX(${previewRotation.rotateX}deg) rotateY(${previewRotation.rotateY}deg)` }}
         >
-          <ResumePreview resumeData={data} isResumeDataLoaded={isResumeDataLoaded} />
+          <DocumentPreview data={data} isDataLoaded={isResumeDataLoaded} />
         </div>
       </div>
 

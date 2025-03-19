@@ -1,10 +1,10 @@
-import styles from "./Template_1.module.scss";
-import photo from "./../../../../../src/assets/images/portrait.jpg";
+import styles from "./TemplateResume_1.module.scss";
 
 import skillsData from "../../../../data/SkillsData";
 import languageLevelsData from "../../../../data/languageLevelsData";
 
 import { convertFromObjectStartDateAndEndDateToStringRangeFormat } from "../../../../lib/dateUtils";
+import { useEffect } from "react";
 
 function checkIsSubSectionEmpty(sectionData) {
   return (!sectionData?.subSections || sectionData?.subSections?.length === 0);
@@ -195,9 +195,12 @@ function AsideSection({ id, title, value, ref }) {
   );
 }
 
-export default function Template_1({ resumeData, isHeader, asideSections, mainSections, asideSectionsRefs, mainSectionsRefs, blocksOverSectionsRefs, isHiden }) {
-  const personalInformation = resumeData?.sections && resumeData.sections.find(section => section.id === "personalInformation");
-  const lineSpacing = resumeData?.lineSpacing ?? 100;
+export default function TemplateResume_1({ isHeader, headerSections, asideSections, mainSections, lineSpacing = 100, asideSectionsRefs, mainSectionsRefs, blocksOverSectionsRefs, isHiden, onRender }) {
+  const personalInformation = headerSections?.find(section => section.id === "personalInformation");
+
+  useEffect(() => {
+    onRender && onRender();
+  }, [])
 
   return (
       <article className={`${styles.template} ${isHiden ? styles.templateHidden : ""}`} style={{ lineHeight: lineSpacing + "%" }}>
@@ -241,9 +244,9 @@ export default function Template_1({ resumeData, isHeader, asideSections, mainSe
                       case "hobbies":
                         return <SectionHobbies sectionData={sectionData} key={sectionData.id} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current[sectionData.id] = el) : null} />
                       case "nationality":
-                        return <AsideSection id="nationality" title="Национальность" value={sectionData.nationality} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current["nationality"] = el) : null} />
+                        return <AsideSection key={sectionData.id} id="nationality" title="Национальность" value={sectionData.nationality} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current["nationality"] = el) : null} />
                       case "gender":
-                        return <AsideSection id="gender" title="Пол" value={sectionData.gender} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current[sectionData.id] = el) : null} />
+                        return <AsideSection key={sectionData.id} id="gender" title="Пол" value={sectionData.gender} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current[sectionData.id] = el) : null} />
                       case "configurableFields":
                         return sectionData?.configurableFields?.map(sectionData => {
                           return sectionData.value ? <AsideSection id={sectionData.id} title={sectionData.label} value={sectionData.value} key={sectionData.id} ref={asideSectionsRefs ? (el) => (asideSectionsRefs.current[sectionData.id] = el) : null} /> : null;

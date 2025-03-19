@@ -4,7 +4,7 @@ import EditableTitle from "../EditableTitle/EditableTitle"
 import styles from "./CVBuilder.module.scss";
 
 import CVFormBuilder from "../CVFormBuilder/CVFormBuilder";
-import CVBuilderPreview from "../CVBuilderPreview/CVBuilderPreview";
+import DocumentBuilderPreview from "../DocumentBuilderPreview/DocumentBuilderPreview";
 import ModalSidebarTrigger from "../ModalSidebarTrigger/ModalSidebarTrigger";
 import Sidebar from "../Sidebar/Sidebar";
 import { useResumeContext } from "../../context/ResumeContext";
@@ -43,7 +43,7 @@ export default function CVBuilder({ resumeId }) {
           </div>
           <CVFormBuilder resumeId={resumeId} />
         </div>
-        <CVBuilderPreview resumeData={resumeData} isResumeDataLoaded={isResumeDataLoaded} />
+        <DocumentBuilderPreview data={resumeData} isDataLoaded={isResumeDataLoaded} changeDocumentField={handleResumeFieldChange} />
       </div>
     </div>
   )

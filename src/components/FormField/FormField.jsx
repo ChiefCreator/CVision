@@ -54,7 +54,9 @@ export default function FormField({ type = "general", Component, data, className
           {!isGeneral && <DropdownControlMenu controls={controlsData} />}
         </div>
       </header>
-      {renderComponent()}
+      <div className={styles.formFieldBody}>
+        {renderComponent()}
+      </div>
     </div>
   );
 }

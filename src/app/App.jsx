@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomeLayout from "../layouts/HomeLayout/HomeLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import CreateResume from "../pages/CreateResume/CreateResume";
+import EditCoverLetter from "../pages/EditCoverLetter/EditCoverLetter";
 
-// import { ImageManagerProvider } from "../context/ImageManagerContext";
+import { CoverLettersProvider } from "../context/CoverLettersContext";
 import { ResumeProvider } from "../context/ResumeContext";
 import { AsideProvider } from "../context/AsideContext";
 import { HeaderProvider } from "../context/HeaderContext";
@@ -20,7 +21,7 @@ export default function App() {
 
   return (
     <ResumeProvider>
-      {/* <ImageManagerProvider> */}
+      <CoverLettersProvider>
         <HeaderProvider>
           <AsideProvider>
             <BrowserRouter>
@@ -30,12 +31,13 @@ export default function App() {
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="settings" element={<div>Настройки</div>} />
                 </Route>
-                <Route path="create-resume/:resumeId" element={<CreateResume />} />
+                <Route path="resumes/:resumeId/edit" element={<CreateResume />} />
+                <Route path="cover-letters/:coverLetterId/edit" element={<EditCoverLetter />} />
               </Routes>
             </BrowserRouter>
           </AsideProvider>
         </HeaderProvider>
-      {/* </ImageManagerProvider> */}
+      </CoverLettersProvider>
     </ResumeProvider>
   )
 }

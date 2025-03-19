@@ -1,6 +1,6 @@
-import styles from "./ResumePreviewNavigation.module.scss";
+import styles from "./DocumentPreviewNavigation.module.scss";
 
-export default function ResumePreviewNavigation({ currentPageIndex, totalPages, setCurrentPageIndex }) {
+export default function DocumentPreviewNavigation({ currentPageIndex, totalPages, setCurrentPageIndex }) {
   currentPageIndex++;
 
   return (

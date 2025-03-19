@@ -1,8 +1,18 @@
 const template_1_config = {
   blocksOverSections: ["header"],
+
+  headerSectionsIds: ["personalInformation"],
   asideSectionsIds: ["skills", "languages", "hobbies", "gender", "nationality", "configurableFields"],
   mainSectionsIds: ["professionalSummary", "employmentHistory", "courses", "exstraCurricular"],
 
+  getHeaderSections(sections) {
+    const personalInformationSection = sections && Object.fromEntries(
+      Object.entries(sections.find(section => section.id === "personalInformation"))
+        .filter(([key]) => !["configurableFields", "nationality", "gender"].includes(key))
+    );
+
+    return sections ? [personalInformationSection] : [];
+  },
   getAsideSections(sections) {
     const nationalitySection = sections && { id: "nationality", nationality: sections.find(section => section.id === "personalInformation").nationality };
     const genderSection = sections && { id: "gender", gender: sections.find(section => section.id === "personalInformation").gender };

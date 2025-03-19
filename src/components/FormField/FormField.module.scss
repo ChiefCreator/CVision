@@ -1,7 +1,12 @@
 .formField {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
   &__header {
+    flex: 1 1 auto;
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: space-between;
     margin-bottom: 7.5px;
   }
