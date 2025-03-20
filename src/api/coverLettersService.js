@@ -1,5 +1,7 @@
 import { db } from "./../../firebase";
-import { collection, getDocs, doc, updateDoc, setDoc, getDoc, deleteDoc, addDoc, deleteField } from "firebase/firestore";
+import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch } from "firebase/firestore";
+import { debounce } from "lodash";
+import { convertFromTimestampToDate, convertFromDateToTimestamp } from "../lib/dateUtils";
 
 export async function getAllCoverLetters(userId) {
   try {
@@ -10,6 +12,10 @@ export async function getAllCoverLetters(userId) {
 
     for (const doc of coverLettersSnapshot.docs) {
       const coverLetterData = doc.data();
+
+      coverLetterData.creationDate = coverLetterData.creationDate ? convertFromTimestampToDate(coverLetterData.creationDate) : null;
+      coverLetterData.changeDate = coverLetterData.changeDate ? convertFromTimestampToDate(coverLetterData.changeDate) : null;
+      
 
       const sectionsRef = collection(doc.ref, "sections");
       const sectionsSnapshot = await getDocs(sectionsRef, { source: "cache" });
@@ -35,6 +41,35 @@ export async function getAllCoverLetters(userId) {
     throw error;
   }
 }
+export async function updateCoverLetter(userId, coverLetterData) {
+  const batch = writeBatch(db);
+
+  const { sections, id: coverLetterId, ...coverLetterDocumentData } = coverLetterData;
+
+  coverLetterDocumentData.creationDate = coverLetterDocumentData.creationDate ? convertFromDateToTimestamp(coverLetterDocumentData.creationDate) : null;
+  coverLetterDocumentData.changeDate = coverLetterDocumentData.changeDate ? convertFromDateToTimestamp(coverLetterDocumentData.changeDate) : null;
+
+  const coverLetterRef = doc(db, `users/${userId}/coverLetters/${coverLetterId}`);
+  batch.set(coverLetterRef, coverLetterDocumentData);
+
+  sections?.forEach(section => {
+    const { id: sectionId, ...sectionDocumentData } = section;
+
+    const sectionRef = doc(coverLetterRef, `sections/${sectionId}`);
+    batch.set(sectionRef, sectionDocumentData);
+  });
+
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error("Ошибка при обновлении резюме:", error);
+  }
+}
+export const debounceUpdateCoverLetter = debounce(async (userId, coverLetterData) => {
+  await updateCoverLetter(userId, coverLetterData);
+}, 5000); 
+
+
 export async function deleteCoverLetter(userId, coverLetterId) {
   try {
     const docRef = doc(db, `users/${userId}/coverLetters/${coverLetterId}`);

@@ -9,6 +9,8 @@ import { generateUUID } from "three/src/math/MathUtils.js";
 import { useResumeContext } from "../../context/ResumeContext";
 import { useCoverLetters } from "../../context/CoverLettersContext";
 
+import { deleteResume } from "../../api/resumeService";
+
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -34,6 +36,8 @@ export default function Dashboard() {
           type: "DELETE_RESUME",
           resumeId: documentId,
         });
+
+        deleteResume(documentId);
         break;
       case "coverLetter":
         dispatchOfCoverLettersDataState({
@@ -63,16 +67,28 @@ export default function Dashboard() {
         break;
     }
   }
-  function handleButtonAddDocument() {
-    const resumeId = generateUUID();
+  function handleButtonAddDocument(documentType) {
+    const documentId = generateUUID();
 
-    dispatchOfResumesDataState({
-      type: "ADD_RESUME",
-      resumeId,
-      isAddDefaultResumeData: true,
-    })
+    switch(documentType) {
+      case "resume":
+        dispatchOfResumesDataState({
+          type: "ADD_RESUME",
+          resumeId: documentId,
+          isAddDefaultResumeData: true,
+        })
+    
+        navigate(`/resumes/${documentId}/edit`);
+        break;
+      case "coverLetter":
+        dispatchOfCoverLettersDataState({
+          type: "ADD_COVER_LETTER",
+          coverLetterId: documentId,
+        });
 
-    navigate(`/create-resume/${resumeId}`);
+        navigate(`/cover-letters/${documentId}/edit`);
+        break;
+    }
   }
 
   return (
@@ -84,7 +100,7 @@ export default function Dashboard() {
             <ButtonAdd
               key="button-add"
               appearance="bg"
-              callbackOnClick={handleButtonAddDocument}
+              callbackOnClick={() => handleButtonAddDocument("resume")}
             >
               Добавить новый документ
             </ButtonAdd>

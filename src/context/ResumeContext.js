@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllResumes, addResume, deleteResume, updateResumeField, updateResumeSectionField, deleteResumeSectionField, updateResumeSectionConfigurableField, addResumeSectionConfigurableField, deleteResumeSectionConfigurableField, updateResumeSubSectionField, addResumeSubSection, deleteResumeSubSection, setResumeSubSections, updateResumeSubSectionDateField } from "../api/resumeService";
-import { createDefaultResume } from "../lib/resumeUtils";
+import { getAllResumes, debounceUpdateResume } from "../api/resumeService";
+import { createDefaultResume, updateDocumentChangeDate } from "../lib/documentUtils";
 
 const initialState = {
   resumes: [],
@@ -56,8 +56,6 @@ const resumeReducer = (draft, action) => {
 
       draft.resumes.push(newResumeData);
 
-      addResume(resumeId, newResumeData);
-
       break;
     }
     case actionTypes.UPDATE_RESUME_FIELD: {
@@ -68,7 +66,7 @@ const resumeReducer = (draft, action) => {
       if (resume) {
         resume[key] = value;
 
-        updateResumeField(resumeId, key, value);
+        updateDocumentChangeDate(resume);
       }
 
       break;
@@ -88,7 +86,7 @@ const resumeReducer = (draft, action) => {
 
       section[key] = value;
 
-      updateResumeSectionField(resumeId, sectionId, key, value);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -107,7 +105,7 @@ const resumeReducer = (draft, action) => {
 
       delete section[key];
 
-      deleteResumeSectionField(resumeId, sectionId, key);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -126,7 +124,8 @@ const resumeReducer = (draft, action) => {
 
       if (configurableField) {
         configurableField[key] = value;
-        updateResumeSectionConfigurableField(resumeId, sectionId, configurableObjectId, key, value);
+
+        updateDocumentChangeDate(resume);
       }
 
       break;
@@ -148,7 +147,7 @@ const resumeReducer = (draft, action) => {
         section.configurableFields = [{...newConfigurableFieldObject}];
       }
 
-      addResumeSectionConfigurableField(resumeId, sectionId, newConfigurableFieldObject);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -165,7 +164,8 @@ const resumeReducer = (draft, action) => {
 
       if (section.configurableFields) {
         section.configurableFields = section.configurableFields.filter(obj => obj.id !== configurableFieldId);
-        deleteResumeSectionConfigurableField(resumeId, sectionId, configurableFieldId);
+
+        updateDocumentChangeDate(resume);
       }
 
       break;
@@ -189,7 +189,7 @@ const resumeReducer = (draft, action) => {
 
       subSection[key] = value;
 
-      updateResumeSubSectionField(resumeId, sectionId, subSectionId, key, value);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -212,7 +212,7 @@ const resumeReducer = (draft, action) => {
 
       subSection[key] = value;
 
-      updateResumeSubSectionDateField(resumeId, sectionId, subSectionId, key, value);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -235,7 +235,7 @@ const resumeReducer = (draft, action) => {
 
       section.subSections.push({ id: subSectionId, order, ...documentFields });
 
-      addResumeSubSection(resumeId, sectionId, subSectionId, order, documentFields);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -257,7 +257,7 @@ const resumeReducer = (draft, action) => {
         };
       });
 
-      deleteResumeSubSection(resumeId, sectionId, order);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -274,7 +274,7 @@ const resumeReducer = (draft, action) => {
       const newSubsections = data.map((item, index) => ({ ...item, order: index }));
       section.subSections = newSubsections;
 
-      setResumeSubSections(resumeId, sectionId, newSubsections);
+      updateDocumentChangeDate(resume);
 
       break;
     }
@@ -283,7 +283,6 @@ const resumeReducer = (draft, action) => {
 
       draft.resumes = draft.resumes.filter((resume) => resume.id !== resumeId);
 
-      deleteResume(resumeId);
       break;
     }
     case actionTypes.CLEAR_RESUMES: {
@@ -304,8 +303,10 @@ export const ResumeProvider = ({ children }) => {
     const fetchResume = async () => {
       try {
         dispatchOfResumesDataState({ type: "SET_LOADING_STATE", state: "loading" });
+
         const data = await getAllResumes();
         console.log("fetched resumes data", data);
+
         dispatchOfResumesDataState({ type: "SET_RESUMES", resumes: data });
         dispatchOfResumesDataState({ type: "SET_LOADING_STATE", state: "loaded" });
       } catch (error) {
@@ -314,7 +315,27 @@ export const ResumeProvider = ({ children }) => {
     };
 
     fetchResume();
+
+    const handleUnload = () => {
+      debounceUpdateResume.flush();
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      debounceUpdateResume.cancel();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
+  useEffect(() => {
+    const changedResume = resumesDataState.resumes.reduce((latest, resume) => {
+      if (!resume.changeDate) return latest;
+
+      return !latest || new Date(resume.changeDate) > new Date(latest.changeDate) ? resume : latest;
+    }, null);
+
+    changedResume && debounceUpdateResume("userId", changedResume)
+  }, [resumesDataState.resumes]);
 
   return (
     <ResumeContext.Provider

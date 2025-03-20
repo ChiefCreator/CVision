@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import DocumentContainer from '../DocumentContainer/DocumentContainer';
 
@@ -14,9 +14,12 @@ import styles from './DocumentCard.module.scss';
 import EditableTitle from "./../EditableTitle/EditableTitle";
 import ActionButton from './ActionButton';
 
+import { convertFromDateToDDMonthYYYYFormat, getTimeAgo } from '../../lib/dateUtils';
+
 export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
   const [isPreviewHovered, setIsPreviewHovered] = useState(false);
   const [previewRotation, setPreviewRotation] = useState({ rotateX: 0, rotateY: 0 });
+  const [currentDate, setCurrentDate] = useState(new Date());
   const documentPreviewRef = useRef();
 
   const editButtonIcon = <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" viewBox="0 0 24 24"><g><path d="m14.46 3.26.88-.88c1.04-1.04 2.85-1.04 3.89 0l.71.71a2.732 2.732 0 0 1 0 3.88l-.88.88-4.6-4.6zM13.4 4.32l-9.11 9.11c-.29.29-.47.67-.5 1.08l-.27 2.93c-.03.37.1.73.36 1 .24.24.55.37.88.37h.11l2.93-.27c.41-.04.79-.22 1.08-.51l9.11-9.11-4.6-4.6zM22.75 22c0-.41-.34-.75-.75-.75H2c-.41 0-.75.34-.75.75s.34.75.75.75h20c.41 0 .75-.34.75-.75z"></path></g></svg>
@@ -103,6 +106,14 @@ export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCa
     if (onDeleteButtonClick) onDeleteButtonClick();
   }
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div className={styles.card}>
       <div className={styles.cardPreviewWrapper}>
@@ -124,7 +135,7 @@ export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCa
         <div className={styles.cardInfo}>
           <header className={styles.cardInfoHeader}>
             <EditableTitle className={styles.cardInfoTitle} onChangeCallback={onChangeTitleCallback} placeholder = "Без названия">{data.title}</EditableTitle>
-            <span className={styles.cardInfoTime}>Edited 43 min. ago</span>
+            {data.changeDate && <span className={styles.cardInfoTime}>{getTimeAgo(data.changeDate, currentDate)}</span>}
           </header>
           <div className={styles.cardInfoBody}>
             <div className={styles.cardInfoButtonsList}>
@@ -134,9 +145,10 @@ export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCa
               <ActionButton className={styles.actionButtonDelete} icon={deleteButtonIcon} onClickCallback={deleteDocument}>Удалить</ActionButton>
             </div>
           </div>
-          <footer className={styles.cardInfoFooter}>
-            <span className={styles.cardInfoTime}>Edited 43 min. ago</span>
-          </footer>
+          {data?.creationDate &&
+            <footer className={styles.cardInfoFooter}>
+              <span className={styles.cardInfoTime}>Создан {convertFromDateToDDMonthYYYYFormat(data.creationDate)}</span>
+            </footer>}
         </div>
       </div>
     </div>

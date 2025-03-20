@@ -1,6 +1,7 @@
 import { db } from "./../../firebase";
-import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where, orderBy, deleteDoc, arrayRemove, addDoc, deleteField } from "firebase/firestore";
-import { convertFromObjectMonthYearFormatToTimestamp, convertFromTimestampToObjectMonthYearFormat, isDateValidMMYYYYFormat } from "../lib/dateUtils";
+import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where, orderBy, deleteDoc, arrayRemove, addDoc, deleteField, writeBatch } from "firebase/firestore";
+import { debounce } from "lodash";
+import { convertFromObjectMonthYearFormatToTimestamp, convertFromTimestampToObjectMonthYearFormat, convertFromDateToTimestamp, convertFromTimestampToDate, isDateValidMMYYYYFormat } from "../lib/dateUtils";
 
 export async function getAllResumes() {
   try {
@@ -11,6 +12,9 @@ export async function getAllResumes() {
 
     for (const doc of resumesSnapshot.docs) {
       const resumeData = doc.data();
+
+      resumeData.creationDate = resumeData.creationDate ? convertFromTimestampToDate(resumeData.creationDate) : null;
+      resumeData.changeDate = resumeData.changeDate ? convertFromTimestampToDate(resumeData.changeDate) : null;
 
       const sectionsRef = collection(doc.ref, "sections");
       const sectionsSnapshot = await getDocs(sectionsRef, { source: "cache" });
@@ -59,6 +63,48 @@ export async function getAllResumes() {
     throw error;
   }
 }
+export async function updateResume(userId, resumeData) {
+  const batch = writeBatch(db);
+
+  const { sections, id: resumeId, ...resumeDocumentData } = resumeData;
+
+  resumeDocumentData.creationDate = resumeDocumentData.creationDate ? convertFromDateToTimestamp(resumeDocumentData.creationDate) : null;
+  resumeDocumentData.changeDate = resumeDocumentData.changeDate ? convertFromDateToTimestamp(resumeDocumentData.changeDate) : null;
+
+  const resumeRef = doc(db, `users/${userId}/resumes/${resumeId}`);
+  batch.set(resumeRef, resumeDocumentData);
+
+  sections?.forEach(section => {
+    const { subSections, id: sectionId, ...sectionDocumentData } = section;
+
+    const sectionRef = doc(resumeRef, `sections/${sectionId}`);
+    batch.set(sectionRef, sectionDocumentData);
+
+    subSections?.forEach(subSection => {
+      const { id: subSectionId, ...subSectionDocumentData } = subSection;
+      
+      const subSectionRef = doc(sectionRef, `subSections/${subSectionId}`);
+
+      if (subSectionDocumentData.startDate) {
+        subSectionDocumentData.startDate = convertFromObjectMonthYearFormatToTimestamp(subSectionDocumentData.startDate);
+      }
+      if (subSectionDocumentData.endDate) {
+        subSectionDocumentData.endDate = convertFromObjectMonthYearFormatToTimestamp(subSectionDocumentData.endDate);
+      }
+
+      batch.set(subSectionRef, subSectionDocumentData);
+    });
+  });
+
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error("Ошибка при обновлении резюме:", error);
+  }
+}
+export const debounceUpdateResume = debounce(async (userId, resumeData) => {
+  await updateResume(userId, resumeData);
+}, 5000); 
 
 // resume operations
 export async function deleteResume(resumeId) {
@@ -75,6 +121,8 @@ export async function addResume(resumeId, resumeData) {
     const sectionsCollection = collection(db, `users/userId/resumes/${resumeId}/sections`);
 
     const { sections: sectionsData, ...resumeWithoutSections } = resumeData;
+
+    resumeWithoutSections.creationDate = convertFromDateToTimestamp(resumeWithoutSections.creationDate);
 
     await setDoc(docRef, resumeWithoutSections);
     

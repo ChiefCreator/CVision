@@ -8,15 +8,11 @@ export default function HobbiesSection({ data, isResumeDataLoaded, handleSection
   const sectionId = "hobbies";
   const defaultTitle = "Хобби";
 
-  useEffect(() => {
-    handleSectionFieldChange(sectionId, "title", defaultTitle);
-  }, []);
-
   return (
     <div className={styles.section}>
       <header className={styles.sectionHeader}>
-        <EditableTitle placeholder={data?.title} fontSize={22} onChangeCallback={(value) => handleSectionFieldChange(sectionId, "title", value)}>
-          {data?.title}
+        <EditableTitle placeholder={defaultTitle} fontSize={22} onChangeCallback={(value) => handleSectionFieldChange(sectionId, "title", value)}>
+          {data?.title ?? defaultTitle}
         </EditableTitle>
       </header>
       <div className={styles.sectionBody}>

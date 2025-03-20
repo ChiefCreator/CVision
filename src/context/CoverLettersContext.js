@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllCoverLetters, addCoverLetter, deleteCoverLetter, updateCoverLetterField, updateCoverLetterSectionField } from "../api/coverLettersService";
-import { createDefaultResume } from "../lib/resumeUtils";
+import { getAllCoverLetters, debounceUpdateCoverLetter, addCoverLetter, deleteCoverLetter, updateCoverLetterField, updateCoverLetterSectionField } from "../api/coverLettersService";
+import { createDefaultResume, updateDocumentChangeDate } from "../lib/documentUtils";
 
 const initialState = {
   coverLetters: [],
@@ -57,7 +57,7 @@ const coverLettersReducer = (draft, action) => {
       if (coverLetter) {
         coverLetter[key] = value;
 
-        updateCoverLetterField(userId, coverLetterId, key, value);
+        updateDocumentChangeDate(coverLetter);
       }
 
       break;
@@ -77,7 +77,7 @@ const coverLettersReducer = (draft, action) => {
 
       section[key] = value;
 
-      updateCoverLetterSectionField(userId, coverLetterId, sectionId, key, value);
+      updateDocumentChangeDate(coverLetter);
 
       break;
     }
@@ -107,7 +107,27 @@ export const CoverLettersProvider = ({ children }) => {
     };
 
     fetchCoverLetters();
+
+    const handleUnload = () => {
+      debounceUpdateCoverLetter.flush();
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      debounceUpdateCoverLetter.cancel();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
+  useEffect(() => {
+    const changedCoverLetter = coverLettersDataState.coverLetters.reduce((latest, coverLetter) => {
+      if (!coverLetter.changeDate) return latest;
+
+      return !latest || new Date(coverLetter.changeDate) > new Date(latest.changeDate) ? coverLetter : latest;
+    }, null);
+
+    changedCoverLetter && debounceUpdateCoverLetter("userId", changedCoverLetter)
+  }, [coverLettersDataState.coverLetters]);
 
   return (
     <CoverLettersContext.Provider
