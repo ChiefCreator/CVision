@@ -12,6 +12,8 @@ function SectionLetterDetails({ data, ref }) {
   );
 }
 function SectionTo({ data, ref }) {
+  if (!data?.companyName && !data?.hiringManagerName) return null;
+
   return (
     <section className={`${styles.asideSection}`} id={data.id} key={data.id} ref={ref}>
       <span className={styles.asideSectionTitle}>Получатель</span>
@@ -21,6 +23,8 @@ function SectionTo({ data, ref }) {
   );
 }
 function SectionFrom({ data, ref }) {
+  if (!data?.fullName && !data?.job && !data?.adress && !data?.phoneNumber && !data?.email) return null;
+
   return (
     <section className={`${styles.asideSection}`} id={data.id} key={data.id} ref={ref}>
       <span className={styles.asideSectionTitle}>Отправитель</span>

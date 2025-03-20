@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
 import { getAllCoverLetters, debounceUpdateCoverLetter, addCoverLetter, deleteCoverLetter, updateCoverLetterField, updateCoverLetterSectionField } from "../api/coverLettersService";
-import { createDefaultResume, updateDocumentChangeDate } from "../lib/documentUtils";
+import { createDefaultCoverLetter, updateDocumentChangeDate } from "../lib/documentUtils";
 
 const initialState = {
   coverLetters: [],
@@ -14,6 +14,7 @@ const actionTypes = {
   SET_LOADING_STATE: "SET_LOADING_STATE",
   SET_COVER_LETTERS: "SET_COVER_LETTERS",
   ADD_COVER_LETTER: "ADD_COVER_LETTER",
+  DELETE_COVER_LETTER: "DELETE_COVER_LETTER",
   UPDATE_COVER_LETTER_FIELD: "UPDATE_COVER_LETTER_FIELD",
   UPDATE_COVER_LETTER_SECTION_FIELD: "UPDATE_COVER_LETTER_SECTION_FIELD",
 };
@@ -37,15 +38,22 @@ const coverLettersReducer = (draft, action) => {
 
       if (data) {
         newData = data;
-      } else if (isAddDefaultResumeData) {
-        newData = createDefaultResume(coverLetterId);
+      } else if (isAddDefaultData) {
+        newData = createDefaultCoverLetter(coverLetterId);
       } else {
         newData = { id: coverLetterId };
       }
 
       draft.coverLetters.push(newData);
 
-      addCoverLetter(userId, coverLetterId, newData);
+      addCoverLetter(userId, newData);
+
+      break;
+    }
+    case actionTypes.DELETE_COVER_LETTER: {
+      const { coverLetterId } = action;
+
+      draft.coverLetters = draft.coverLetters.filter(item => item.id !== coverLetterId);
 
       break;
     }

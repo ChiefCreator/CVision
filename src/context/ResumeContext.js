@@ -40,7 +40,7 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_RESUME: {
-      const { resumeId, resumeData, isAddDefaultResumeData } = action;
+      const { resumeId, resumeData, isAddDefaultData } = action;
 
       if (!draft.resumes) draft.resumes = [];
 
@@ -48,7 +48,7 @@ const resumeReducer = (draft, action) => {
 
       if (resumeData) {
         newResumeData = resumeData;
-      } else if (isAddDefaultResumeData) {
+      } else if (isAddDefaultData) {
         newResumeData = createDefaultResume(resumeId);
       } else {
         newResumeData = { id: resumeId };

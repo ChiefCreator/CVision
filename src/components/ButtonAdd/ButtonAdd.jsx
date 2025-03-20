@@ -1,6 +1,6 @@
 import styles from "./ButtonAdd.module.scss"
 
-export default function ButtonAdd({ children, callbackOnClick, appearance = "no-bg" }) {
+export default function ButtonAdd({ children, callbackOnClick, appearance = "no-bg", ref }) {
 
   function handleClick(event) {
     event.preventDefault();
@@ -13,6 +13,7 @@ export default function ButtonAdd({ children, callbackOnClick, appearance = "no-
       className={styles.button}
       onClick={handleClick}
       data-appearance={appearance}
+      ref={ref}
     >
       <div className={styles.buttonIconWrapper}>
         <svg className={styles.buttonIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">

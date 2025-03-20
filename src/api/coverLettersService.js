@@ -81,8 +81,20 @@ export async function deleteCoverLetter(userId, coverLetterId) {
 export async function addCoverLetter(userId, coverLetterData) {
   try {
     const docRef = doc(db, `users/${userId}/coverLetters/${coverLetterData.id}`);
+    const sectionsCollection = collection(docRef, "sections");
 
-    await setDoc(docRef, coverLetterData);
+    const { sections: sectionsData, ...coverLetterDocumentData } = coverLetterData;
+
+    coverLetterDocumentData.creationDate = convertFromDateToTimestamp(coverLetterDocumentData.creationDate);
+
+    await setDoc(docRef, coverLetterDocumentData);
+    
+    if (Array.isArray(sectionsData)) {
+      for (const sectionData of sectionsData) {
+        const sectionDocRef = doc(sectionsCollection, sectionData.id);
+        await setDoc(sectionDocRef, { });
+    }
+    }
   } catch (error) {
     console.error("Ошибка при добавлении документа:", error);
   }
