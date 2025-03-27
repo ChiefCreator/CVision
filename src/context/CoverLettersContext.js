@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllCoverLetters, debounceUpdateCoverLetter, addCoverLetter, deleteCoverLetter, updateCoverLetterField, updateCoverLetterSectionField } from "../api/coverLettersService";
-import { createDefaultCoverLetter, updateDocumentChangeDate } from "../lib/documentUtils";
+import { getAllCoverLetters, debounceUpdateCoverLetter, addCoverLetter, deleteCoverLetter } from "../api/coverLettersService";
+import { updateDocumentChangeDate } from "../lib/documentUtils";
+
+import { useAuth } from "./AuthContext";
 
 const initialState = {
   coverLetters: [],
@@ -30,23 +32,11 @@ const coverLettersReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_COVER_LETTER: {
-      const { userId, coverLetterId, data, isAddDefaultData } = action;
+      const { data } = action;
 
       if (!draft.coverLetters) draft.coverLetters = [];
 
-      let newData = null;
-
-      if (data) {
-        newData = data;
-      } else if (isAddDefaultData) {
-        newData = createDefaultCoverLetter(coverLetterId);
-      } else {
-        newData = { id: coverLetterId };
-      }
-
-      draft.coverLetters.push(newData);
-
-      addCoverLetter(userId, newData);
+      draft.coverLetters.push(data);
 
       break;
     }
@@ -98,23 +88,31 @@ const CoverLettersContext = createContext();
 
 export const CoverLettersProvider = ({ children }) => {
   const [coverLettersDataState, dispatchOfCoverLettersDataState] = useImmerReducer(coverLettersReducer, initialState);
+  const { userProfileState } = useAuth();
+  const { user } = userProfileState;
 
+  async function getCoverLettersFromDatabase() {
+    try {
+      const data = await getAllCoverLetters(user?.email);
+      console.log("fetched cover letters data", data);
+
+      dispatchOfCoverLettersDataState({ type: "SET_COVER_LETTERS", coverLetters: data });
+      dispatchOfCoverLettersDataState({ type: "SET_LOADING_STATE", state: "loaded" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  async function addCoverLetterToDatabase(data) {
+    addCoverLetter(user?.email, data);
+  };
+  async function deleteCoverLetterFromDatabase(id) {
+    deleteCoverLetter(user?.email, id);
+  }
+  
   useEffect(() => {
-    const fetchCoverLetters = async () => {
-      try {
-        dispatchOfCoverLettersDataState({ type: "SET_LOADING_STATE", state: "loading" });
+    if (!user?.email) return;
 
-        const data = await getAllCoverLetters("userId");
-        console.log("fetched cover letters data", data);
-
-        dispatchOfCoverLettersDataState({ type: "SET_COVER_LETTERS", coverLetters: data });
-        dispatchOfCoverLettersDataState({ type: "SET_LOADING_STATE", state: "loaded" });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchCoverLetters();
+    getCoverLettersFromDatabase();
 
     const handleUnload = () => {
       debounceUpdateCoverLetter.flush();
@@ -126,20 +124,22 @@ export const CoverLettersProvider = ({ children }) => {
       debounceUpdateCoverLetter.cancel();
       window.removeEventListener("beforeunload", handleUnload);
     };
-  }, []);
+  }, [user?.email]);
   useEffect(() => {
+    if (!user?.email) return;
+
     const changedCoverLetter = coverLettersDataState.coverLetters.reduce((latest, coverLetter) => {
       if (!coverLetter.changeDate) return latest;
 
       return !latest || new Date(coverLetter.changeDate) > new Date(latest.changeDate) ? coverLetter : latest;
     }, null);
 
-    changedCoverLetter && debounceUpdateCoverLetter("userId", changedCoverLetter)
+    changedCoverLetter && debounceUpdateCoverLetter(user?.email, changedCoverLetter)
   }, [coverLettersDataState.coverLetters]);
 
   return (
     <CoverLettersContext.Provider
-      value={{ coverLettersDataState, dispatchOfCoverLettersDataState }}
+      value={{ coverLettersDataState, dispatchOfCoverLettersDataState, addCoverLetterToDatabase, deleteCoverLetterFromDatabase }}
     >
       {children}
     </CoverLettersContext.Provider>

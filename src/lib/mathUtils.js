@@ -13,3 +13,7 @@ export function recalculateValueRelativeToRange(value, min, max) {
 export function generateUUID() {
   return uuidv4();
 }
+
+export function generateVerificationCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};

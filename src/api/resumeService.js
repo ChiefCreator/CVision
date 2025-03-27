@@ -3,9 +3,9 @@ import { collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query,
 import { debounce } from "lodash";
 import { convertFromObjectMonthYearFormatToTimestamp, convertFromTimestampToObjectMonthYearFormat, convertFromDateToTimestamp, convertFromTimestampToDate, isDateValidMMYYYYFormat } from "../lib/dateUtils";
 
-export async function getAllResumes() {
+export async function getAllResumes(userId) {
   try {
-    const resumesRef = collection(db, "users/userId/resumes");
+    const resumesRef = collection(db, `users/${userId}/resumes`);
     const resumesSnapshot = await getDocs(resumesRef);
 
     let resumesData = [];
@@ -107,18 +107,18 @@ export const debounceUpdateResume = debounce(async (userId, resumeData) => {
 }, 5000); 
 
 // resume operations
-export async function deleteResume(resumeId) {
+export async function deleteResume(userId, resumeId) {
   try {
-    const docRef = doc(db, `users/userId/resumes/${resumeId}`);
+    const docRef = doc(db, `users/${userId}/resumes/${resumeId}`);
     await deleteDoc(docRef);
   } catch (error) {
     console.error("Ошибка при удалении документа:", error);
   }
 }
-export async function addResume(resumeId, resumeData) {
+export async function addResume(userId, resumeData) {
   try {
-    const docRef = doc(db, `users/userId/resumes/${resumeId}`);
-    const sectionsCollection = collection(db, `users/userId/resumes/${resumeId}/sections`);
+    const docRef = doc(db, `users/${userId}/resumes/${resumeData.id}`);
+    const sectionsCollection = collection(docRef, `sections`);
 
     const { sections: sectionsData, ...resumeWithoutSections } = resumeData;
 

@@ -1,0 +1,50 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__header {
+  }
+  &__title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    color: black;
+  }
+  &__description {
+    text-align: center;
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: rgb(107 114 128);
+    opacity: 0.8;
+    &__email {
+      color: var(--color-primary);
+    }
+  }
+
+  &__code-input-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+  }
+
+  &__button-send {
+    width: 100%;
+  }
+}
+
+.codeNotReceived {
+  text-align: center;
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  color: rgb(107 114 128);
+  opacity: 0.8;
+
+  &__resend {
+    cursor: pointer;
+    color: var(--color-primary);
+  }
+}

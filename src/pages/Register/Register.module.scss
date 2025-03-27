@@ -1,0 +1,53 @@
+.register {
+  height: 100%;
+  overflow: hidden;
+  
+  &__container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    height: 100%;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-primary);
+      left: 40%;
+    }
+  }
+
+  &__form {
+    margin-top: 20px;
+  }
+  &__form-wrapper {
+    padding: 20px 20px 20px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  &__logo {
+    position: absolute;
+    max-width: 120px;
+  }
+
+  &__description-block {
+    display: flex;
+    padding: 20px 0 20px 20px;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--color-neutral-main--light);
+  }
+  &__title {
+    font-size: 46px;
+    font-weight: 700;
+  }
+  &__description {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 300;
+  }
+}

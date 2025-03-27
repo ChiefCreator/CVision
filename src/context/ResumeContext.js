@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
-import { getAllResumes, debounceUpdateResume } from "../api/resumeService";
+import { getAllResumes, debounceUpdateResume, addResume, deleteResume } from "../api/resumeService";
 import { createDefaultResume, updateDocumentChangeDate } from "../lib/documentUtils";
+
+import { useAuth } from "./AuthContext";
 
 const initialState = {
   resumes: [],
@@ -40,21 +42,11 @@ const resumeReducer = (draft, action) => {
       break;
     }
     case actionTypes.ADD_RESUME: {
-      const { resumeId, resumeData, isAddDefaultData } = action;
+      const { resumeData } = action;
 
       if (!draft.resumes) draft.resumes = [];
 
-      let newResumeData = null;
-
-      if (resumeData) {
-        newResumeData = resumeData;
-      } else if (isAddDefaultData) {
-        newResumeData = createDefaultResume(resumeId);
-      } else {
-        newResumeData = { id: resumeId };
-      }
-
-      draft.resumes.push(newResumeData);
+      draft.resumes.push(resumeData);
 
       break;
     }
@@ -298,23 +290,31 @@ const ResumeContext = createContext();
 
 export const ResumeProvider = ({ children }) => {
   const [resumesDataState, dispatchOfResumesDataState] = useImmerReducer(resumeReducer, initialState);
+  const { userProfileState } = useAuth();
+  const { user } = userProfileState;
+
+  async function getResumesFromDatabase() {
+    try {
+      const data = await getAllResumes(user.email);
+      console.log("fetched resumes data", data);
+
+      dispatchOfResumesDataState({ type: "SET_RESUMES", resumes: data });
+      dispatchOfResumesDataState({ type: "SET_LOADING_STATE", state: "loaded" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  async function addResumeToDatabase(resume) {
+    await addResume(user?.email, resume);
+  };
+  async function deleteResumeFromDatabase(id) {
+    deleteResume(user?.email, id);
+  }
 
   useEffect(() => {
-    const fetchResume = async () => {
-      try {
-        dispatchOfResumesDataState({ type: "SET_LOADING_STATE", state: "loading" });
+    if (!user?.email) return;
 
-        const data = await getAllResumes();
-        console.log("fetched resumes data", data);
-
-        dispatchOfResumesDataState({ type: "SET_RESUMES", resumes: data });
-        dispatchOfResumesDataState({ type: "SET_LOADING_STATE", state: "loaded" });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchResume();
+    getResumesFromDatabase();
 
     const handleUnload = () => {
       debounceUpdateResume.flush();
@@ -326,20 +326,22 @@ export const ResumeProvider = ({ children }) => {
       debounceUpdateResume.cancel();
       window.removeEventListener("beforeunload", handleUnload);
     };
-  }, []);
+  }, [user?.email]);
   useEffect(() => {
+    if (!user?.email) return;
+
     const changedResume = resumesDataState.resumes.reduce((latest, resume) => {
       if (!resume.changeDate) return latest;
 
       return !latest || new Date(resume.changeDate) > new Date(latest.changeDate) ? resume : latest;
     }, null);
 
-    changedResume && debounceUpdateResume("userId", changedResume)
+    changedResume && debounceUpdateResume(user.email, changedResume)
   }, [resumesDataState.resumes]);
 
   return (
     <ResumeContext.Provider
-      value={{ resumesDataState, dispatchOfResumesDataState }}
+      value={{ resumesDataState, dispatchOfResumesDataState, addResumeToDatabase, deleteResumeFromDatabase }}
     >
       {children}
     </ResumeContext.Provider>

@@ -1,0 +1,19 @@
+.code-input {
+  display: inline-flex;
+  gap: 20px;
+  
+  &__cell {
+    display: block;
+    width: 40px;
+    aspect-ratio: 1;
+    text-align: center;
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    &:focus {
+      border-color: var(--color-primary);
+    }
+  }
+}

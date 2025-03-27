@@ -1,10 +1,10 @@
 import styles from './Button.module.scss';
 
-export default function Button({ children, className, onClickCallback }) {
+export default function Button({ type = "button", children, className, onClickCallback }) {
   return (
     <button
       className={`${styles.button} ${className}`}
-      type="button"
+      type={type}
       onClick={onClickCallback}
     >{children}</button>
   );

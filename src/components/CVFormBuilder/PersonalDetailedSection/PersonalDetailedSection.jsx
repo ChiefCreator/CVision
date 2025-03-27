@@ -117,7 +117,7 @@ export default function PersonalDetailedSection({ resumeId, data, isResumeDataLo
             </FormGroupCell>
           </FormGroup>
           <FormGroup gridTemplateColumns="1fr 1fr">
-            <FormGroupCell gridArea="1 / 1 / 3 / 2">
+            <FormGroupCell>
               <FormField
                 label="Эл. почта"
                 inputValue={data?.email}

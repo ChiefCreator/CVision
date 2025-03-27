@@ -1,0 +1,88 @@
+.input {
+  display: block;
+  width: 100%;
+  color: rgb(17 24 39);
+  background-color: rgb(249 250 251);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(209 213 219);
+  border-radius: .5rem;
+  overflow: hidden;
+  transition: border-color .3s var(--transition-power--in-out);
+
+  &__container {
+    display: flex;
+  }
+
+  &__item-wrapper {
+    flex: 1 1 auto;
+    position: relative;
+  }
+  &__item {
+    width: 100%;
+    padding: .625rem;
+    color: inherit;
+
+    &:-webkit-autofill {
+      background-color: transparent !important;
+      box-shadow: 0 0 0px 1000px white inset !important;
+    }
+  }
+
+  &__controls {
+    padding: 0 5px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  &_focused {
+    border-color: var(--color-primary);
+  }
+
+  &_error {
+    color: red !important;
+    border-color: red !important;
+  }
+}
+
+.input-error-warning {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(100%);
+  transition: transform .3s var(--transition-power--in-out);
+  &__icon {
+    fill: red;
+    width: 18px;
+    aspect-ratio: 1;
+  }
+
+  &_active {
+    transform: translateY(-50%);
+  }
+}
+
+.button {
+  cursor: pointer;
+  display: inline-flex;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background-color .3s var(--transition-power--in-out);
+  &__icon {
+    width: 16px;
+    aspect-ratio: 1;
+
+    fill: none;
+    stroke-width: 2;
+    stroke: rgb(107, 114, 128);
+  }
+
+  &:hover {
+    background-color: rgb(230, 231, 235);
+  }
+}

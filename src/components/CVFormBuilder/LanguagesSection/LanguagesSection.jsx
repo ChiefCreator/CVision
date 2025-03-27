@@ -34,11 +34,9 @@ export default function LanguagesSection({ resumeId, isResumeDataLoaded, data })
             </FormGroupCell>
             <FormGroupCell>
               <FormField
-                Component={Select}
-                data={languageLevelsData}
                 label="Уровень английского"
-                inputValue={data?.languageLevel}
-                onChangeInputCallback={(value) => handleFormFieldInputChange("languageLevel", value)} />
+                Component={() => <Select selectedValue={data?.languageLevel} onChangeCallback={(value) => handleFormFieldInputChange("languageLevel", value)} data={languageLevelsData} />}
+              />
             </FormGroupCell>
           </FormGroup>
         </div>

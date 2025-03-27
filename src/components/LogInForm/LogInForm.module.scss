@@ -1,0 +1,81 @@
+.form {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__header {
+  }
+  &__title {
+    font-size: 28px;
+    font-weight: 600;
+    color: black;
+  }
+  &__sub-title {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: rgb(107 114 128);
+    opacity: 0.8;
+  }
+  &__sign-up {
+    color: var(--color-primary);
+  }
+
+  &__group {
+    margin-top: 20px;
+  }
+  &__field {
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgb(17 24 39);
+    }
+  }
+
+  &__send {
+    margin-top: 30px;
+    width: 100%;
+    padding: 0.625rem !important;
+    border-radius: 0.5rem;
+  }
+}
+
+.alternative-methods {
+  margin-top: 30px;
+  &__head {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  &__line {
+    width: 100%;
+    height: 1.5px;
+    background-color: rgb(229 231 235);
+  }
+  &__or {
+    font-size: 14px;
+    color: rgb(107 114 128);
+  }
+}
+
+.alternative-method {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  color: rgb(17 24 39);
+  padding: 0.625rem;
+  background-color: rgb(249 250 251);
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0.5rem;
+  &__icon {
+    margin-right: 10px;
+    width: 22px;
+    aspect-ratio: 1;
+  }
+}
