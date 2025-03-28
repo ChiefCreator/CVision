@@ -15,7 +15,7 @@ import ActionButton from './ActionButton';
 
 import { convertFromDateToDDMonthYYYYFormat, getTimeAgo } from '../../lib/dateUtils';
 
-export default function DocumentCard({ data, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
+export default function DocumentCard({ data, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick, onDuplicateButtonClick }) {
   const [isPreviewHovered, setIsPreviewHovered] = useState(false);
   const [previewRotation, setPreviewRotation] = useState({ rotateX: 0, rotateY: 0 });
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -69,7 +69,7 @@ export default function DocumentCard({ data, onChangeTitleCallback, onEditButton
     if (onEditButtonClick) onEditButtonClick();
   }
   function duplicateDocument() {
-
+    onDuplicateButtonClick && onDuplicateButtonClick();
   }
   function downLoadPDFDocument() {
     handleConvertToCanvas()

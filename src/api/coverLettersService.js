@@ -89,12 +89,10 @@ export async function addCoverLetter(userId, coverLetterData) {
 
     await setDoc(docRef, coverLetterDocumentData);
     
-    if (Array.isArray(sectionsData)) {
-      for (const sectionData of sectionsData) {
-        const sectionDocRef = doc(sectionsCollection, sectionData.id);
-        await setDoc(sectionDocRef, { });
-    }
-    }
+    sectionsData?.forEach(async sectionData => {
+      const sectionDoc = doc(sectionsCollection, sectionData.id);
+      await setDoc(sectionDoc, sectionData);
+    })
   } catch (error) {
     console.error("Ошибка при добавлении документа:", error);
   }

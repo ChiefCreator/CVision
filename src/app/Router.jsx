@@ -80,6 +80,25 @@ export default function Router() {
   
     navigate(`/cover-letters/${id}/edit`);
   }
+  function duplicateDocument(documentType, documentData) {
+    const duplicatedDocument = {
+      ...documentData,
+      id: generateUUID(),
+      changeDate: new Date(),
+      creationDate: new Date(),
+    };
+
+    switch(documentType) {
+      case "resume":
+        dispatchOfResumesDataState({ type: "ADD_RESUME", resumeData: duplicatedDocument });
+        addResumeToDatabase(duplicatedDocument);
+        break;
+      case "coverLetter":
+        dispatchOfCoverLettersDataState({ type: "ADD_COVER_LETTER", data: duplicatedDocument });
+        addCoverLetterToDatabase(duplicatedDocument);
+        break;
+    }
+  }
 
   return (
     <Routes future={{ v7_relativeSplatPath: true }}>
@@ -105,6 +124,7 @@ export default function Router() {
                 clickEditButton={handleEditButtonClick}
                 clickDeleteButton={handleDeleteButtonClick}
                 clickAddButton={createNewResume}
+                duplicateDocument={duplicateDocument}
               />
             } 
           />
@@ -118,6 +138,7 @@ export default function Router() {
                 clickEditButton={handleEditButtonClick}
                 clickDeleteButton={handleDeleteButtonClick}
                 clickAddButton={createNewCoverLetter}
+                duplicateDocument={duplicateDocument}
               />
             } 
           />

@@ -125,13 +125,18 @@ export async function addResume(userId, resumeData) {
     resumeWithoutSections.creationDate = convertFromDateToTimestamp(resumeWithoutSections.creationDate);
 
     await setDoc(docRef, resumeWithoutSections);
-    
-    if (Array.isArray(sectionsData)) {
-      for (const sectionData of sectionsData) {
-        const sectionDocRef = doc(sectionsCollection, sectionData.id);
-        await setDoc(sectionDocRef, { title: sectionData.title, order: sectionData.order });
-    }
-    }
+
+    sectionsData?.forEach(async sectionData => {
+      const sectionDoc = doc(sectionsCollection, sectionData.id);
+      await setDoc(sectionDoc, sectionData);
+
+      const subSections = sectionData?.subSection;
+
+      subSections?.forEach(async subSectionData => {
+        const subSectionDoc = doc(sectionDoc, subSectionData.id);
+        await setDoc(subSectionDoc, subSectionData);
+      })
+    })
   } catch (error) {
     console.error("Ошибка при добавлении документа:", error);
   }

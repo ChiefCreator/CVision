@@ -30,7 +30,7 @@ const config = {
   }
 }
 
-export default function Documents({ type = "resume", documents, changeCardTitle, clickEditButton, clickDeleteButton, clickAddButton }) {
+export default function Documents({ type = "resume", documents, changeCardTitle, clickEditButton, clickDeleteButton, clickAddButton, duplicateDocument }) {
   const data = config[type];
   const documentsLength = documents?.length;
 
@@ -71,6 +71,7 @@ export default function Documents({ type = "resume", documents, changeCardTitle,
                   onChangeTitleCallback={(value) => changeCardTitle(type, document.id, "title", value)}
                   onEditButtonClick={() => clickEditButton(`/${type === "resume" ? "resumes" : "coverLetters"}/${document.id}/edit`)}
                   onDeleteButtonClick={() => clickDeleteButton(type, document.id)}
+                  onDuplicateButtonClick={() => duplicateDocument(type, document)}
                 />
               );
             })}

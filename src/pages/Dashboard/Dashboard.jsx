@@ -93,6 +93,25 @@ export default function Dashboard() {
   function handleButtonAddDocument() {
     setIsDropdownCreateDocOpen(prev => !prev);
   }
+  function duplicateDocument(documentType, documentData) {
+    const duplicatedDocument = {
+      ...documentData,
+      id: generateUUID(),
+      changeDate: new Date(),
+      creationDate: new Date(),
+    };
+
+    switch(documentType) {
+      case "resume":
+        dispatchOfResumesDataState({ type: "ADD_RESUME", resumeData: duplicatedDocument });
+        addResumeToDatabase(duplicatedDocument);
+        break;
+      case "coverLetter":
+        dispatchOfCoverLettersDataState({ type: "ADD_COVER_LETTER", data: duplicatedDocument });
+        addCoverLetterToDatabase(duplicatedDocument);
+        break;
+    }
+  }
 
   // методы
   function createNewResume() {
@@ -169,6 +188,7 @@ export default function Dashboard() {
                   onChangeTitleCallback={(value) => handleDocumentCardTitleChange("resume", resume.id, "title", value)}
                   onEditButtonClick={() => handleEditButtonClick(`/resumes/${resume.id}/edit`)}
                   onDeleteButtonClick={() => handleDeleteButtonClick("resume", resume.id)}
+                  onDuplicateButtonClick={() => duplicateDocument("resume", resume)}
                 />
               );
             })}
@@ -181,6 +201,7 @@ export default function Dashboard() {
                   onChangeTitleCallback={(value) => handleDocumentCardTitleChange("coverLetter", coverLetter.id, "title", value)}
                   onEditButtonClick={() => handleEditButtonClick(`/cover-letters/${coverLetter.id}/edit`)}
                   onDeleteButtonClick={() => handleDeleteButtonClick("coverLetter", coverLetter.id)}
+                  onDuplicateButtonClick={() => duplicateDocument("cover-letter", coverLetter)}
                 />
               );
             })}
@@ -213,6 +234,7 @@ export default function Dashboard() {
                   onChangeTitleCallback={(value) => handleDocumentCardTitleChange("resume", resume.id, "title", value)}
                   onEditButtonClick={() => handleEditButtonClick(`/resumes/${resume.id}/edit`)}
                   onDeleteButtonClick={() => handleDeleteButtonClick("resume", resume.id)}
+                  onDuplicateButtonClick={() => duplicateDocument("resume", resume)}
                 />
               );
             })}
@@ -245,6 +267,7 @@ export default function Dashboard() {
                   onChangeTitleCallback={(value) => handleDocumentCardTitleChange("coverLetter", coverLetter.id, "title", value)}
                   onEditButtonClick={() => handleEditButtonClick(`/cover-letters/${coverLetter.id}/edit`)}
                   onDeleteButtonClick={() => handleDeleteButtonClick("coverLetter", coverLetter.id)}
+                  onDuplicateButtonClick={() => duplicateDocument("cover-letter", coverLetter)}
                 />
               );
             })}
