@@ -1,6 +1,6 @@
 import styles from "./ButtonAdd.module.scss"
 
-export default function ButtonAdd({ children, callbackOnClick, appearance = "no-bg", ref }) {
+export default function ButtonAdd({ className = "", children, callbackOnClick, appearance = "no-bg", ref }) {
 
   function handleClick(event) {
     event.preventDefault();
@@ -10,7 +10,7 @@ export default function ButtonAdd({ children, callbackOnClick, appearance = "no-
 
   return(
     <button 
-      className={styles.button}
+      className={`${styles.button} ${className}`}
       onClick={handleClick}
       data-appearance={appearance}
       ref={ref}

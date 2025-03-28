@@ -10,7 +10,7 @@ import templates from "./templates/templates";
 import { filterObjectByArrayOfKeys } from "../../lib/objUtils";
 import { cleanHTMLString } from "../../lib/stringUtils";
 
-export default function DocumentPreview({ data, isDataLoaded, currentPageIndex, setTotalPages }) {
+export default function DocumentPreview({ data, currentPageIndex, setTotalPages }) {
   const { component: Template, config: templateCongig } = templates[data?.template] ?? { component: null, config: null };
 
   const [pages, setPages] = useState([]);
@@ -201,8 +201,6 @@ export default function DocumentPreview({ data, isDataLoaded, currentPageIndex, 
     setPages(pagesArray);
     if (setTotalPages) setTotalPages(pagesArray.length);
   }, [data, measured]);
-
-  if (!isDataLoaded) return null;
 
   return (
     <div className={styles.documentPreview}>

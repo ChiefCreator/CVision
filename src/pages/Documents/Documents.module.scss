@@ -1,0 +1,36 @@
+.resumes-page {
+
+}
+
+.header {
+  margin-bottom: 20px;
+  &__title-wrapper {
+    display: flex;
+    align-items: end;
+    gap: 10px;
+  }
+  &__title {
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--color-neutral-contrast);
+  }
+  &__counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: var(--color-primary);
+    padding: 5px;
+    font-size: 12px;
+    color: white;
+    border-radius: 50%;
+  }
+  &__line {
+    margin-top: 5px;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-secondary--lighten);
+  }
+}

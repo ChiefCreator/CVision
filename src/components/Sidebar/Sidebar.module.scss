@@ -158,14 +158,17 @@
   }
 
   &__content {
-    width: 100%;
+    flex: 1 1 auto;
+    width: calc(100% - 26px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    overflow: hidden;
   }
 
   &__title {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -198,6 +201,7 @@
   overflow: hidden;
 
   &__container {
+    width: calc(100% - 5px);
     min-height: 0;
     padding-left: 10px;
     display: flex;

@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react';
 
 import DocumentContainer from '../DocumentContainer/DocumentContainer';
 
-import img from "./../../assets/images/portrait.jpg"
 import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js';
 import html2canvas from 'html2canvas';
@@ -16,7 +15,7 @@ import ActionButton from './ActionButton';
 
 import { convertFromDateToDDMonthYYYYFormat, getTimeAgo } from '../../lib/dateUtils';
 
-export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
+export default function DocumentCard({ data, onChangeTitleCallback, onEditButtonClick, onDeleteButtonClick }) {
   const [isPreviewHovered, setIsPreviewHovered] = useState(false);
   const [previewRotation, setPreviewRotation] = useState({ rotateX: 0, rotateY: 0 });
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -127,7 +126,7 @@ export default function DocumentCard({ data, isResumeDataLoaded, onChangeTitleCa
           onMouseEnter={handlePreviewMouseenter} 
           style={{ transform: `rotateX(${previewRotation.rotateX}deg) rotateY(${previewRotation.rotateY}deg)` }}
         >
-          <DocumentPreview data={data} isDataLoaded={isResumeDataLoaded} />
+          <DocumentPreview data={data} />
         </div>
       </div>
 
