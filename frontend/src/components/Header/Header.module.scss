@@ -1,0 +1,64 @@
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 20px 0;
+    border-radius: 20px;
+    transition: padding .4s var(--transition-power--in-out), background-color .4s var(--transition-power--in-out);
+    backdrop-filter: blur(2px);
+  }
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.header-logo {
+  flex: 0 0 100px;
+}
+
+.button-account {
+  display: flex;
+  padding: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:  background-color .3s var(--transition-power--in-out);
+
+  &__icon {
+    width: 30px;
+    aspect-ratio: 1;
+
+    color: var(--color-secondary--light);
+  }
+
+  &:hover {
+    background-color: var(--color-secondary--lighten);
+  }
+}
+.account-dropdown-menu {
+  margin-top: 10px;
+  padding: 10px !important;
+
+  &__header {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--color-secondary--lighten);
+  }
+  &__title {
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  &__subtitle {
+    font-size: 14px;
+    color: var(--color-secondary--light);
+  }
+}

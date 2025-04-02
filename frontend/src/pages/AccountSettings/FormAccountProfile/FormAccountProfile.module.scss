@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  &__field {
+    display: block;
+  }
+}
+
+.button-send {
+  margin-top: 20px;
+  margin-left: auto;
+}
