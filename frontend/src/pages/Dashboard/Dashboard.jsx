@@ -23,7 +23,6 @@ import NoDocuments from "../../components/NoDocuments/NoDocuments";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { userProfileState } = useAuth();
 
   const { resumesDataState, dispatchOfResumesDataState, addResumeToDatabase, deleteResumeFromDatabase } = useResumeContext();
   const { resumes } = resumesDataState;

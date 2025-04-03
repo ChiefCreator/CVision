@@ -1,6 +1,7 @@
 import styles from "./AccountSettings.module.scss";
 
 import FormAccountProfile from "./FormAccountProfile/FormAccountProfile";
+import SettingsSection from "../../components/SettingsSection/SettingsSection";
 
 export default function AccountSettings() {
 
@@ -12,15 +13,17 @@ export default function AccountSettings() {
         </header>
   
         <div className={styles.pageSections}>
-          <section className={styles.section}>
-            <header className={styles.sectionHeader}>
-              <h4 className={styles.sectionTitle}>Аккаунт</h4>
-            </header>
-  
-            <div className={styles.sectionBody}>
-              <FormAccountProfile />
-            </div>
-          </section>
+          <SettingsSection
+            title="Аккаунт"
+            stylesConfig={{
+              section: styles.section,
+              header: styles.sectionHeader,
+              title: styles.sectionTitle,
+              body: styles.sectionBody,
+            }}
+          >
+            <FormAccountProfile />
+          </SettingsSection>
         </div>
       </div>
     </div>

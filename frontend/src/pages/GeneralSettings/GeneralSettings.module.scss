@@ -1,0 +1,10 @@
+.page {
+  &__container {
+    
+  }
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+}

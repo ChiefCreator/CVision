@@ -40,7 +40,7 @@ export default function CoverLetterBuilder({ coverLetterId }) {
   return (
     <div className={styles.coverLetterBuilder}>
       <ModalSidebarTrigger isSidebarModalOpen={isSidebarModalOpen} setIsSidebarModalOpen={setIsSidebarModalOpen} />
-      <Sidebar defaultActiveItemId="none" isModal={true} isModalOpen={isSidebarModalOpen} isHeaderRendered={true} />
+      <Sidebar defaultActiveItemId="none" isModal={true} isModalOpen={isSidebarModalOpen} />
 
       <div className={styles.coverLetterBuilderContainer}>
         <div className={styles.coverLetterBuilderInfo}>

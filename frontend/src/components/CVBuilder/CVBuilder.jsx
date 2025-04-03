@@ -29,7 +29,7 @@ export default function CVBuilder({ resumeId }) {
     <div className={styles.cvBuilder}>
 
       <ModalSidebarTrigger isSidebarModalOpen={isSidebarModalOpen} setIsSidebarModalOpen={setIsSidebarModalOpen} />
-      <Sidebar defaultActiveItemId="none" isModal={true} isModalOpen={isSidebarModalOpen} isHeaderRendered={true} />
+      <Sidebar defaultActiveItemId="none" isModal={true} isModalOpen={isSidebarModalOpen} />
 
       <div className={styles.cvBuilderContainer}>
         <div className={styles.cvBuilderInfo}>

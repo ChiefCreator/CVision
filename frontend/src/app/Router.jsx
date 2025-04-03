@@ -13,6 +13,7 @@ import Register from "../pages/Register/Register";
 import LogIn from "../pages/LogIn/LogIn";
 import HomeLayout from "../layouts/HomeLayout/HomeLayout";
 import SettingsLayout from "../layouts/SettingsLayout/SettingsLayout";
+import GeneralSettings from "../pages/GeneralSettings/GeneralSettings";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Documents from "../pages/Documents/Documents";
 import AccountSettings from "../pages/AccountSettings/AccountSettings";
@@ -150,7 +151,7 @@ export default function Router() {
           <Route path="settings" element={<SettingsLayout />}>
             <Route index element={<Navigate to="general" />} />
 
-            <Route path="general" element={<div>Общие настройки</div>} />
+            <Route path="general" element={<GeneralSettings />} />
             <Route path="account" element={<AccountSettings />} />
           </Route>
         </Route>

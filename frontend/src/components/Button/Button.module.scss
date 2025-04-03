@@ -6,4 +6,13 @@
   cursor: pointer;
   font-size: 14px;
   padding: 8px 12px;
+  transition: background-color .3s var(--transition-power--in-out), scale .3s var(--transition-power--in-out);
+
+  &:active {
+    scale: .98;
+  }
+
+  &:hover {
+    background-color: rgb(10, 126, 221);
+  }
 }

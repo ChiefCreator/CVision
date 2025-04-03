@@ -1,0 +1,20 @@
+.section {
+  &__header {
+    padding: 0 40px;
+    margin-bottom: 8px;
+  }
+  &__title {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    color: var(--color-neutral-contrast--light);
+    text-transform: uppercase;
+  }
+
+  &__body {
+    width: 100%;
+    border-radius: 6px;
+    padding: 0 40px;
+    background-color: rgb(242, 246, 255);
+  }
+}
