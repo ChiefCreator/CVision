@@ -38,7 +38,7 @@ model Resume {
 
   userId String @map("user_id")
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PersonalDetails {
@@ -60,7 +60,7 @@ model PersonalDetails {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
 model ProfessionalSummary {
@@ -68,7 +68,7 @@ model ProfessionalSummary {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
 model EmploymentHistorySection {
@@ -78,7 +78,7 @@ model EmploymentHistorySection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model EmploymentHistory {
   jobTitle    String?   @map("job_title")
@@ -90,7 +90,7 @@ model EmploymentHistory {
 
   sectionId String @unique @map("section_id")
 
-  section EmploymentHistorySection @relation(fields: [sectionId], references: [id])
+  section EmploymentHistorySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model EducationSection {
@@ -100,7 +100,7 @@ model EducationSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model Education {
   school      String?
@@ -112,7 +112,7 @@ model Education {
 
   sectionId String @unique @map("section_id")
 
-  section EducationSection @relation(fields: [sectionId], references: [id])
+  section EducationSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model LinkSection {
@@ -122,7 +122,7 @@ model LinkSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model Link {
   label String?
@@ -130,7 +130,7 @@ model Link {
 
   sectionId String @unique @map("section_id")
 
-  section LinkSection @relation(fields: [sectionId], references: [id])
+  section LinkSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model SkillSection {
@@ -141,7 +141,7 @@ model SkillSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model Skill {
   title String?
@@ -149,7 +149,7 @@ model Skill {
 
   sectionId String @unique @map("section_id")
 
-  section SkillSection @relation(fields: [sectionId], references: [id])
+  section SkillSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model LanguageSection {
@@ -159,7 +159,7 @@ model LanguageSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model Language {
   title String?
@@ -167,7 +167,7 @@ model Language {
 
   sectionId String @unique @map("section_id")
 
-  section LanguageSection @relation(fields: [sectionId], references: [id])
+  section LanguageSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model CourseSection {
@@ -177,7 +177,7 @@ model CourseSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model Course {
   title       String?
@@ -187,7 +187,7 @@ model Course {
 
   sectionId String @unique @map("section_id")
 
-  section CourseSection @relation(fields: [sectionId], references: [id])
+  section CourseSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model CustomSection {
@@ -197,7 +197,7 @@ model CustomSection {
 
   resumeId String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model CustomData {
   title       String?
@@ -208,7 +208,7 @@ model CustomData {
 
   sectionId String @unique @map("section_id")
 
-  section CustomSection @relation(fields: [sectionId], references: [id])
+  section CustomSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 enum SkillLevel {
