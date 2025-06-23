@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email    String  @unique
+  password String
+  name     String?
+
+  resumes Resume[]
+}
+
+model Resume {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title               String?
+  personalDetails     PersonalDetails?
+  professionalSummary ProfessionalSummary?
+  employmentHistory   EmploymentHistorySection?
+  education           EducationSection?
+  links               LinkSection?
+  skills              SkillSection?
+  languages           LanguageSection?
+  courses             CourseSection?
+  customSections      CustomSection?
+
+  userId String @map("user_id")
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PersonalDetails {
+  id String @id @default(uuid())
+
+  avatarUrl      String?   @map("avatar_url")
+  jobTitle       String?   @map("job_title")
+  fullName       String?   @map("full_name")
+  email          String?
+  phone          String?
+  address        String?
+  city           String?
+  country        String?
+  postalCode     String?   @map("postal_code")
+  drivingLicense String?   @map("driving_license")
+  birthPlace     String?   @map("birth_place")
+  birthDate      DateTime? @map("birth_date")
+  nationality    String?
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+
+model ProfessionalSummary {
+  summary String?
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+
+model EmploymentHistorySection {
+  id    String              @id @default(uuid())
+  order Int
+  data  EmploymentHistory[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model EmploymentHistory {
+  jobTitle    String?   @map("job_title")
+  employer    String?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  city        String?
+  description String?
+
+  sectionId String @unique @map("section_id")
+
+  section EmploymentHistorySection @relation(fields: [sectionId], references: [id])
+}
+
+model EducationSection {
+  id    String      @id @default(uuid())
+  order Int
+  data  Education[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model Education {
+  school      String?
+  degree      String?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  city        String?
+  description String?
+
+  sectionId String @unique @map("section_id")
+
+  section EducationSection @relation(fields: [sectionId], references: [id])
+}
+
+model LinkSection {
+  id    String @id @default(uuid())
+  order Int
+  data  Link[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model Link {
+  label String?
+  url   String?
+
+  sectionId String @unique @map("section_id")
+
+  section LinkSection @relation(fields: [sectionId], references: [id])
+}
+
+model SkillSection {
+  id          String  @id @default(uuid())
+  order       Int
+  isShowLevel Boolean @default(true)
+  data        Skill[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model Skill {
+  title String?
+  level SkillLevel
+
+  sectionId String @unique @map("section_id")
+
+  section SkillSection @relation(fields: [sectionId], references: [id])
+}
+
+model LanguageSection {
+  id    String  @id @default(uuid())
+  order Int
+  data  Language[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model Language {
+  title String?
+  level LanguageLevel?
+
+  sectionId String @unique @map("section_id")
+
+  section LanguageSection @relation(fields: [sectionId], references: [id])
+}
+
+model CourseSection {
+  id    String  @id @default(uuid())
+  order Int
+  data  Course[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model Course {
+  title       String?
+  institution String?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+
+  sectionId String @unique @map("section_id")
+
+  section CourseSection @relation(fields: [sectionId], references: [id])
+}
+
+model CustomSection {
+  id    String  @id @default(uuid())
+  order Int
+  data  CustomData[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id])
+}
+model CustomData {
+  title       String?
+  city        String?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  description String?
+
+  sectionId String @unique @map("section_id")
+
+  section CustomSection @relation(fields: [sectionId], references: [id])
+}
+
+enum SkillLevel {
+  novice
+  beginner
+  skillful
+  experienced
+  expert
+}
+enum LanguageLevel {
+  nativeSpeaker
+  highlyProficient
+  goodWorkingKnowledge
+  workingKnowledge
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+}
