@@ -3,3 +3,8 @@ export interface BaseEntityFields {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface BaseSectionResume {
+  id: string;
+  order: number;
+}

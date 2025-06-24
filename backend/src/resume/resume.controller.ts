@@ -16,11 +16,11 @@ export class ResumeController {
     return this.resumeService.findOne(resumeId);
   }
 
-  @Post("create")
+  @Post()
   create(@Body() dto: CreateResumeDto) {
     return this.resumeService.create(process.env.TEST_USER_ID!, dto);
   }
-  @Post("delete/:resumeId")
+  @Post(":resumeId")
   delete(@Param("resumeId") resumeId: string) {
     return this.resumeService.delete(resumeId);
   }
