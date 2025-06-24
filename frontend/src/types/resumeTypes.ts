@@ -15,6 +15,7 @@ export interface Resume extends BaseEntityFields {
 }
 
 export type CreateResume = Resume["title"];
+export type UpdateResume = Partial<Omit<Resume, keyof BaseEntityFields>>;
 
 export interface PersonalDetails {
   id: string;
