@@ -10,28 +10,28 @@ class ResumeService {
   async getAll() {
     const res = await apiClassic.get<Resume[]>(`/${this.BASE_URL_SEGMENT}`);
 
-    return res;
+    return res.data;
   }
   async getOne(id: Resume["id"]) {
     const res = await apiClassic.get<Resume>(`/${this.BASE_URL_SEGMENT}/${id}`);
 
-    return res;
+    return res.data;
   }
 
   async create(dto: CreateResume) {
     const res = await apiClassic.post<Resume>(`/${this.BASE_URL_SEGMENT}`, dto);
 
-    return res;
+    return res.data;
   }
   async delete(id: Resume["id"]) {
     const res = await apiClassic.post<Resume>(`/${this.BASE_URL_SEGMENT}/${id}`);
 
-    return res;
+    return res.data;
   }
   async update(id: Resume["id"], dto: UpdateResume) {
     const res = await apiClassic.put<Resume>(`/${this.BASE_URL_SEGMENT}/${id}`, dto);
 
-    return res;
+    return res.data;
   }
 }
 
