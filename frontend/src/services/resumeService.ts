@@ -1,6 +1,6 @@
 import { apiClassic } from '@/api/api'
 
-import type { Resume, CreateResume, UpdateResume } from '@/types/resumeTypes';
+import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resumeTypes';
 
 class ResumeService {
   constructor() {}
@@ -28,8 +28,8 @@ class ResumeService {
 
     return res.data;
   }
-  async update(id: Resume["id"], dto: UpdateResume) {
-    const res = await apiClassic.put<Resume>(`/${this.BASE_URL_SEGMENT}/${id}`, dto);
+  async update(id: Resume["id"], fieldUpdates: ResumeFieldUpdates) {
+    const res = await apiClassic.put<Resume>(`/${this.BASE_URL_SEGMENT}/${id}`, fieldUpdates);
 
     return res.data;
   }

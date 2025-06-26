@@ -8,3 +8,7 @@ export interface BaseSectionResume {
   id: string;
   order: number;
 }
+
+export interface BaseComponent {
+  className?: string;
+}
