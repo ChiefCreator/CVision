@@ -1,0 +1,85 @@
+.editor {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: normal;
+  white-space: pre;
+
+  &__container {
+    display: flex;
+    gap: 6px;
+    overflow: hidden;
+  }
+
+  &__content-wrapper {
+    flex: 1 1 auto;
+  }
+  &__content {
+    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+    position: relative;
+  }
+  &__hidden-content {
+    display: inline-block;
+    max-width: 100%;
+    min-width: 3.2em;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    white-space: inherit;
+  }
+}
+
+.input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  white-space: inherit;
+  color: var(--color-neutral-contrast);
+  caret-color: var(--color-primary);
+  background-color: transparent;
+}
+
+.line {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  margin-top: 3px;
+}
+
+.sub-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  scale: 0;
+
+  &_first {
+    background-color: var(--color-neutral-contrast--lighten);
+    z-index: 1;
+  }
+  &_second {
+    background-color: var(--color-primary);
+    z-index: 2;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}

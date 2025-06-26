@@ -1,0 +1,17 @@
+.editor {
+  display: flex;
+  height: 100%;
+  background-color: var(--color-neutral-primary--dark);
+
+  &__content {
+    flex: 1 1 auto;
+    max-width: 50%;
+    padding: 20px 0;
+    background-color: var(--color-neutral-primary);
+  }
+  &__preview {
+    flex: 1 1 auto;
+    max-width: 50%;
+    padding: 20px 0;
+  }
+}
