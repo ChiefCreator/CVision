@@ -12,25 +12,26 @@ const nextConfig: NextConfig = {
         const loaders = Array.isArray(rule.use) ? rule.use : [rule.use];
 
         loaders.forEach((loader: any) => {
-          if (typeof loader.loader !== 'string') return;
+          if (typeof loader.loader !== "string") return;
 
           if (
-            loader.loader.includes('sass-loader') ||
-            loader.loader.includes('resolve-url-loader') ||
-            loader.loader.includes('postcss-loader') ||
-            loader.loader.includes('css-loader')
+            loader.loader.includes("sass-loader") ||
+            loader.loader.includes("resolve-url-loader") ||
+            loader.loader.includes("postcss-loader") ||
+            loader.loader.includes("css-loader")
           ) {
-            loader.options = {
-              ...(loader.options || {}),
-              sourceMap: true,
-            };
+            loader.options = { ...(loader.options || {}), sourceMap: true };
           }
 
-          if (loader.loader.includes('sass-loader') && !loader.options?.additionalData) {
+          if (loader.loader.includes("css-loader") && loader.options?.modules) {
+            loader.options.modules.exportLocalsConvention = "camelCase";
+          }
+
+          if (loader.loader.includes("sass-loader") && !loader.options?.additionalData) {
             loader.options.additionalData = `@use "@/assets/styles/mixin" as *;`;
             loader.options.sassOptions = {
               ...(loader.options.sassOptions || {}),
-              includePaths: [path.resolve(__dirname, 'src')],
+              includePaths: [path.resolve(__dirname, "src")],
             };
           }
         });
