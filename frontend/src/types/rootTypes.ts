@@ -6,6 +6,9 @@ export interface BaseEntityFields {
 
 export interface BaseSectionResume {
   id: string;
+  title: string;
+  defaultTitle: string;
+
   order: number;
 }
 

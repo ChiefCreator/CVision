@@ -18,9 +18,7 @@ export type CreateResume = Resume["title"];
 export type UpdateResume = Partial<Omit<Resume, keyof BaseEntityFields>>;
 export type ResumeFieldUpdates = Record<string, UpdateResume>;
 
-export interface PersonalDetails {
-  id: string;
-
+export interface PersonalDetails extends BaseSectionResume {
   avatarUrl?: string;
   jobTitle?: string;
   fullName?: string;
@@ -35,7 +33,7 @@ export interface PersonalDetails {
   birthDate?: string;
   nationality?: string;
 }
-export interface ProfessionalSummary {
+export interface ProfessionalSummary extends BaseSectionResume {
   summary?: string;
 }
 
