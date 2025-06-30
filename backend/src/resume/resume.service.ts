@@ -1,23 +1,56 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
-import { UpdateResumeDto } from './dto/update-resume.dto';
-import { Prisma } from 'prisma/generated/client';
+import { ResumeFieldUpdates, UpdateResumeDto } from './dto/update-resume.dto';
+import { splitPath } from "./utils/splitPath";
+import { updateResumeField } from './utils/updateResumeField';
+import { SectionResumeService } from 'src/section-resume/section-resume.service';
+import { BadRequestException } from '@nestjs/common';
+
+import { ResumeSectionNames } from './types/ResumeSectionNames';
 
 @Injectable()
 export class ResumeService {
-  constructor(private readonly prisma: PrismaService) {};
-
+  constructor(private readonly prisma: PrismaService, private readonly sectionResumeService: SectionResumeService) {};
+  
   private readonly resumeInclude = {
     personalDetails: true,
     professionalSummary: true,
-    employmentHistory: true,
-    education: true,
-    links: true,
-    skills: true,
-    languages: true,
-    courses: true,
-    customSections: true,
+    employmentHistory: {
+      include: {
+        data: true
+      }
+    },
+    education: {
+      include: {
+        data: true
+      }
+    },
+    links: {
+      include: {
+        data: true
+      }
+    },
+    skills: {
+      include: {
+        data: true
+      }
+    },
+    languages: {
+      include: {
+        data: true
+      }
+    },
+    courses: {
+      include: {
+        data: true
+      }
+    },
+    customSections: {
+      include: {
+        data: true
+      }
+    },
   }
 
   async findAll() {
@@ -51,197 +84,38 @@ export class ResumeService {
       where: { id: resumeId }
     });
   }
-   async updateOne(resumeId: string, dto: UpdateResumeDto) {
-    const existingResume = await this.findOne(resumeId);
+  async updateOne(resumeId: string, updates: ResumeFieldUpdates) {
+    let resumeUpdates: UpdateResumeDto = {};
+    let sections: UpdateResumeDto = {};
 
-    const ops: Prisma.PrismaPromise<unknown>[] = [];
+    for (const [path, pathData] of Object.entries(updates)) {
+      const pathParts = splitPath(path);
+      const rootPathPart = pathParts[0];
 
-    if (dto.title !== undefined) {
-      ops.push(
-        this.prisma.resume.update({
+      if (this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames)) {
+        sections = updateResumeField(sections, path, pathData);
+      }
+      else if (!this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames)) {
+        resumeUpdates = updateResumeField(resumeUpdates, path, pathData)
+      }
+      else {
+        throw new BadRequestException("Resume update error");
+      }
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      if (Object.keys(resumeUpdates).length) {
+        await (tx.resume as any).update({
           where: { id: resumeId },
-          data: { title: dto.title },
-        })
-      );
-    }
-    if (dto.personalDetails !== undefined) {
-      ops.push(
-        this.prisma.personalDetails.upsert({
-          where: { resumeId },
-          update: dto.personalDetails,
-          create: {
-            ...dto.personalDetails,
-            resumeId,
-          },
-        })
-      );
-    }
-    if (dto.professionalSummary !== undefined) {
-      ops.push(
-        this.prisma.professionalSummary.upsert({
-          where: { resumeId },
-          update: dto.professionalSummary,
-          create: {
-            ...dto.professionalSummary,
-            resumeId,
-          },
-        })
-      );
-    }
-    if (dto.employmentHistory !== undefined) {
-      ops.push(
-        this.prisma.employmentHistorySection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.employmentHistory.order,
-            data: {
-              deleteMany: {},
-              create: dto.employmentHistory.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.employmentHistory.order,
-            data: {
-              create: dto.employmentHistory.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.education !== undefined) {
-      ops.push(
-        this.prisma.educationSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.education.order,
-            data: {
-              deleteMany: {},
-              create: dto.education.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.education.order,
-            data: {
-              create: dto.education.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.skills !== undefined) {
-      ops.push(
-        this.prisma.skillSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.skills.order,
-            isShowLevel: dto.skills.isShowLevel ?? true,
-            data: {
-              deleteMany: {},
-              create: dto.skills.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.skills.order,
-            isShowLevel: dto.skills.isShowLevel ?? true,
-            data: {
-              create: dto.skills.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.languages !== undefined) {
-      ops.push(
-        this.prisma.languageSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.languages.order,
-            data: {
-              deleteMany: {},
-              create: dto.languages.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.languages.order,
-            data: {
-              create: dto.languages.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.links !== undefined) {
-      ops.push(
-        this.prisma.linkSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.links.order,
-            data: {
-              deleteMany: {},
-              create: dto.links.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.links.order,
-            data: {
-              create: dto.links.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.courses !== undefined) {
-      ops.push(
-        this.prisma.courseSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.courses.order,
-            data: {
-              deleteMany: {},
-              create: dto.courses.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.courses.order,
-            data: {
-              create: dto.courses.data,
-            },
-          },
-        })
-      );
-    }
-    if (dto.customSections !== undefined) {
-      ops.push(
-        this.prisma.customSection.upsert({
-          where: { resumeId },
-          update: {
-            order: dto.customSections.order,
-            data: {
-              deleteMany: {},
-              create: dto.customSections.data,
-            },
-          },
-          create: {
-            resumeId,
-            order: dto.customSections.order,
-            data: {
-              create: dto.customSections.data,
-            },
-          },
-        })
-      );
-    }
+          data: resumeUpdates,
+        });
+      }
+  
+      for (let [sectionName, updates] of Object.entries(sections)) {
+        const sectionAndDataModelNames = this.sectionResumeService.getSectionAndDataModelNames(sectionName as ResumeSectionNames);
 
-    if (ops.length === 0) {
-      throw new BadRequestException("No data to update");
-    }
-
-    return this.prisma.$transaction(ops);
+        await this.sectionResumeService.upsert(sectionAndDataModelNames, resumeId, updates);
+      }
+    });
   }
 }

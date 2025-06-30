@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Param, Body } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
-import { UpdateResumeDto } from './dto/update-resume.dto';
+import { ResumeFieldUpdates } from './dto/update-resume.dto';
 
 @Controller("resumes")
 export class ResumeController {
@@ -25,7 +25,7 @@ export class ResumeController {
     return this.resumeService.delete(resumeId);
   }
   @Put(":resumeId")
-  async updateOne(@Param("resumeId") resumeId: string, @Body() dto: UpdateResumeDto) {
-    return this.resumeService.updateOne(resumeId, dto);
+  async updateOne(@Param("resumeId") resumeId: string, @Body() resumeUpdates: ResumeFieldUpdates) {
+    return this.resumeService.updateOne(resumeId, resumeUpdates);
   }
 }

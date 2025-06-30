@@ -2,6 +2,9 @@ import { IsOptional, IsString, IsArray, IsEnum, IsBoolean, IsNumber, ValidateNes
 import { Type } from 'class-transformer';
 
 export class PersonalDetailsDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+
   @IsOptional() @IsString() avatarUrl?: string;
   @IsOptional() @IsString() jobTitle?: string;
   @IsOptional() @IsString() fullName?: string;
@@ -18,6 +21,9 @@ export class PersonalDetailsDto {
 }
 
 export class ProfessionalSummaryDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+
   @IsOptional() @IsString() summary?: string;
 }
 
@@ -30,6 +36,8 @@ export class EmploymentHistoryItemDto {
   @IsOptional() @IsString() description?: string;
 }
 export class EmploymentHistorySectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -47,6 +55,8 @@ export class EducationItemDto {
   @IsOptional() @IsString() description?: string;
 }
 export class EducationSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -60,6 +70,8 @@ export class LinkDto {
   @IsOptional() @IsString() url?: string;
 }
 export class LinkSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -80,6 +92,8 @@ export class SkillDto {
   @IsEnum(SkillLevel) level: SkillLevel;
 }
 export class SkillSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsBoolean() isShowLevel: boolean;
@@ -107,6 +121,8 @@ export class LanguageDto {
   @IsOptional() @IsEnum(LanguageLevel) level?: LanguageLevel;
 }
 export class LanguageSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -122,6 +138,8 @@ export class CourseDto {
   @IsOptional() @IsDateString() endDate?: string;
 }
 export class CourseSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -138,6 +156,8 @@ export class CustomDataDto {
   @IsOptional() @IsString() description?: string;
 }
 export class CustomSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
   @IsArray()
@@ -176,3 +196,5 @@ export class UpdateResumeDto {
   @IsOptional() @ValidateNested() @Type(() => CustomSectionDto)
   customSections?: CustomSectionDto;
 }
+
+export type ResumeFieldUpdates = Record<string, any>
