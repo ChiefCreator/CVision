@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { resumeKeys } from './queryKeys';
 import { resumeService } from '@/services/resumeService';
 import { updateResumeFields } from '@/utils/resumeUtils';
 import debounce from 'lodash.debounce';
 
-import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resumeTypes';
+import type { Resume, CreateResume, ResumeFieldUpdates, ChangeResumeField } from '@/types/resumeTypes';
 
 export const useResumesQuery = () => {
   return useQuery({
@@ -73,7 +73,7 @@ export const useUpdateResume = (id: Resume["id"]) => {
 export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
   const queryClient = useQueryClient();
   const updateQueue = useRef<ResumeFieldUpdates>({});
-  const queryKey = resumeKeys.detail(id);
+  const queryKey = useMemo(() => resumeKeys.detail(id), [id]);
 
   const { data: resume, isLoading: isGetResumeLoading } = useResumeQuery(id);
   const { mutate, isPending: isUpdateResumeLoading } = useUpdateResume(id);
@@ -90,7 +90,7 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
     }, timer)
   ).current;
 
-  const changeField = (path: string, value: any) => {
+  const changeField: ChangeResumeField = useCallback((path, value) => {
     updateQueue.current[path] = value;
 
     queryClient.setQueryData(queryKey, (previousResume: Resume | undefined) => {
@@ -100,7 +100,7 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
     });
 
     debouncedSend();
-  };
+  }, [queryClient, queryKey]);
 
   return {
     resume,
@@ -108,4 +108,8 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
     isGetResumeLoading,
     isUpdateResumeLoading,
   };
+}
+
+export const useFieldChange = (onChange: ChangeResumeField, path: string) => {
+  return useCallback((val: string) => onChange(path, val), [onChange, path]);
 }
