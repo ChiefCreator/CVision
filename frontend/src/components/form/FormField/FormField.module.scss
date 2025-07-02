@@ -1,0 +1,23 @@
+.formField {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__head {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 7.5px;
+  }
+  &__label {
+    display: inline-block;
+    color: var(--color-neutral-contrast--light);
+  }
+
+  &__error-description {
+    margin-top: 5px;
+    color: red;
+    font-size: 14px;
+  }
+}
