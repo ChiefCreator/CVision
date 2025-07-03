@@ -12,6 +12,7 @@ import { ChevronDown } from "lucide-react";
 interface SectionProps extends BaseComponent {
   title?: string;
   defaultTitle?: string;
+  description?: string;
   children: React.ReactNode;
   isOpen: boolean;
 
@@ -19,7 +20,7 @@ interface SectionProps extends BaseComponent {
   onChange: (value: string) => void;
 }
 
-export default function Section({ className, title, defaultTitle, children, isOpen, onToggle, onChange }: SectionProps) {
+export default function Section({ className, title, description, defaultTitle, children, isOpen, onToggle, onChange }: SectionProps) {
 
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -47,6 +48,8 @@ export default function Section({ className, title, defaultTitle, children, isOp
       <div className={clsx(styles.body, { [styles.bodyOpen]: isOpen })}>
         <div className={styles.bodyContainer}>
           <div className={styles.bodyContent}>
+            {description && <p className={styles.description}>{description}</p>}
+
             {children}
           </div>
         </div>

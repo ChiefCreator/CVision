@@ -1,10 +1,11 @@
-import styles from "./EditInput.module.scss"
-
 import React, { useState, useRef } from "react";
+import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
 
+import InputLine from "../InputLine/InputLine";
+
+import styles from "./EditInput.module.scss"
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import clsx from "clsx";
 gsap.registerPlugin(useGSAP);
 
 export interface EditInputProps {
@@ -27,22 +28,7 @@ export default React.memo(function EditInput({ value, placeholder, inputRef, onC
   const handleMouseenter = () => setIsHovered(true);
   const handleMouseleave = () => setIsHovered(false);
 
-  useGSAP(() => {
-    const line = lineRef.current;
-    if (!line) return;
-
-    const [hoverLine, focusLine] = Array.from(line.children);
-
-    gsap.to(hoverLine, {
-      scale: isHovered ? 1 : 0,
-      duration: 0.2,
-    });
-
-    gsap.to(focusLine, {
-      scale: isFocused ? 1 : 0,
-      duration: 0.2,
-    });
-  }, [isHovered, isFocused]);
+  useAnimateInputLine({ isFocused, isHovered, lineRef });
 
   return (
     <div 
@@ -64,10 +50,7 @@ export default React.memo(function EditInput({ value, placeholder, inputRef, onC
         ></input>
       </div>
 
-      <div className={styles.inputLine} ref={lineRef}>
-        <span className={clsx(styles.inputSubLine, styles.inputSubLineFirst)}></span>
-        <span className={clsx(styles.inputSubLine, styles.inputSubLineSecond)}></span>
-      </div>
+      <InputLine className={styles.inputLine} ref={lineRef} />
     </div>
   );
 })

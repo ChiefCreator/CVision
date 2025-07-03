@@ -1,6 +1,8 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
+import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
 
 import EditButton from "@/components/button/IconButton/EditButton/EditButton";
+import InputLine from "../InputLine/InputLine";
 
 import type { BaseComponent } from "@/types/rootTypes";
 import type { IconButtonProps } from "@/components/button/IconButton/IconButton";
@@ -64,25 +66,6 @@ export default React.memo(function TitleEditor({ className, value, defaultValue 
     setIsHovered(false);
   }
 
-  useGSAP(() => {
-    const line = lineRef.current;
-    if (!line) return;
-
-    const lines: Element[] = Array.from(line.children);
-
-    if (isHovered) {
-      gsap.to(lines[0], { scale: 1, duration: 0.2 });
-    } else {
-      gsap.to(lines[0], { scale: 0, duration: 0.2 });
-    }
-
-    if (isFocused) {
-      gsap.to(lines[1], { scale: 1, duration: 0.2 });
-    } else {
-      gsap.to(lines[1], { scale: 0, duration: 0.2 });
-    }
-  }, [isHovered, isFocused]);
-
   useLayoutEffect(() => {
     setContentWrapperWidth();
   }, [finalValue]);
@@ -93,6 +76,8 @@ export default React.memo(function TitleEditor({ className, value, defaultValue 
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useAnimateInputLine({ isFocused, isHovered, lineRef });
 
   return (
     <div
@@ -117,10 +102,7 @@ export default React.memo(function TitleEditor({ className, value, defaultValue 
             <div className={clsx(styles.editorHiddenContent, "invisible")}>{value || defaultValue}</div>
           </div>
   
-          <div className={styles.line} ref={lineRef}>
-            <span className={clsx(styles.subLine, styles.subLineFirst)}></span>
-            <span className={clsx(styles.subLine, styles.subLineSecond)}></span>
-          </div>
+          <InputLine className={styles.inputLine} ref={lineRef} />
         </div>
   
         <div className={styles.controls} ref={controlsRef}>

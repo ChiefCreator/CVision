@@ -51,3 +51,10 @@
     grid-template-rows: 1fr;
   }
 }
+
+.description {
+  color: var(--color-neutral-contrast--lighten);
+  font-size: 13px;
+  margin-bottom: 15px;
+  line-height: 130%;
+}
