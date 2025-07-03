@@ -6,26 +6,23 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 
-import type { Resume, PersonalDetails, ResumeSectionName } from "@/types/resumeTypes"
+import type { PersonalDetails, ResumeSectionName, ResumeSectionChangeObj } from "@/types/resumeTypes"
 import type { ChangeResumeField } from "@/types/resumeTypes";
 
 import styles from "./PersonalDetails.module.scss";
 
 interface PersonalDetailsProps {
-  sectionData?: Resume["personalDetails"];
+  sectionData?: PersonalDetails;
   isOpen: boolean;
 
   onToggle: (id: ResumeSectionName) => void;
   onChange: ChangeResumeField;
 }
-type PersonalDetailsChangeObj = {
-  [key in keyof Required<Omit<PersonalDetails, "id" | "defaultTitle" | "order">>]: (val: string) => void
-};
 
 const id = "personalDetails";
 
 export default React.memo(function PersonalDetails({ sectionData, isOpen, onToggle, onChange }: PersonalDetailsProps) {
-  const changeObj: PersonalDetailsChangeObj= {
+  const changeObj: ResumeSectionChangeObj<PersonalDetails> = {
     title: useFieldChange(onChange, `${id}.title`),
     avatarUrl: useFieldChange(onChange, `${id}.avatarUrl`),
     jobTitle: useFieldChange(onChange, `${id}.jobTitle`),
