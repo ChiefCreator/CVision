@@ -124,3 +124,7 @@ export interface CustomData {
   endDate?: string;
   description?: string;
 }
+
+export type ResumeSectionName = keyof Omit<Resume, keyof BaseEntityFields | "title">;
+
+export type ChangeResumeField = (path: string, value: any) => void;

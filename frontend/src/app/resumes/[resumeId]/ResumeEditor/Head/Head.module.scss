@@ -1,0 +1,18 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-neutral-primary);
+  min-height: 100px;
+  border-bottom-left-radius: var(--section-border-radius);
+  border-bottom-right-radius: var(--section-border-radius);
+
+  &__title {
+    font-size: 20px;
+     max-width: calc(100% - 2 * var(--section-padding));
+  }
+  &__title-control {
+    width: 20px;
+    height: 20px;
+  }
+}

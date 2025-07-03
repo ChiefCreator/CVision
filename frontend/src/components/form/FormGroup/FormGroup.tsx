@@ -10,10 +10,10 @@ interface FormGroupProps extends BaseComponent {
   children: React.ReactNode;
 }
 
-export default function FormGroup({ className, gridTemplateColumns, gridTemplateRows, children }: FormGroupProps) {
+export default React.memo(function FormGroup({ className, gridTemplateColumns, gridTemplateRows, children }: FormGroupProps) {
   return (
     <fieldset className={clsx(styles.formGroup, className)} style={{ gridTemplateRows, gridTemplateColumns }}>
       {children}
     </fieldset>
   );
-};
+})

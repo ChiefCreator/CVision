@@ -1,3 +1,5 @@
+import React from "react";
+
 import type { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./FormField.module.scss"
@@ -10,7 +12,6 @@ export interface FormFieldProps extends BaseComponent {
 }
 
 export default function FormField({ className, label, errorMessage, children }: FormFieldProps) {
-
   return (
     <div className={clsx(styles.formField, className)}>
       <header className={styles.formFieldHead}>

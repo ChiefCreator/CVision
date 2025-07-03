@@ -13,10 +13,9 @@ export default function Head({ title, changeField }: HeadProps) {
     <header className={styles.head}>
       <TitleEditor
         className={styles.headTitle}
+        controlClassName={styles.headTitleControl}
         value={title}  
         isControlsShow={true}
-
-        controlProps={{ size: 19 }}
 
         onChange={(val) => changeField("title", val)}
       />

@@ -4,10 +4,13 @@ import styles from "./IconButton.module.scss";
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
-  size?: number;
+  iconProps: {
+    className?: string;
+    size?: number;
+  }
 }
 
-export default function IconButton({ className, children, size = 16, type = "button", onClick }: IconButtonProps) {
+export default function IconButton({ className, children, type = "button", onClick }: IconButtonProps) {
   return (
     <button className={clsx(styles.button, className)} type={type} onClick={onClick}>
       <div className={styles.iconWrapper}>{children}</div>

@@ -1,3 +1,12 @@
-.icon-wrapper {
-  color: var(--color-neutral-contrast--lighten);
+.button {
+  &__icon {
+    color: var(--color-neutral-contrast--lighten);
+    transition: color .2s var(--transition-primary);
+  }
+
+  &:hover {
+    .button__icon {
+      color: var(--color-primary) !important;
+    }
+  }
 }
