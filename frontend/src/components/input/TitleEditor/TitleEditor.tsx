@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 
 import EditButton from "@/components/button/IconButton/EditButton/EditButton";
 
@@ -26,13 +26,29 @@ function getFinalValue(value: TitleEditorProps["value"], defaultValue: TitleEdit
   return !value ? defaultValue : value;
 }
 
-export default function TitleEditor({ className, value, defaultValue = "Без названия", isControlsShow = "auto", inputRef, controlProps, onChange }: TitleEditorProps) {
+export default React.memo(function TitleEditor({ className, value, defaultValue = "Без названия", isControlsShow = "auto", inputRef, controlClassName, onChange }: TitleEditorProps) {
   const finalValue = getFinalValue(value, defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentWrapperRef = useRef<HTMLDivElement>(null);
   const finalInputRef = inputRef ? inputRef : useRef<HTMLInputElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<HTMLDivElement>(null);
+
+  const setContentWrapperWidth = () => {
+    const controls = controlsRef.current;
+    const contentWrapper = contentWrapperRef.current;
+    const container = containerRef.current;
+
+    if (!controls || !contentWrapper || !container) return;
+
+    const containerGap = parseFloat(getComputedStyle(container).gap);
+    const controlsWidth = controls.offsetWidth;
+
+    contentWrapper.style.maxWidth = `calc(100% - ${controlsWidth + containerGap}px)`;
+  }
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -67,6 +83,17 @@ export default function TitleEditor({ className, value, defaultValue = "Без �
     }
   }, [isHovered, isFocused]);
 
+  useLayoutEffect(() => {
+    setContentWrapperWidth();
+  }, [finalValue]);
+  useEffect(() => {
+    const handleResize = () => setContentWrapperWidth();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       className={clsx(styles.editor, className)}
@@ -74,8 +101,8 @@ export default function TitleEditor({ className, value, defaultValue = "Без �
       onMouseEnter={handleMouseenter} 
       onMouseLeave={handleMouseleave} 
     >
-      <div className={styles.editorContainer}>
-        <div className={styles.editorContentWrapper}>
+      <div className={styles.editorContainer} ref={containerRef}>
+        <div className={styles.editorContentWrapper} ref={contentWrapperRef}>
           <div className={styles.editorContent}>
             <input
               className={styles.input}
@@ -96,10 +123,10 @@ export default function TitleEditor({ className, value, defaultValue = "Без �
           </div>
         </div>
   
-        <div className={styles.controls}>
-          {((typeof isControlsShow === "boolean" && isControlsShow) || (isHovered && isControlsShow === "auto")) && <EditButton size={controlProps?.size} onClick={handleFocus} />}
+        <div className={styles.controls} ref={controlsRef}>
+          {((typeof isControlsShow === "boolean" && isControlsShow) || (isHovered && isControlsShow === "auto")) && <EditButton className={clsx(styles.button, controlClassName)} iconProps={{ className: styles.buttonIcon }} onClick={handleFocus} />}
         </div>
       </div>
     </div>
   );
-}
+})
