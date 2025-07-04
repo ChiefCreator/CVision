@@ -11,19 +11,24 @@ gsap.registerPlugin(useGSAP);
 export interface EditInputProps {
   value?: string;
   placeholder?: string;
+  ref?: React.Ref<HTMLDivElement>;
   inputRef?: React.RefObject<HTMLInputElement>;
 
+  onFocus?: () => void;
   onChange: (value: string) => void;
 }
 
-export default React.memo(function EditInput({ value, placeholder, inputRef, onChange }: EditInputProps) {
+export default React.memo(function EditInput({ value, placeholder, ref, inputRef, onFocus, onChange }: EditInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const finalInputRef = inputRef || useRef<HTMLInputElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
 
-  const handleFocus = () => setIsFocused(true);
+  const handleFocus = () => {
+    setIsFocused(true);
+    onFocus?.();
+  };
   const handleBlur = () => setIsFocused(false);
   const handleMouseenter = () => setIsHovered(true);
   const handleMouseleave = () => setIsHovered(false);
@@ -33,6 +38,7 @@ export default React.memo(function EditInput({ value, placeholder, inputRef, onC
   return (
     <div 
       className={styles.input}
+      ref={ref}
 
       onMouseEnter={handleMouseenter}
       onMouseLeave={handleMouseleave}
