@@ -1,0 +1,200 @@
+import React, { useState, useEffect } from "react";
+
+import { parse, format, isValid, setMonth, setYear, getYear } from "date-fns";
+import { ru } from "date-fns/locale";
+
+import Portal from "@/components/position/Portal/Portal";
+import Positioner, { type PositionerProps } from "@/components/position/Positioner/Positioner";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import styles from "./MonthPicker.module.scss";
+import clsx from "clsx";
+
+const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
+
+const formatDate = (date: Date) => {
+  const formattedDate = format(date, "LLLL, yyyy", { locale: ru });
+  return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+};
+const parseFlexibleDate = (value: string) => {
+  const trimmedValue = value.trim();
+
+  if (/^\d{4}-\d{2}$/.test(trimmedValue)) {
+    return parse(trimmedValue, "yyyy-MM", new Date(), { locale: ru });
+  }
+  else if (/^\d{2}\s*\/\s*\d{4}$/.test(trimmedValue)) {
+    const normalized = trimmedValue.replace(/\s*/g, "").replace("/", "/");
+    return parse(normalized, "MM/yyyy", new Date(), { locale: ru });
+  }
+  else if (/^[а-яА-Яa-zA-Z]+\/\d{4}$/.test(trimmedValue)) {
+    return parse(trimmedValue, "LLLL/yyyy", new Date(), { locale: ru });
+  }
+  else if (/^\d{4}$/.test(trimmedValue)) {
+    return parse(trimmedValue, "yyyy", new Date(), { locale: ru });
+  }
+  else if (/^[а-яА-Яa-zA-Z]+\s*,\s*\d{4}$/.test(trimmedValue)) {
+    const normalized = trimmedValue.replace(/\s*,\s*/, ", ");
+    return parse(normalized, "LLLL, yyyy", new Date(), { locale: ru });
+  }
+  else {
+    return null;
+  }
+}
+
+interface MonthPickerProps {
+  date?: string;
+  isShow?: boolean;
+  positionerProps?: PositionerProps
+
+  changeIsShow?: (show: boolean) => void;
+  onChange: (date: string) => void;
+}
+
+type ActivePanel = "months" | "years";
+
+export default function MonthPicker({ date, isShow = true, positionerProps, changeIsShow, onChange }: MonthPickerProps) {
+  const [activePanel, setActivePanel] = useState<ActivePanel>("months");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const changePanel = (panel: ActivePanel) => {
+    setTimeout(() => setActivePanel(panel));
+  }
+  const selectMonth = (monthIndex: number) => {
+    if (!selectedDate) return;
+
+    const newDate = setMonth(selectedDate, monthIndex);
+    const formattedDate = formatDate(newDate);
+
+    setSelectedDate(newDate);
+    onChange(formattedDate);
+  };
+  const selectYear = (year: number) => {
+    if (!selectedDate) return;
+
+    const newDate = setYear(selectedDate, year);
+    const formattedDate = formatDate(newDate);
+
+    setSelectedDate(newDate);
+    onChange(formattedDate);
+  };
+  const selectPrevYear = () => {
+    if (!selectedDate) return;
+
+    selectYear(getYear(selectedDate) - 1);
+  };
+  const selectNextYear = () => {
+    if (!selectedDate) return;
+
+    selectYear(getYear(selectedDate) + 1);
+  };
+  const getSelectedYear = () => {
+    return selectedDate ? getYear(selectedDate) : new Date().getFullYear();
+  };
+
+  const handleClickYearCell = (e: React.MouseEvent<HTMLButtonElement>, year: number) => {
+    selectYear(year);
+    changePanel("months");
+  };
+
+  useEffect(() => {
+    if (!date) {
+      setSelectedDate(new Date());
+      return;
+    }
+
+    const parsedDate = parseFlexibleDate(date);
+
+    if (isValid(parsedDate)) {
+      setSelectedDate(parsedDate);
+    } else {
+      setSelectedDate(null);
+    }
+  }, [date, setSelectedDate]);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      if (!target.closest(`.${styles.calendar}`) && !positionerProps?.triggerRef?.current?.contains(target)) {
+        changeIsShow?.(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  return (
+    <Portal>
+      <Positioner {...positionerProps}>
+        <div className={clsx(styles.calendar, { [styles.calendarOpen]: isShow })}>
+          {activePanel === "months" && (
+            <div className={styles.monthsPanel}>
+              <header className={styles.monthsPanelHeader}>
+                <button
+                  className={clsx(styles.button, styles.buttonPrev)}
+                  type="button"
+                  onClick={selectPrevYear}
+                >
+                  <ChevronLeft className={styles.buttonIcon} />
+                </button>
+    
+                <button
+                  className={styles.monthsPanelYear}
+                  type="button"
+                  onClick={() => changePanel("years")}
+                >
+                  {getSelectedYear()}
+                </button>
+    
+                <button
+                  className={clsx(styles.button, styles.buttonNext)}
+                  type="button"
+                  onClick={selectNextYear}
+                >
+                  <ChevronRight className={styles.buttonIcon} />
+                </button>
+              </header>
+    
+              <div className={styles.monthsPanelBody}>
+                <div className={styles.monthsPanelCells}>
+                  {months.map((month, i) => (
+                    <button
+                      className={clsx(styles.monthCell, { [styles.monthCellSelected ]: i === selectedDate?.getMonth() })}
+                      key={month}
+                      data-month={i}
+                      type="button"
+                      onClick={() => selectMonth(i)}
+                    >
+                      {month}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          {activePanel === "years" && (
+            <div className={styles.yearsPanel}>
+              <div className={styles.yearsPanelBody}>
+                <div className={styles.yearsPanelCells}>
+                  {years.map(year => (
+                    <button
+                      className={clsx(styles.yearCell, { [styles.yearCellSelected]: year === getSelectedYear() })}
+                      key={year}
+                      data-year={year}
+                      type="button"
+                      onClick={(e) => handleClickYearCell(e, year)}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Positioner>
+    </Portal>
+  )
+}

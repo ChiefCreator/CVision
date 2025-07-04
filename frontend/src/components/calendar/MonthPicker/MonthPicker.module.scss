@@ -1,0 +1,102 @@
+.calendar {
+  position: absolute;
+  z-index: 5;
+  min-width: 250px;
+  height: 260px;
+  background-color: var(--color-neutral-primary);
+  box-shadow: 0 0 4px var(--color-neutral-primary--dark);
+  padding: 15px;
+  border-radius: 8px;
+  transform: scale(0);
+  transform-origin: 100% 0;
+  transition: transform .2s var(--transition-primary);
+  
+  &_open {
+    transform: scale(1);
+  }
+}
+.months-panel {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 1 auto;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  &__body {
+    flex: 1 1 auto;
+  }
+  &__year {
+    cursor: pointer;
+  }
+  &__cells {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 10px;
+  }
+}
+
+.month-cell {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 5px;
+  transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
+  border-radius: 8px;
+  &:hover {
+    background-color: var(--color-neutral-primary--dark);
+  }
+  &_selected {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+  }
+}
+
+.button {
+  &__icon {
+    width: 20px;
+    aspect-ratio: 1;
+    color: var(--color-secondary--light);
+    transition: color .2s var(--transition-primary);
+  }
+
+  &:hover .button__icon {
+    color: var(--color-primary);
+  }
+}
+
+.years-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  &__body {
+    flex: 1 1 auto;
+    height: 100%;
+  }
+  &__cells {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 10px;
+    height: 100%;
+    overflow: auto;
+  }
+}
+
+.year-cell {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 5px;
+  transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
+  border-radius: 8px;
+
+  &:hover {
+    background-color: var(--color-neutral-primary--dark);
+  }
+
+  &_selected {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+  }
+}
