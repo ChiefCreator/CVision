@@ -5,6 +5,9 @@ import Head from "./Head/Head";
 import PersonalDetails from "./sections/PersonalDetails/PersonalDetails";
 import ProfessionalSummary from "./sections/ProfessionalSummary/ProfessionalSummary";
 import EmploymentHistory from "./sections/EmploymentHistory/EmploymentHistory";
+import Education from "./sections/Education/Education";
+import Links from "./sections/Links/Links";
+import Courses from "./sections/Courses/Courses";
 
 import { ChangeResumeField, isSectionDefault, Resume } from "@/types/resumeTypes";
 import { ResumeSectionName } from "@/types/resumeTypes";
@@ -12,8 +15,6 @@ import { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
-import Education from "./sections/Education/Education";
-import Links from "./sections/Links/Links";
 
 const sectionNames: ResumeSectionName[] = ["personalDetails", "professionalSummary", "employmentHistory", "education", "links", "skills", "languages", "courses", "customSections"]
 
@@ -134,6 +135,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Links
           sectionData={resume!.links}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <Courses
+          sectionData={resume!.courses}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}
