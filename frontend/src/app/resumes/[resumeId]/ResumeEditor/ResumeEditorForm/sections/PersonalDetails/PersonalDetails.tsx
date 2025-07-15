@@ -6,45 +6,47 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 
-import type { PersonalDetails, ResumeSectionName, ResumeSectionChangeObj } from "@/types/resumeTypes"
+import type { PersonalDetails, ResumeSectionChangeObj } from "@/types/resumeTypes"
 import type { ChangeResumeField } from "@/types/resumeTypes";
 
 import styles from "./PersonalDetails.module.scss";
 
 interface PersonalDetailsProps {
   sectionData?: PersonalDetails;
-  isOpen: boolean;
+  isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
-  onToggle: (id: ResumeSectionName) => void;
+  onToggle: (id: string) => void;
   onChange: ChangeResumeField;
 }
 
-const id = "personalDetails";
+const sectionName = "personalDetails";
 
 export default React.memo(function PersonalDetails({ sectionData, isOpen, onToggle, onChange }: PersonalDetailsProps) {
   const changeObj: ResumeSectionChangeObj<PersonalDetails> = {
-    title: useFieldChange(onChange, `${id}.title`),
-    avatarUrl: useFieldChange(onChange, `${id}.avatarUrl`),
-    jobTitle: useFieldChange(onChange, `${id}.jobTitle`),
-    fullName: useFieldChange(onChange, `${id}.fullName`),
-    email: useFieldChange(onChange, `${id}.email`),
-    phone: useFieldChange(onChange, `${id}.phone`),
-    address: useFieldChange(onChange, `${id}.address`),
-    city: useFieldChange(onChange, `${id}.city`),
-    country: useFieldChange(onChange, `${id}.country`),
-    postalCode: useFieldChange(onChange, `${id}.postalCode`),
-    birthPlace: useFieldChange(onChange, `${id}.birthPlace`),
-    birthDate: useFieldChange(onChange, `${id}.birthDate`),
-    nationality: useFieldChange(onChange, `${id}.nationality`),
-    drivingLicense: useFieldChange(onChange, `${id}.drivingLicense`),
+    title: useFieldChange(onChange, `${sectionName}.title`),
+    avatarUrl: useFieldChange(onChange, `${sectionName}.avatarUrl`),
+    jobTitle: useFieldChange(onChange, `${sectionName}.jobTitle`),
+    fullName: useFieldChange(onChange, `${sectionName}.fullName`),
+    email: useFieldChange(onChange, `${sectionName}.email`),
+    phone: useFieldChange(onChange, `${sectionName}.phone`),
+    address: useFieldChange(onChange, `${sectionName}.address`),
+    city: useFieldChange(onChange, `${sectionName}.city`),
+    country: useFieldChange(onChange, `${sectionName}.country`),
+    postalCode: useFieldChange(onChange, `${sectionName}.postalCode`),
+    birthPlace: useFieldChange(onChange, `${sectionName}.birthPlace`),
+    birthDate: useFieldChange(onChange, `${sectionName}.birthDate`),
+    nationality: useFieldChange(onChange, `${sectionName}.nationality`),
+    drivingLicense: useFieldChange(onChange, `${sectionName}.drivingLicense`),
   }
 
   return (
     <Section
+      id={sectionData?.id}
+      sectionName={sectionName}
       title={sectionData?.title}
       defaultTitle={sectionData?.defaultTitle}
-      isOpen={isOpen}
-      onToggle={() => onToggle(id)}
+      checkIsOpen={isOpen}
+      onToggle={onToggle}
       onChange={changeObj.title}
     >
       <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">

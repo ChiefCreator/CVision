@@ -12,6 +12,10 @@ export interface BaseSectionResume {
   order: number;
 }
 
+export interface BaseSubsectionResume {
+  id: string;
+}
+
 export interface BaseComponent {
   className?: string;
 }

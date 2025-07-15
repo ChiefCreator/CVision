@@ -1,38 +1,19 @@
 import React from "react";
 
 import TitleEditor from "@/components/input/TitleEditor/TitleEditor";
-
-import type { BaseComponent } from "@/types/rootTypes";
+import { ChevronDown } from "lucide-react";
 
 import styles from "./Section.module.scss";
 import clsx from "clsx";
-import { ResumeSectionName } from "@/types/resumeTypes";
-import { ChevronDown } from "lucide-react";
+import { useSection } from "./hooks/useSection";
+import { DefaultSectionProps } from "./Section";
 
-interface SectionProps extends BaseComponent {
-  title?: string;
-  defaultTitle?: string;
-  description?: string;
-  children: React.ReactNode;
-  isOpen: boolean;
-
-  onToggle: (id?: ResumeSectionName) => void;
-  onChange: (value: string) => void;
-}
-
-export default function Section({ className, title, description, defaultTitle, children, isOpen, onToggle, onChange }: SectionProps) {
-
-  const handleClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    if (target.closest(`.${styles.titleEditor}`)) return;
-
-    onToggle();
-  }
+export default function DefaultSection({ className, id, sectionName, title, description, defaultTitle, children, checkIsOpen, onToggle, onChange }: DefaultSectionProps) {
+  const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
 
   return (
     <div className={clsx(styles.section, className)}>
-      <header className={styles.head} onClick={handleClick}>
+      <header className={styles.head} onClick={handleClickHead}>
         <TitleEditor
           className={styles.titleEditor}
           controlClassName={styles.titleEditorControl}

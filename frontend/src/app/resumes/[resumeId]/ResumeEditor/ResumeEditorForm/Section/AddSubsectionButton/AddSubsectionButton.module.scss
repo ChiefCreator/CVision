@@ -1,0 +1,24 @@
+.button {
+  --font-size: 14px;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  color: var(--color-primary);
+  font-size: var(--font-size);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: background-color .2s var(--transition-primary);
+  
+  &__icon {
+    width: var(--font-size);
+    height: var(--font-size);
+  }
+
+  &:hover {
+    background-color: var(--color-primary--light);
+  }
+}

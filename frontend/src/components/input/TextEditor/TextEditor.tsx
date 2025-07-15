@@ -13,12 +13,13 @@ gsap.registerPlugin(useGSAP);
 
 export interface TextEditorProps {
   placeholder?: string;
-  children?: React.ReactNode;
+  children?: string;
   
   onChange?: (value: string) => void;
 }
 
-export default function TextEditor({ placeholder, children: content, onChange }: TextEditorProps) {
+export default function TextEditor({ placeholder, children, onChange }: TextEditorProps) {
+  const [content, setContent] = useState(children || "");
   const [isPlaceholderActive, setIsPlaceholderActive] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -33,6 +34,10 @@ export default function TextEditor({ placeholder, children: content, onChange }:
   const contentRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
 
+  const changeContent = (content: string) => {
+    setContent(content);
+    onChange?.(content);
+  }
   const executeCommand = (command: string) => {
     document.execCommand(command, false, undefined);
     updateButtonStates();
@@ -59,7 +64,7 @@ export default function TextEditor({ placeholder, children: content, onChange }:
     const contentEl = contentRef.current;
     if (!contentEl) return;
 
-    onChange?.(contentEl.innerHTML);
+    changeContent(contentEl.innerHTML);
   }
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
@@ -67,6 +72,10 @@ export default function TextEditor({ placeholder, children: content, onChange }:
   const handleMouseleave = () => setIsHovered(false);
 
   useEffect(() => {
+    if (content && contentRef.current) {
+      contentRef.current.innerHTML = content;
+    }
+
     document.addEventListener("selectionchange", updateButtonStates);
 
     return () => document.removeEventListener("selectionchange", updateButtonStates);

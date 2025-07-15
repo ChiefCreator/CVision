@@ -1,6 +1,7 @@
 :root {
   --color-primary: rgb(26, 145, 240);
   --color-primary--dark: rgb(14, 105, 181);
+  --color-primary--light: rgb(237, 247, 255);
 
   --color-secondary: rgb(48, 56, 72);
   --color-secondary--light: rgb(64, 73, 91);
@@ -11,6 +12,7 @@
   --color-neutral-primary--darken: #c2beba;
 
   --color-neutral-secondary: rgb(220, 223, 232);
+  --color-neutral-secondary--light: rgb(235, 238, 246);
   --color-neutral-secondary--dark: rgb(202, 204, 212);
 
   --color-neutral-contrast: rgb(15, 20, 30);
@@ -22,4 +24,7 @@
   --section-border-radius: 10px;
   --section-padding: 20px;
   --section-gap: 4px;
+
+  --subsection-border-radius: 8px;
+  --subsection-padding: 15px;
 }

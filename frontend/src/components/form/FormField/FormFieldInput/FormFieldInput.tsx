@@ -7,10 +7,10 @@ import React from "react";
 
 interface FormFieldEditInputProps extends EditInputProps, Omit<FormFieldProps, "children"> {}
 
-export default React.memo(function FormFieldEditInput({ className, label, errorMessage, value, placeholder, onChange }: FormFieldEditInputProps) {
+export default React.memo(function FormFieldEditInput({ className, label, errorMessage, ...inputProps }: FormFieldEditInputProps) {
   return (
     <FormField className={className} label={label} errorMessage={errorMessage}>
-      <EditInput value={value} placeholder={placeholder} onChange={onChange} />
+      <EditInput {...inputProps} />
     </FormField>
   );
 })

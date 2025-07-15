@@ -8,7 +8,7 @@ type Origin = {
 };
 
 export interface PositionerProps {
-  triggerRef?: React.RefObject<HTMLElement | null> | null;
+  triggerRef?: React.RefObject<HTMLElement | SVGElement | null> | null;
   anchorOrigin?: Origin;
   transformOrigin?: Origin;
   offsetX?: number;

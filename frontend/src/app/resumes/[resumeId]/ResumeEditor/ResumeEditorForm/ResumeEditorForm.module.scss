@@ -1,0 +1,9 @@
+.form {
+
+  &__sections {
+    margin-top: var(--section-gap);
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+  }
+}

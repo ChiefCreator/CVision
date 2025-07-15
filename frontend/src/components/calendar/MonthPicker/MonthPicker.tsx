@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import { parse, format, isValid, setMonth, setYear, getYear } from "date-fns";
-import { ru } from "date-fns/locale";
+import { isValid, setMonth, setYear, getYear } from "date-fns";
+import { formatDate, parseFlexibleDate } from "@/utils/dateUtils";
 
 import Portal from "@/components/position/Portal/Portal";
 import Positioner, { type PositionerProps } from "@/components/position/Positioner/Positioner";
@@ -12,35 +12,6 @@ import clsx from "clsx";
 
 const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
 const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
-
-const formatDate = (date: Date) => {
-  const formattedDate = format(date, "LLLL, yyyy", { locale: ru });
-  return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-};
-const parseFlexibleDate = (value: string) => {
-  const trimmedValue = value.trim();
-
-  if (/^\d{4}-\d{2}$/.test(trimmedValue)) {
-    return parse(trimmedValue, "yyyy-MM", new Date(), { locale: ru });
-  }
-  else if (/^\d{2}\s*\/\s*\d{4}$/.test(trimmedValue)) {
-    const normalized = trimmedValue.replace(/\s*/g, "").replace("/", "/");
-    return parse(normalized, "MM/yyyy", new Date(), { locale: ru });
-  }
-  else if (/^[а-яА-Яa-zA-Z]+\/\d{4}$/.test(trimmedValue)) {
-    return parse(trimmedValue, "LLLL/yyyy", new Date(), { locale: ru });
-  }
-  else if (/^\d{4}$/.test(trimmedValue)) {
-    return parse(trimmedValue, "yyyy", new Date(), { locale: ru });
-  }
-  else if (/^[а-яА-Яa-zA-Z]+\s*,\s*\d{4}$/.test(trimmedValue)) {
-    const normalized = trimmedValue.replace(/\s*,\s*/, ", ");
-    return parse(normalized, "LLLL, yyyy", new Date(), { locale: ru });
-  }
-  else {
-    return null;
-  }
-}
 
 interface MonthPickerProps {
   date?: string;
@@ -61,18 +32,14 @@ export default function MonthPicker({ date, isShow = true, positionerProps, chan
     setTimeout(() => setActivePanel(panel));
   }
   const selectMonth = (monthIndex: number) => {
-    if (!selectedDate) return;
-
-    const newDate = setMonth(selectedDate, monthIndex);
+    const newDate = setMonth(selectedDate || new Date(), monthIndex);
     const formattedDate = formatDate(newDate);
 
     setSelectedDate(newDate);
     onChange(formattedDate);
   };
   const selectYear = (year: number) => {
-    if (!selectedDate) return;
-
-    const newDate = setYear(selectedDate, year);
+    const newDate = setYear(selectedDate || new Date(), year);
     const formattedDate = formatDate(newDate);
 
     setSelectedDate(newDate);
@@ -98,10 +65,7 @@ export default function MonthPicker({ date, isShow = true, positionerProps, chan
   };
 
   useEffect(() => {
-    if (!date) {
-      setSelectedDate(new Date());
-      return;
-    }
+    if (!date) return;
 
     const parsedDate = parseFlexibleDate(date);
 
@@ -161,7 +125,7 @@ export default function MonthPicker({ date, isShow = true, positionerProps, chan
                 <div className={styles.monthsPanelCells}>
                   {months.map((month, i) => (
                     <button
-                      className={clsx(styles.monthCell, { [styles.monthCellSelected ]: i === selectedDate?.getMonth() })}
+                      className={clsx(styles.monthCell, i === selectedDate?.getMonth() && styles.monthCellSelected )}
                       key={month}
                       data-month={i}
                       type="button"

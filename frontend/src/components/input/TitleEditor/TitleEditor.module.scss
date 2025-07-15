@@ -26,7 +26,6 @@
   &__hidden-content {
     display: inline-block;
     max-width: 100%;
-    min-width: 3.2em;
     font-size: inherit;
     font-weight: inherit;
     letter-spacing: inherit;
@@ -46,6 +45,10 @@
   color: var(--color-neutral-contrast);
   caret-color: var(--color-primary);
   background-color: transparent;
+
+  &::placeholder {
+    color: var(--color-neutral-contrast--light);
+  }
 }
 
 .input-line {

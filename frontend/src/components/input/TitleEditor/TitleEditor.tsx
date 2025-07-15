@@ -9,8 +9,6 @@ import type { IconButtonProps } from "@/components/button/IconButton/IconButton"
 
 import clsx from 'clsx';
 import styles from "./TitleEditor.module.scss"
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 interface TitleEditorProps extends BaseComponent {
   controlClassName?: string;
@@ -24,12 +22,10 @@ interface TitleEditorProps extends BaseComponent {
   onChange?: (value: string) => void;
 }
 
-function getFinalValue(value: TitleEditorProps["value"], defaultValue: TitleEditorProps["defaultValue"]) {
-  return !value ? defaultValue : value;
-}
+export default React.memo(function TitleEditor({ className, value: valueProp, defaultValue: defaultValueProp, isControlsShow = "auto", inputRef, controlClassName, onChange }: TitleEditorProps) {
+  const defaultValue = defaultValueProp || "Без названия";
+  const [value, setValue] = useState(valueProp || "");
 
-export default React.memo(function TitleEditor({ className, value, defaultValue = "Без названия", isControlsShow = "auto", inputRef, controlClassName, onChange }: TitleEditorProps) {
-  const finalValue = getFinalValue(value, defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -52,23 +48,31 @@ export default React.memo(function TitleEditor({ className, value, defaultValue 
     contentWrapper.style.maxWidth = `calc(100% - ${controlsWidth + containerGap}px)`;
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    setValue(value);
+    onChange?.(value);
+  }
   const handleFocus = () => {
     setIsFocused(true);
+
     finalInputRef.current?.focus();
   }
   const handleBlur = () => {
     setIsFocused(false);
-  }
-  const handleMouseenter = () => {
-    setIsHovered(true);
-  }
-  const handleMouseleave = () => {
-    setIsHovered(false);
-  }
+
+    if (!value) {
+      setValue(defaultValue);
+      onChange?.(defaultValue);
+    }
+  };
+  const handleMouseenter = () => setIsHovered(true);
+  const handleMouseleave = () => setIsHovered(false);
 
   useLayoutEffect(() => {
     setContentWrapperWidth();
-  }, [finalValue]);
+  }, [value]);
   useEffect(() => {
     const handleResize = () => setContentWrapperWidth();
 
@@ -91,10 +95,11 @@ export default React.memo(function TitleEditor({ className, value, defaultValue 
           <div className={styles.editorContent}>
             <input
               className={styles.input}
-              value={finalValue}
+              value={value}
               ref={finalInputRef}
+              placeholder={defaultValue}
               
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value)}
+              onChange={handleChange}
               onFocus={handleFocus}
               onBlur={handleBlur}
             ></input>

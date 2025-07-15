@@ -13,6 +13,14 @@ const options: CreateAxiosDefaults = {
 
 export const apiClassic = axios.create(options);
 export const apiWithAuth = axios.create(options);
+export const apiWithDelay = axios.create(options);
+
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+apiWithDelay.interceptors.request.use(async config => {
+  await delay(1000);
+  return config;
+});
 
 apiWithAuth.interceptors.request.use(
   config => {
