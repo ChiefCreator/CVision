@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import { useChange } from "../../Subsection/hooks/useChange";
 
 import { transformStringDatesToRangeFormat } from "@/utils/dateUtils";
 
@@ -20,6 +21,8 @@ interface EmploymentHistorySubsectionProps extends EmploymentHistory, Omit<Subse
 }
 
 export default React.memo(function EmploymentHistorySubsection({ id, subsectionName, sectionId, sectionName, jobTitle, employer, startDate, endDate, city, description, checkIsOpen, onToggle, onChange }: EmploymentHistorySubsectionProps) {
+  const { isFirstInputFocused, setIsFirstInputFocused, changeOnClick } = useChange({ id, sectionId, onToggle });
+    
   const rootPath = `${sectionName}.data[${id}]`;
   const changeObj: ResumeSectionChangeObj<EmploymentHistory> = {
     jobTitle: useFieldChange(onChange, `${rootPath}.jobTitle`),
@@ -28,13 +31,6 @@ export default React.memo(function EmploymentHistorySubsection({ id, subsectionN
     endDate: useFieldChange(onChange, `${rootPath}.endDate`),
     city: useFieldChange(onChange, `${rootPath}.city`),
     description: useFieldChange(onChange, `${rootPath}.description`),
-  }
-
-  const [isFirstInputFocused, setIsFirstInputFocused] = useState(false);
-
-  const changeOnClick = () => {
-    onToggle(sectionId, id, true);
-    setIsFirstInputFocused(true);
   }
 
   return (

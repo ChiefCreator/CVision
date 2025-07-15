@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import { useChange } from "../../Subsection/hooks/useChange";
 
 import { transformStringDatesToRangeFormat } from "@/utils/dateUtils";
 import { transformStringsToSlashFormat } from "@/utils/stringUtils";
@@ -21,6 +22,8 @@ interface EducationSubsectionProps extends Education, Omit<SubsectionProps, "chi
 }
 
 export default React.memo(function EducationSubsection({ id, subsectionName, sectionId, sectionName, school, degree, startDate, endDate, city, description, checkIsOpen, onToggle, onChange }: EducationSubsectionProps) {
+  const { isFirstInputFocused, setIsFirstInputFocused, changeOnClick } = useChange({ id, sectionId, onToggle });
+  
   const rootPath = `${sectionName}.data[${id}]`;
   const changeObj: ResumeSectionChangeObj<Education> = {
     school: useFieldChange(onChange, `${rootPath}.school`),
@@ -29,13 +32,6 @@ export default React.memo(function EducationSubsection({ id, subsectionName, sec
     endDate: useFieldChange(onChange, `${rootPath}.endDate`),
     city: useFieldChange(onChange, `${rootPath}.city`),
     description: useFieldChange(onChange, `${rootPath}.description`),
-  }
-
-  const [isFirstInputFocused, setIsFirstInputFocused] = useState(false);
-
-  const changeOnClick = () => {
-    onToggle(sectionId, id, true);
-    setIsFirstInputFocused(true);
   }
 
   return (

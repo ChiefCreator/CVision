@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import { useChange } from "../../Subsection/hooks/useChange";
 
 import Subsection from "../../Subsection/Subsection";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
@@ -16,17 +17,12 @@ interface LinkSubsectionProps extends Link, Omit<SubsectionProps, "children" | "
 }
 
 export default React.memo(function LinkSubsection({ id, subsectionName, sectionId, sectionName, label, url, checkIsOpen, onToggle, onChange }: LinkSubsectionProps) {
+  const { isFirstInputFocused, setIsFirstInputFocused, changeOnClick } = useChange({ id, sectionId, onToggle });
+  
   const rootPath = `${sectionName}.data[${id}]`;
   const changeObj: ResumeSectionChangeObj<Link> = {
     label: useFieldChange(onChange, `${rootPath}.label`),
     url: useFieldChange(onChange, `${rootPath}.url`),
-  }
-
-  const [isFirstInputFocused, setIsFirstInputFocused] = useState(false);
-
-  const changeOnClick = () => {
-    onToggle(sectionId, id, true);
-    setIsFirstInputFocused(true);
   }
 
   return (
