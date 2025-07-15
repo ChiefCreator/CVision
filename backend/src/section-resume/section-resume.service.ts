@@ -1,115 +1,213 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { type ResumeSectionNames, isListResumeSection } from 'src/resume/types/ResumeSectionNames';
+import type { DefaultResumeSectionNames, ListResumeSectionNames, ReorderedResumeSectionNames, ResumeSectionNames, SingleResumeSectionNames } from 'src/section-resume/types/ResumeSectionNames';
 import type { UpdateResumeDto } from 'src/resume/dto/update-resume.dto';
-import { CreateSections } from './types/create-sections';
 import { Prisma } from 'prisma/generated/client';
+import { SubsectionResumeService } from 'src/subsection-resume/subsection-resume.service';
+import { ResumeSubsectionNames } from 'src/subsection-resume/types/ResumeSubsectionNames';
+
+import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/serviceTypes';
 
 @Injectable()
 export class SectionResumeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly subsectionResumeService: SubsectionResumeService
+  ) {}
 
   readonly sectionNames: ResumeSectionNames[] = ["personalDetails", "professionalSummary", "courses", "customSections", "education", "employmentHistory", "languages", "links", "skills"];
-  private readonly createSectionNames: CreateSections[] = ["educationSection", "employmentHistorySection", "languageSection", "skillSection", "linkSection", "courseSection", "customSection"];;
+  readonly sectionListNames: ListResumeSectionNames[] = ["education", "employmentHistory", "languages", "skills", "links", "courses", "customSections"];
+  readonly sectionSingleNames: SingleResumeSectionNames[] = ["personalDetails", "professionalSummary"];
+  readonly sectionDefaultNames: DefaultResumeSectionNames[] = ["personalDetails", "professionalSummary", "education", "employmentHistory", "links", "skills"];
+  readonly sectionReorderedNames: ReorderedResumeSectionNames[] = ["education", "employmentHistory", "languages", "skills", "links", "courses", "customSections"];
+  readonly customSectionsName: "customSections" = "customSections";
 
-  async create(sectionName: ResumeSectionNames, resumeId: string, updates: any = {}): Promise<any> {
-    return this.prisma.$transaction(async (tx) => {
-      const order = await this.getSectionCount(resumeId, tx);
+  isSingleResumeSection(name: string): name is SingleResumeSectionNames {
+    return this.sectionSingleNames.includes(name as SingleResumeSectionNames);
+  }
+  isListResumeSection(name: string): name is ListResumeSectionNames {
+    return this.sectionListNames.includes(name as ListResumeSectionNames);
+  }
+  isListResumeSectionByData(data: UpdateResumeDto[ResumeSectionNames]): data is UpdateResumeDto[ListResumeSectionNames] {
+    return (typeof data === "object" && data !== null && "data" in data);
+  }
+  isReorderedResumeSection(name: string): name is ReorderedResumeSectionNames {
+    return this.sectionReorderedNames.includes(name as ReorderedResumeSectionNames);
+  }
+  getSectionAndDataModelNames(sectionName: ResumeSectionNames) {
+    const sectionModels = {
+      personalDetails: {
+        sectionName: "personalDetails",
+      },
+      professionalSummary: {
+        sectionName: "professionalSummary",
+      },
+      employmentHistory: {
+        sectionName: "employmentHistory",
+        subsectionName: "employmentHistorySubsection",
+      },
+      education: {
+        sectionName: "education",
+        subsectionName: "educationSubsection",
+      },
+      links: {
+        sectionName: "links",
+        subsectionName: "linkSubsection",
+      },
+      skills: {
+        sectionName: "skills",
+        subsectionName: "skillSubsection",
+      },
+      languages: {
+        sectionName: "languages",
+        subsectionName: "languageSubsection",
+      },
+      courses: {
+        sectionName: "courses",
+        subsectionName: "courseSubsection",
+      },
+      customSections: {
+        sectionName: "customSections",
+        subsectionName: "customDataSubsection",
+      },
+    };
 
-      return tx[sectionName].create({
+    return sectionModels[sectionName] as { sectionName: ResumeSectionNames, subsectionName?: ResumeSubsectionNames };
+  }
+
+  async findOneByName({ sectionName, resumeId, prisma = this.prisma }: FindOneByName) {
+    return (prisma[sectionName] as any).findFirst({ where: { resumeId } });
+  }
+  async findOneById({ sectionName, id, prisma = this.prisma }: FindOneById) {
+    return (prisma[sectionName] as any).findUnique({ where: { id } });
+  }
+
+  async createOne({ sectionName, resumeId, updates = {}, order: orderProp, prisma = this.prisma}: CreateOne) {
+    if (sectionName !== this.customSectionsName) {
+      const isSectionExist = await this.findOneByName({ sectionName, resumeId });
+      if (isSectionExist) throw new NotFoundException(`Section ${sectionName} exists in resume`);
+    }
+
+    const order = orderProp || await this.getSectionCount(resumeId, prisma);
+
+    if (this.isSingleResumeSection(sectionName)) {
+      const section = await (prisma[sectionName] as any).create({
         data: {
           ...updates,
-          order,
+          defaultTitle: "Без названия",
+          ...(this.isReorderedResumeSection(sectionName) ? { order } : {}),
           resume: { connect: { id: resumeId } },
         },
       });
+
+      if (!section) {
+        throw new NotFoundException(`Couldn't create ${sectionName} section`);
+      }
+
+      return { [sectionName]: section };
+    }
+
+    const { data: subsectionUpdates, ...sectionUpdates } = updates;
+  
+    const section = await (prisma[sectionName] as any).create({
+      data: {
+        ...sectionUpdates,
+        defaultTitle: "Без названия",
+        ...(this.isReorderedResumeSection(sectionName) ? { order } : {}),
+        resume: { connect: { id: resumeId } },
+      },
     });
+
+    if (!section) {
+      throw new NotFoundException(`Couldn't create ${sectionName} section`);
+    }
+        
+    const subsectionName = this.getSectionAndDataModelNames(sectionName).subsectionName;
+    if (!subsectionName) throw new NotFoundException(`Couldn't create ${subsectionName} subsection for ${sectionName} section`);
+
+    const subsections = subsectionUpdates?.length ? await Promise.all(subsectionUpdates.map((updates: any) => {
+      return this.subsectionResumeService.createOne({
+        subsectionName,
+        sectionId: section.id,
+        updates,
+        prisma
+      });
+    })) : [];
+
+    return {
+      [sectionName]: {
+        ...section,
+        data: subsections,
+      }
+    };
   }
-  async delete(sectionName: ResumeSectionNames, sectionId: string): Promise<void> {
+  async createDefaultOnes({ resumeId, prisma = this.prisma}: CreateDefaultOnes) {
+    const createSectionPromises = Promise.all(this.sectionDefaultNames.map((sectionName, i) => this.createOne({ sectionName, resumeId, order: i, prisma })));
+
+    
+    const sectionsData = await createSectionPromises;
+
+    return sectionsData.reduce((acc, section) => ({ ...acc, ...section }), {});
+  }
+  async deleteOne({ sectionName, sectionId }: DeleteOne) {
     return this.prisma.$transaction(async (tx) => {
-      const section = await tx[sectionName].findUnique({ where: { id: sectionId } });
+      const section = await (tx[sectionName] as any).findUnique({ where: { id: sectionId } });
 
       if (!section) throw new NotFoundException(`Section not found in resume`);
 
       const resumeId = section.resumeId;
 
-      await tx[sectionName].delete({ where: { id: sectionId } });
+      await (tx[sectionName] as any).delete({ where: { id: sectionId } });
 
       await this.reorderSectionsAfterDelete(tx, resumeId, section.order);
 
       return section;
     });
   }
-  async update(sectionName: ResumeSectionNames, resumeId: string, updates: any): Promise<any> {
-    return this.prisma[sectionName].update({
-      where: { resumeId },
-      data: updates
+
+  async updateOne({ sectionName, sectionId, updates, prisma = this.prisma }: UpdateOne) {
+    const { data, ...sectionUpdates } = updates || {};
+
+    const section = await (prisma[sectionName] as any).update({
+      where: { id: sectionId },
+      data: sectionUpdates
     })
-  }
 
-  async upsert({ sectionName, dataName }: { sectionName: ResumeSectionNames, dataName?: string }, resumeId: string, updates: UpdateResumeDto[ResumeSectionNames]): Promise<void> {
-    if (isListResumeSection(updates)) {
-      const { data, ...restProps } = updates || {};
+    if (!data) return section;
 
-      const isSection = await this.prisma[sectionName].findUnique({ where: { resumeId }});
+    const subsectionName = this.getSectionAndDataModelNames(sectionName).subsectionName;
+    if (!subsectionName) throw new NotFoundException(`Section not found in resume`);
 
-      let section: any = {};
+    const subsections = await Promise.all(data.map((updates: any) => {
+      return this.subsectionResumeService.updateOne({
+        subsectionName,
+        subsectionId: updates.id,
+        updates,
+        prisma
+      });
+    }));
 
-      if (isSection) {
-        section = await this.update(sectionName, resumeId, restProps);
-      } else {
-        section = await this.create(sectionName, resumeId, restProps);
-      }
-
-      if (!dataName) throw new NotFoundException(`Section not found in resume`);;
-
-      const promises = data?.map(async (item: any): Promise<any> => {
-        const id = item.id;
-
-        return this.prisma[dataName].upsert({
-          where: { id },
-          update: item,
-          create: {
-            ...item,
-            section: { connect: { id: section.id } }
-          }
-        });
-      })
-
-      if (promises) await Promise.all(promises);
-    } else {
-      await this.prisma[sectionName].upsert({
-        where: { resumeId },
-        update: { ...updates },
-        create: { resumeId, ...updates },
-      })
+    return {
+      ...section,
+      data: subsections,
     }
+  }
+  async upsertOne({ sectionName, resumeId, updates, prisma = this.prisma }: UpsertOne) {
+    const existingSection = await (prisma[sectionName] as any).findUnique({ where: { resumeId }});
+
+    return existingSection
+      ? this.updateOne({ sectionName, sectionId: existingSection.id, updates, prisma })
+      : this.createOne({ sectionName, resumeId, updates, prisma });
   }
 
   private async getSectionCount(resumeId: string, tx: Prisma.TransactionClient) {
-    const [employmentCount, educationCount, linkCount, skillCount, languageCount, courseCount, customCount] = await Promise.all([
-      tx.employmentHistorySection.count({ where: { resumeId } }),
-      tx.educationSection.count({ where: { resumeId } }),
-      tx.linkSection.count({ where: { resumeId } }),
-      tx.skillSection.count({ where: { resumeId } }),
-      tx.languageSection.count({ where: { resumeId } }),
-      tx.courseSection.count({ where: { resumeId } }),
-      tx.customSection.count({ where: { resumeId } }),
-    ]);
+    const sectionCounts = await Promise.all(this.sectionReorderedNames.map(name => (tx[name] as any).count({ where: { resumeId } })));
   
-    return (
-      employmentCount +
-      educationCount +
-      linkCount +
-      skillCount +
-      languageCount +
-      courseCount +
-      customCount
-    );
+    return sectionCounts.reduce((acc, count) => acc + count , 0);
   }
   private async reorderSectionsAfterDelete(tx: Prisma.TransactionClient, resumeId: string, deletedOrder: number) {
-    const updatePromises = this.createSectionNames.map(async (model) => {
-      await (tx[model] as any).updateMany({
+    const updatePromises = this.sectionReorderedNames.map(sectionName => {
+      return (tx[sectionName] as any).updateMany({
         where: {
           resumeId,
           order: { gt: deletedOrder },
@@ -122,47 +220,6 @@ export class SectionResumeService {
       });
     });
 
-    await Promise.all(updatePromises);
-  }
-
-  getSectionAndDataModelNames(sectionName: ResumeSectionNames) {
-    const sectionModels = {
-      personalDetails: {
-        sectionName: "personalDetails",
-      },
-      professionalSummary: {
-        sectionName: "professionalSummary",
-      },
-      employmentHistory: {
-        sectionName: "employmentHistorySection",
-        dataName: "employmentHistory",
-      },
-      education: {
-        sectionName: "educationSection",
-        dataName: "education",
-      },
-      links: {
-        sectionName: "linkSection",
-        dataName: "link",
-      },
-      skills: {
-        sectionName: "skillSection",
-        dataName: "skill",
-      },
-      languages: {
-        sectionName: "languageSection",
-        dataName: "language",
-      },
-      courses: {
-        sectionName: "courseSection",
-        dataName: "course",
-      },
-      customSections: {
-        sectionName: "customSection",
-        dataName: "customData",
-      },
-    };
-
-    return sectionModels[sectionName] as { sectionName: ResumeSectionNames, dataName?: string };
+    return Promise.all(updatePromises);
   }
 }

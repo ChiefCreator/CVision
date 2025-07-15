@@ -17,13 +17,18 @@ export class ResumeController {
   }
 
   @Post()
-  create(@Body() dto: CreateResumeDto) {
-    return this.resumeService.create(process.env.TEST_USER_ID!, dto);
+  createOne(@Body() dto: CreateResumeDto) {
+    return this.resumeService.createOne(process.env.TEST_USER_ID!, dto);
   }
   @Post(":resumeId")
-  delete(@Param("resumeId") resumeId: string) {
-    return this.resumeService.delete(resumeId);
+  deleteOne(@Param("resumeId") resumeId: string) {
+    return this.resumeService.deleteOne(resumeId);
   }
+  @Post("user/:userId")
+  deleteUserAll(@Param("userId") userId: string) {
+    return this.resumeService.deleteUserAll(userId);
+  }
+
   @Put(":resumeId")
   async updateOne(@Param("resumeId") resumeId: string, @Body() resumeUpdates: ResumeFieldUpdates) {
     return this.resumeService.updateOne(resumeId, resumeUpdates);

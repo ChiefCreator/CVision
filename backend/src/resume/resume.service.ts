@@ -7,56 +7,22 @@ import { updateResumeField } from './utils/updateResumeField';
 import { SectionResumeService } from 'src/section-resume/section-resume.service';
 import { BadRequestException } from '@nestjs/common';
 
-import { ResumeSectionNames } from './types/ResumeSectionNames';
+import type { ResumeSectionNames } from '../section-resume/types/ResumeSectionNames';
 
 @Injectable()
 export class ResumeService {
-  constructor(private readonly prisma: PrismaService, private readonly sectionResumeService: SectionResumeService) {};
-  
-  private readonly resumeInclude = {
-    personalDetails: true,
-    professionalSummary: true,
-    employmentHistory: {
-      include: {
-        data: true
-      }
-    },
-    education: {
-      include: {
-        data: true
-      }
-    },
-    links: {
-      include: {
-        data: true
-      }
-    },
-    skills: {
-      include: {
-        data: true
-      }
-    },
-    languages: {
-      include: {
-        data: true
-      }
-    },
-    courses: {
-      include: {
-        data: true
-      }
-    },
-    customSections: {
-      include: {
-        data: true
-      }
-    },
-  }
+  private readonly resumeInclude: Record<string, any>;
+
+  constructor(private readonly prisma: PrismaService, private readonly sectionResumeService: SectionResumeService) {
+    this.resumeInclude = {
+      personalDetails: true,
+      professionalSummary: true,
+      ...sectionResumeService.sectionListNames.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true } }}}), {})
+    };
+  };
 
   async findAll() {
-    return this.prisma.resume.findMany({ 
-      include: this.resumeInclude
-    });
+    return this.prisma.resume.findMany({ include: this.resumeInclude });
   }
   async findOne(id: string) {
     const resume = await this.prisma.resume.findUnique({
@@ -71,19 +37,31 @@ export class ResumeService {
     return resume;
   }
 
-  async create(userId: string, dto: CreateResumeDto) {
-    return this.prisma.resume.create({
-      data: {
-        userId: userId,
-        title: dto.title,
-      },
-    });
+  async createOne(userId: string, dto: CreateResumeDto) {
+    try {
+      return this.prisma.$transaction(async tx => {
+        const resume = await tx.resume.create({
+          data: {
+            userId,
+            ...dto,
+          },
+        });
+  
+        const sectionsDataObj = await this.sectionResumeService.createDefaultOnes({ resumeId: resume.id, prisma: tx });
+
+        return { ...resume, ...sectionsDataObj };
+      })
+    } catch (error) {
+      throw new BadRequestException(`Couldn't create resume`, { cause: error });
+    }
   }
-  async delete(resumeId: string) {
-    return this.prisma.resume.delete({
-      where: { id: resumeId }
-    });
+  async deleteOne(resumeId: string) {
+    return this.prisma.resume.delete({ where: { id: resumeId } });
   }
+  async deleteUserAll(userId: string) {
+    return this.prisma.resume.deleteMany({ where: { userId } });
+  }
+
   async updateOne(resumeId: string, updates: ResumeFieldUpdates) {
     let resumeUpdates: UpdateResumeDto = {};
     let sections: UpdateResumeDto = {};
@@ -91,31 +69,28 @@ export class ResumeService {
     for (const [path, pathData] of Object.entries(updates)) {
       const pathParts = splitPath(path);
       const rootPathPart = pathParts[0];
+      const isSection = this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames);
 
-      if (this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames)) {
+      if (isSection) {
         sections = updateResumeField(sections, path, pathData);
-      }
-      else if (!this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames)) {
-        resumeUpdates = updateResumeField(resumeUpdates, path, pathData)
-      }
-      else {
-        throw new BadRequestException("Resume update error");
+      } else {
+        resumeUpdates = updateResumeField(resumeUpdates, path, pathData);
       }
     }
 
-    await this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx) => {
       if (Object.keys(resumeUpdates).length) {
         await (tx.resume as any).update({
           where: { id: resumeId },
           data: resumeUpdates,
         });
       }
-  
-      for (let [sectionName, updates] of Object.entries(sections)) {
-        const sectionAndDataModelNames = this.sectionResumeService.getSectionAndDataModelNames(sectionName as ResumeSectionNames);
 
-        await this.sectionResumeService.upsert(sectionAndDataModelNames, resumeId, updates);
-      }
+      await Promise.all(Object.entries(sections).map(([sectionName, updates]) => (
+        this.sectionResumeService.upsertOne({ sectionName: sectionName as ResumeSectionNames, resumeId, updates, prisma: tx })
+      )))
+
+      return this.findOne(resumeId);
     });
   }
 }

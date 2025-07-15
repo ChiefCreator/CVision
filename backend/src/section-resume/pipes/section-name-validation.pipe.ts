@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform, BadRequestException } from "@nestjs/common";
-import type { ResumeSectionNames } from "src/resume/types/ResumeSectionNames";
+import type { ResumeSectionNames } from "src/section-resume/types/ResumeSectionNames";
 
 @Injectable()
 export class SectionNameValidationPipe implements PipeTransform {
