@@ -1,0 +1,31 @@
+.slider-theme {
+  &[data-theme="novice"] {
+    --slider-selector-color-primary: rgb(255, 0, 106);
+    --slider-selector-color-secondary: rgb(255, 161, 200);
+    --slider-selector-color-third: rgb(252, 131, 181);
+  }
+  &[data-theme="beginner"] {
+    --slider-selector-color-primary: rgb(255, 72, 0);
+    --slider-selector-color-secondary: rgb(255, 166, 131);
+    --slider-selector-color-third: rgb(255, 110, 53);
+  }
+  &[data-theme="skillful"] {
+    --slider-selector-color-primary: rgb(255, 132, 0);
+    --slider-selector-color-secondary: rgb(255, 198, 137);
+    --slider-selector-color-third: rgb(251, 166, 75);
+  }
+  &[data-theme="experienced"] {
+    --slider-selector-color-primary: rgb(20, 174, 20);
+    --slider-selector-color-secondary: rgb(109, 245, 109);
+    --slider-selector-color-third: rgb(66, 232, 66);
+  }
+  &[data-theme="expert"] {
+    --slider-selector-color-primary: rgb(131, 7, 131);
+    --slider-selector-color-secondary: rgb(254, 153, 254);
+    --slider-selector-color-third: rgb(215, 88, 215);
+  }
+}
+
+.slider {
+  height: 38.4px;
+}
