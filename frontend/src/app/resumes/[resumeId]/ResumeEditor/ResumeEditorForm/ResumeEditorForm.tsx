@@ -10,14 +10,16 @@ import Links from "./sections/Links/Links";
 import Courses from "./sections/Courses/Courses";
 import Skills from "./sections/Skills/Skills";
 
-import { ChangeResumeField, isSectionDefault, Resume } from "@/types/resumeTypes";
-import { ResumeSectionName } from "@/types/resumeTypes";
+import { SECTION_NAMES } from "@/constants/sectionNames";
+
+import { isListResumeSectionByData } from "@/utils/sectionNamesUtils";
+
+import { ChangeResumeField, Resume } from "@/types/resumeTypes";
 import { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
-
-const sectionNames: ResumeSectionName[] = ["personalDetails", "professionalSummary", "employmentHistory", "education", "links", "skills", "languages", "courses", "customSections"]
+import Internships from "./sections/Internships/Internships";
 
 interface ResumeEditorForm extends BaseComponent {
   resume?: Resume;
@@ -84,13 +86,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
   useEffect(() => {
     if (isGetResumeLoading || !resume) return;
 
-    const sectionsState = sectionNames.reduce((acc, name) => {
+    const sectionsState = SECTION_NAMES.reduce((acc, name) => {
       const section = resume[name];
       if (!section) return acc;
 
       acc[section.id] = {
         isOpen: true,
-        openSubsections: isSectionDefault(section) ? undefined : section.data.map(o => o.id),
+        openSubsections: isListResumeSectionByData(section) ? section.data.map(o => o.id) : undefined,
       };
     
       return acc;
@@ -150,6 +152,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Skills
           sectionData={resume!.skills}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <Internships
+          sectionData={resume!.internships}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}

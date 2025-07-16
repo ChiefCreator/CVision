@@ -1,0 +1,23 @@
+import type { ResumeSectionName, ResumeSingleSectionName, ResumeListSectionName, ResumeDefaultSectionName, ResumeReorderedSectionNames, Resume  } from "@/types/resumeTypes";
+
+import { SECTION_SINGLE_NAMES, SECTION_LIST_NAMES, SECTION_REORDERED_NAMES, SECTION_DEFAULT_NAMES } from "@/constants/sectionNames";
+
+export function isSingleResumeSection(name: string): name is ResumeSingleSectionName {
+  return SECTION_SINGLE_NAMES.includes(name as ResumeSingleSectionName);
+}
+export function isListResumeSection(name: string): name is ResumeListSectionName {
+  return SECTION_LIST_NAMES.includes(name as ResumeListSectionName);
+}
+export function isDefaultResumeSection(name: string): name is ResumeDefaultSectionName {
+  return SECTION_DEFAULT_NAMES.includes(name as ResumeDefaultSectionName);
+}
+export function isReorderedResumeSection(name: string): name is ResumeReorderedSectionNames {
+  return SECTION_REORDERED_NAMES.includes(name as ResumeReorderedSectionNames);
+}
+export function isListResumeSectionByData(section: Resume[ResumeSectionName]): section is Resume[ResumeListSectionName]  {
+  if ("data" in section!) {
+    return true;
+  }
+
+  return false;
+}

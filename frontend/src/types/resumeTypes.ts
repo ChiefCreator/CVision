@@ -7,10 +7,14 @@ export interface Resume extends BaseEntityFields {
   professionalSummary?: ProfessionalSummary;
   employmentHistory?: EmploymentHistorySection;
   education?: EducationSection;
-  links?: LinkSection;
   skills?: SkillSection;
   languages?: LanguageSection;
+  links?: LinkSection;
   courses?: CourseSection;
+  internships?: InternshipSection;
+  hobbies?: Hobbies;
+  extraCurricularActivities?: ExtraCurricularActivitySection;
+  references?: ReferenceSection;
   customSections?: CustomSection;
 }
 
@@ -41,7 +45,6 @@ export interface EmploymentHistorySection extends BaseSectionResume {
   data: EmploymentHistory[];
 }
 export interface EmploymentHistory extends BaseSubsectionResume {
-  id: string;
   jobTitle?: string;
   employer?: string;
   startDate?: string;
@@ -110,10 +113,50 @@ export interface CourseSection extends BaseSectionResume {
   data: Course[];
 }
 export interface Course extends BaseSubsectionResume {
-  title?: string;
-  institution?: string;
+  jobTitle?: string;
+  employer?: string;
   startDate?: string;
   endDate?: string;
+  city?: string;
+  description?: string;
+}
+
+export interface InternshipSection extends BaseSectionResume {
+  data: Internship[];
+}
+export interface Internship extends BaseSubsectionResume {
+  jobTitle?: string;
+  employer?: string;
+  startDate?: string;
+  endDate?: string;
+  city?: string;
+  description?: string;
+}
+
+export interface Hobbies extends BaseSectionResume {
+  description?: string;
+}
+
+export interface ExtraCurricularActivitySection extends BaseSectionResume {
+  data: ExtraCurricularActivity[];
+}
+export interface ExtraCurricularActivity extends BaseSubsectionResume {
+  functionTitle?: string;
+  employer?: string;
+  startDate?: string;
+  endDate?: string;
+  city?: string;
+  description?: string;
+}
+
+export interface ReferenceSection extends BaseSectionResume {
+  data: Reference[];
+}
+export interface Reference extends BaseSubsectionResume {
+  referentFullName?: string;
+  company?: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface CustomSection extends BaseSectionResume {
@@ -128,20 +171,13 @@ export interface CustomData extends BaseSubsectionResume {
 }
 
 export type ResumeSectionName = keyof Omit<Resume, keyof BaseEntityFields | "title">;
-export type ResumeSingleSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary">;
-export type ResumeListSectionName = Exclude<ResumeSectionName, "personalDetails" | "professionalSummary">;
+export type ResumeSingleSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "hobbies">;
+export type ResumeListSectionName = Exclude<ResumeSectionName, ResumeSingleSectionName>;
+export type ResumeDefaultSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "employmentHistory" | "education" | "links" | "skills">;
+export type ResumeReorderedSectionNames = Exclude<ResumeSectionName, "personalDetails" | "professionalSummary">;
 
 export type ChangeResumeField = (path: string, value: any) => void;
 
 export type ResumeSectionChangeObj<T, P extends keyof T = never> = {
   [key in keyof Required<Omit<T, "id" | "defaultTitle" | "order" | (P extends never ? never : P)>>]: (val: any) => void
 };
-
-export function isSectionDefault(section: Resume[ResumeSectionName]): section is Resume["personalDetails" | "professionalSummary"]  {
-  if (!("data" in section!)) {
-    return true;
-  }
-
-  return false;
-}
-
