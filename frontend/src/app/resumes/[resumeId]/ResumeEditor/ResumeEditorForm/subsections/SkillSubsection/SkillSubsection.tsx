@@ -41,7 +41,7 @@ export default React.memo(function SkillSubsection({ id, subsectionName, section
       sectionId={sectionId}
       sectionName={sectionName}
       title={title}
-      subtitle={levelLabel}
+      subtitle={isShowLevel ? undefined : levelLabel}
       checkIsOpen={checkIsOpen}
       onToggle={onToggle}
       onClickChange={changeOnClick}
