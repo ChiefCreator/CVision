@@ -174,5 +174,5 @@ export const useDeleteSubsection = (resumeId: Resume["id"], sectionId: string, s
 }
 
 export const useFieldChange = (onChange: ChangeResumeField, path: string) => {
-  return useCallback((val: string) => onChange(path, val), [onChange, path]);
+  return useCallback((val: any) => onChange(path, val), [onChange, path]);
 }

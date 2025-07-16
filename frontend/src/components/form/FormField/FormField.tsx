@@ -6,7 +6,7 @@ import styles from "./FormField.module.scss"
 import clsx from "clsx";
 
 export interface FormFieldProps extends BaseComponent {
-  label?: string;
+  label?: string | React.ReactElement;
   errorMessage?: string;
   children: React.ReactNode;
 }

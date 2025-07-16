@@ -8,6 +8,7 @@ import EmploymentHistory from "./sections/EmploymentHistory/EmploymentHistory";
 import Education from "./sections/Education/Education";
 import Links from "./sections/Links/Links";
 import Courses from "./sections/Courses/Courses";
+import Skills from "./sections/Skills/Skills";
 
 import { ChangeResumeField, isSectionDefault, Resume } from "@/types/resumeTypes";
 import { ResumeSectionName } from "@/types/resumeTypes";
@@ -142,6 +143,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Courses
           sectionData={resume!.courses}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <Skills
+          sectionData={resume!.skills}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}

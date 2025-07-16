@@ -13,6 +13,7 @@ interface BaseSectionProps extends BaseComponent {
   defaultTitle?: string;
   description?: string;
   children: React.ReactNode;
+  additionalContent?: React.ReactNode;
 
   checkIsOpen: (sectionId: string, subsectionId?: string) => boolean;
   onToggle: (id: string, subsectionId?: string) => void;
@@ -25,6 +26,7 @@ export interface DefaultSectionProps extends BaseSectionProps {
 export interface SubsectionSectionProps extends BaseSectionProps {
   type: "subsection";
   subsectionName: string;
+  addSubsectionDto?: any;
 }
 
 type SectionProps = DefaultSectionProps | SubsectionSectionProps;

@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { useSection } from "./hooks/useSection";
 import { DefaultSectionProps } from "./Section";
 
-export default function DefaultSection({ className, id, sectionName, title, description, defaultTitle, children, checkIsOpen, onToggle, onChange }: DefaultSectionProps) {
+export default function DefaultSection({ className, id, sectionName, title, description, defaultTitle, children, additionalContent, checkIsOpen, onToggle, onChange }: DefaultSectionProps) {
   const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
 
   return (
@@ -30,6 +30,7 @@ export default function DefaultSection({ className, id, sectionName, title, desc
         <div className={styles.bodyContainer}>
           <div className={styles.bodyContent}>
             {description && <p className={styles.description}>{description}</p>}
+            {additionalContent && <div className={styles.additionalContent}>{additionalContent}</div>}
 
             {children}
           </div>

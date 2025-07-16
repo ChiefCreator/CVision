@@ -72,6 +72,7 @@ export interface Link extends BaseSubsectionResume {
 
 export interface SkillSection extends BaseSectionResume {
   data: Skill[];
+  isShowLevel: boolean;
 }
 export interface Skill extends BaseSubsectionResume {
   title?: string;
@@ -133,7 +134,7 @@ export type ResumeListSectionName = Exclude<ResumeSectionName, "personalDetails"
 export type ChangeResumeField = (path: string, value: any) => void;
 
 export type ResumeSectionChangeObj<T, P extends keyof T = never> = {
-  [key in keyof Required<Omit<T, "id" | "defaultTitle" | "order" | (P extends never ? never : P)>>]: (val: string) => void
+  [key in keyof Required<Omit<T, "id" | "defaultTitle" | "order" | (P extends never ? never : P)>>]: (val: any) => void
 };
 
 export function isSectionDefault(section: Resume[ResumeSectionName]): section is Resume["personalDetails" | "professionalSummary"]  {

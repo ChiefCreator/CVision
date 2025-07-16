@@ -1,4 +1,9 @@
 .slider-theme {
+  &[data-theme="disabled"] {
+    --slider-selector-color-primary: var(--color-neutral-secondary--dark);
+    --slider-selector-color-secondary: var(--color-neutral-secondary);
+    --slider-selector-color-third: var(--color-neutral-secondary--light);
+  }
   &[data-theme="novice"] {
     --slider-selector-color-primary: rgb(255, 0, 106);
     --slider-selector-color-secondary: rgb(255, 161, 200);

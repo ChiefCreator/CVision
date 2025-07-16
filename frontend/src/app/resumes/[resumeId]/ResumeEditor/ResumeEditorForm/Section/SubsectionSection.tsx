@@ -13,7 +13,7 @@ import { SubsectionSectionProps } from "./Section";
 import { useSection } from "./hooks/useSection";
 import { useResumeId } from "../../context/ResumeIdContext";
 
-export default function SubsectionSection({ className, id, sectionName, subsectionName, title, description, defaultTitle, children, checkIsOpen, onToggle, onChange }: SubsectionSectionProps) {
+export default function SubsectionSection({ className, id, sectionName, subsectionName, title, description, defaultTitle, children, additionalContent, addSubsectionDto = {}, checkIsOpen, onToggle, onChange }: SubsectionSectionProps) {
   const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
   const resumeId = useResumeId();
   const { mutate } = useAddSubsection(resumeId, id!, sectionName as ResumeListSectionName, subsectionName);
@@ -21,7 +21,7 @@ export default function SubsectionSection({ className, id, sectionName, subsecti
   const addSubsection = async () => {
     const subsectionId = v4();
     
-    mutate({ subsectionId });
+    mutate({ subsectionId, dto: addSubsectionDto });
     onToggle(id!, subsectionId);
   }
 
@@ -44,6 +44,7 @@ export default function SubsectionSection({ className, id, sectionName, subsecti
         <div className={styles.bodyContainer}>
           <div className={styles.bodyContent}>
             {description && <p className={styles.description}>{description}</p>}
+            {additionalContent && <div className={styles.additionalContent}>{additionalContent}</div>}
 
             <div className={styles.subsectionList}>{children}</div>
 

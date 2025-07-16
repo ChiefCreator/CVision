@@ -20,6 +20,18 @@
     height: 100%;
     pointer-events: none;
   }
+
+  &_disabled {
+    .tracker__block, .dash {
+      cursor: initial;
+    }
+    .cell {
+      cursor: initial;
+      &:hover {
+        background-color: initial;
+      }
+    }
+  }
 }
 
 .cell {
@@ -45,7 +57,7 @@
   transform: translate(-50%, -50%);
   border-radius: 6px;
   transition: background-color .2s var(--transition-primary);
-  background-color: var(--slider-selector-color-primary)
+  background-color: var(--slider-selector-color-primary);
 }
 
 .tracker {

@@ -58,8 +58,15 @@ export default React.memo(function SliderSelect({ className, selectedValue, data
     return 0;
   }
 
+  const handleCellClick = (value: string, i: number) => {
+    if (isDisabled) return;
+
+    selectValue(value, i)
+  }
   const handleTrackerPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (isDisabled) return;
 
     const slider = sliderRef.current;
     const tracker = trackerRef.current;
@@ -145,7 +152,7 @@ export default React.memo(function SliderSelect({ className, selectedValue, data
   }, []);
 
   return (
-    <div className={clsx(styles.slider, className, isDisabled && styles.sliderDisabled)} data-theme={selectedValue} ref={sliderRef}>
+    <div className={clsx(styles.slider, className, isDisabled && styles.sliderDisabled)} data-theme={isDisabled ? "disabled" : selectedValue} ref={sliderRef}>
       <div className={styles.sliderCells}>
         {data.map(({ value }, i) => {
           return (
@@ -153,7 +160,7 @@ export default React.memo(function SliderSelect({ className, selectedValue, data
               className={styles.cell}
               id={value}
               key={value}
-              onClick={() => selectValue(value, i)}
+              onClick={() => handleCellClick(value, i)}
             ></button>
           )
         })}
