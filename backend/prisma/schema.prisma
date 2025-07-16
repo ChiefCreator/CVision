@@ -25,16 +25,20 @@ model Resume {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title               String?
-  personalDetails     PersonalDetails?
-  professionalSummary ProfessionalSummary?
-  employmentHistory   EmploymentHistory?
-  education           Education?
-  links               Links?
-  skills              Skills?
-  languages           Languages?
-  courses             Courses?
-  customSections      CustomSections[]
+  title                     String?
+  personalDetails           PersonalDetails?
+  professionalSummary       ProfessionalSummary?
+  employmentHistory         EmploymentHistory?
+  education                 Education?
+  links                     Links?
+  skills                    Skills?
+  languages                 Languages?
+  courses                   Courses?
+  internships               Internships?
+  hobbies                   Hobbies?
+  extraCurricularActivities ExtraCurricularActivities?
+  references                References?
+  customSections            CustomSections[]
 
   userId String @map("user_id")
 
@@ -218,6 +222,94 @@ model CourseSubsection {
   sectionId String @map("section_id")
 
   section Courses @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model Internships {
+  id           String      @id @default(uuid())
+  title        String?
+  defaultTitle String?
+  order        Int
+  data         InternshipSubsection[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+model InternshipSubsection {
+  id String @id @default(uuid())
+
+  jobTitle    String?   @map("job_title")
+  employer    String?
+  startDate   String? @map("start_date")
+  endDate     String? @map("end_date")
+  city        String?
+  description String?
+
+  sectionId String @map("section_id")
+
+  section Internships @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model Hobbies {
+  id           String      @id @default(uuid())
+  title        String?
+  defaultTitle String?
+  order        Int
+  description  String?
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+
+model ExtraCurricularActivities {
+  id           String      @id @default(uuid())
+  title        String?
+  defaultTitle String?
+  order        Int
+  data         ExtraCurricularActivitySubsection[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+model ExtraCurricularActivitySubsection {
+  id String @id @default(uuid())
+
+  functionTitle    String?   @map("function_title")
+  employer    String?
+  startDate   String? @map("start_date")
+  endDate     String? @map("end_date")
+  city        String?
+  description String?
+
+  sectionId String @map("section_id")
+
+  section ExtraCurricularActivities @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model References {
+  id           String      @id @default(uuid())
+  title        String?
+  defaultTitle String?
+  order        Int
+  data         ReferenceSubsection[]
+
+  resumeId String @unique @map("resume_id")
+
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+model ReferenceSubsection {
+  id String @id @default(uuid())
+
+  referentFullName String? @map("referent_full_name")
+  company          String?
+  phone            String?
+  email            String?
+
+  sectionId String @map("section_id")
+
+  section References @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model CustomSections {

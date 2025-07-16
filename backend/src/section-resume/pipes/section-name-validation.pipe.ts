@@ -1,10 +1,12 @@
 import { Injectable, PipeTransform, BadRequestException } from "@nestjs/common";
-import type { ResumeSectionNames } from "src/section-resume/types/ResumeSectionNames";
+
+import { SECTION_NAMES } from "../constants/section-names";
+import type { ResumeSectionNames } from "src/section-resume/types/section-names.types";
 
 @Injectable()
 export class SectionNameValidationPipe implements PipeTransform {
   transform(value: string) {
-    if (!["personalDetails", "professionalSummary", "courses", "customSections", "education", "employmentHistory", "languages", "links", "skills"].includes(value as ResumeSectionNames)) {
+    if (!SECTION_NAMES.includes(value as ResumeSectionNames)) {
       throw new BadRequestException(`Invalid section name: ${value}`);
     }
 

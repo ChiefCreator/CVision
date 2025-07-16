@@ -1,7 +1,7 @@
 import { Controller, Post, Param, Body } from '@nestjs/common';
 import { SubsectionResumeService } from './subsection-resume.service';
 import { SectionNameValidationPipe } from './pipes/subsection-name-validation.pipe';
-import type { ResumeSubsectionNames } from './types/ResumeSubsectionNames';
+import type { ResumeSubsectionNames } from './types/subsection-names.types';
 
 @Controller("resumes/:resumeId/sections/:sectionId/subsections")
 export class SubsectionResumeController {

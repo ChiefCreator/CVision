@@ -148,6 +148,69 @@ export class CourseSectionDto {
   data: CourseDto[];
 }
 
+export class InternshipSubsectionDto {
+  @IsOptional() @IsString() jobTitle?: string;
+  @IsOptional() @IsString() employer?: string;
+  @IsOptional() @IsDateString() startDate?: string;
+  @IsOptional() @IsDateString() endDate?: string;
+  @IsOptional() @IsString() city?: string;
+  @IsOptional() @IsString() description?: string;
+}
+export class InternshipsSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+  @IsNumber() order: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => InternshipSubsectionDto)
+  data: InternshipSubsectionDto[];
+}
+
+export class ExtraCurricularActivitySubsectionDto {
+  @IsOptional() @IsString() functionTitle?: string;
+  @IsOptional() @IsString() employer?: string;
+  @IsOptional() @IsDateString() startDate?: string;
+  @IsOptional() @IsDateString() endDate?: string;
+  @IsOptional() @IsString() city?: string;
+  @IsOptional() @IsString() description?: string;
+}
+export class ExtraCurricularActivitiesSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+  @IsNumber() order: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ExtraCurricularActivitySubsectionDto)
+  data: ExtraCurricularActivitySubsectionDto[];
+}
+
+export class ReferenceSubsectionDto {
+  @IsOptional() @IsString() referentFullName?: string;
+  @IsOptional() @IsString() company?: string;
+  @IsOptional() @IsString() phone?: string;
+  @IsOptional() @IsString() email?: string;
+}
+export class ReferencesSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+  @IsNumber() order: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ReferenceSubsectionDto)
+  data: ReferenceSubsectionDto[];
+}
+
+export class HobbiesSectionDto {
+  @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() defaultTitle?: string;
+  @IsNumber() order: number;
+
+  @IsOptional() @IsString() description?: string;
+}
+
 export class CustomDataDto {
   @IsOptional() @IsString() title?: string;
   @IsOptional() @IsString() city?: string;
@@ -192,6 +255,18 @@ export class UpdateResumeDto {
 
   @IsOptional() @ValidateNested() @Type(() => CourseSectionDto)
   courses?: CourseSectionDto;
+
+  @IsOptional() @ValidateNested() @Type(() => InternshipsSectionDto)
+  internships?: InternshipsSectionDto;
+
+  @IsOptional() @ValidateNested() @Type(() => ExtraCurricularActivitiesSectionDto)
+  extraCurricularActivities?: ExtraCurricularActivitiesSectionDto;
+
+  @IsOptional() @ValidateNested() @Type(() => ReferencesSectionDto)
+  references?: ReferencesSectionDto;
+
+  @IsOptional() @ValidateNested() @Type(() => HobbiesSectionDto)
+  hobbies?: HobbiesSectionDto;
 
   @IsOptional() @ValidateNested() @Type(() => CustomSectionDto)
   customSections?: CustomSectionDto;

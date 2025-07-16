@@ -1,23 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SectionResumeService } from 'src/section-resume/section-resume.service';
+
+import { SECTION_LIST_NAMES, SECTION_NAMES } from 'src/section-resume/constants/section-names';
+
+import { updateResumeField } from './utils/updateResumeField';
+import { splitPath } from "./utils/splitPath";
+
+import type { ResumeSectionNames } from '../section-resume/types/section-names.types';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates, UpdateResumeDto } from './dto/update-resume.dto';
-import { splitPath } from "./utils/splitPath";
-import { updateResumeField } from './utils/updateResumeField';
-import { SectionResumeService } from 'src/section-resume/section-resume.service';
-import { BadRequestException } from '@nestjs/common';
-
-import type { ResumeSectionNames } from '../section-resume/types/ResumeSectionNames';
 
 @Injectable()
 export class ResumeService {
   private readonly resumeInclude: Record<string, any>;
 
-  constructor(private readonly prisma: PrismaService, private readonly sectionResumeService: SectionResumeService) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly sectionResumeService: SectionResumeService
+  ) {
     this.resumeInclude = {
       personalDetails: true,
       professionalSummary: true,
-      ...sectionResumeService.sectionListNames.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true } }}}), {})
+      ...SECTION_LIST_NAMES.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true } }}}), {})
     };
   };
 
@@ -69,7 +75,7 @@ export class ResumeService {
     for (const [path, pathData] of Object.entries(updates)) {
       const pathParts = splitPath(path);
       const rootPathPart = pathParts[0];
-      const isSection = this.sectionResumeService.sectionNames.includes(rootPathPart as ResumeSectionNames);
+      const isSection = SECTION_NAMES.includes(rootPathPart as ResumeSectionNames);
 
       if (isSection) {
         sections = updateResumeField(sections, path, pathData);

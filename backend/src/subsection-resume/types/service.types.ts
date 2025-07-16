@@ -1,5 +1,5 @@
 import { Prisma } from "prisma/generated/client";
-import type { ResumeSubsectionNames } from "./ResumeSubsectionNames";
+import type { ResumeSubsectionNames } from "./subsection-names.types";
 
 interface BaseMethod {
   subsectionName: ResumeSubsectionNames;

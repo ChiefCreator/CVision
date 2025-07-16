@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateOne, DeleteOne, UpdateOne } from './types/serviceTypes';
+
+import type { CreateOne, DeleteOne, UpdateOne } from './types/service.types';
 
 @Injectable()
 export class SubsectionResumeService {

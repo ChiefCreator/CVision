@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import type { DefaultResumeSectionNames, ListResumeSectionNames, ReorderedResumeSectionNames, ResumeSectionNames, SingleResumeSectionNames } from 'src/section-resume/types/ResumeSectionNames';
-import type { UpdateResumeDto } from 'src/resume/dto/update-resume.dto';
 import { Prisma } from 'prisma/generated/client';
-import { SubsectionResumeService } from 'src/subsection-resume/subsection-resume.service';
-import { ResumeSubsectionNames } from 'src/subsection-resume/types/ResumeSubsectionNames';
 
-import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/serviceTypes';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { SubsectionResumeService } from 'src/subsection-resume/subsection-resume.service';
+
+import { SECTION_DEFAULT_NAMES, SECTION_REORDERED_NAMES, CUSTOM_SECTIONS_NAME } from './constants/section-names';
+import { SECTION_MODEL_MAP } from './constants/section-model-map';
+import { isReorderedResumeSection, isSingleResumeSection } from './utils/section-names.utils';
+
+import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
 
 @Injectable()
 export class SectionResumeService {
@@ -14,66 +16,6 @@ export class SectionResumeService {
     private readonly prisma: PrismaService,
     private readonly subsectionResumeService: SubsectionResumeService
   ) {}
-
-  readonly sectionNames: ResumeSectionNames[] = ["personalDetails", "professionalSummary", "courses", "customSections", "education", "employmentHistory", "languages", "links", "skills"];
-  readonly sectionListNames: ListResumeSectionNames[] = ["education", "employmentHistory", "languages", "skills", "links", "courses", "customSections"];
-  readonly sectionSingleNames: SingleResumeSectionNames[] = ["personalDetails", "professionalSummary"];
-  readonly sectionDefaultNames: DefaultResumeSectionNames[] = ["personalDetails", "professionalSummary", "education", "employmentHistory", "links", "skills"];
-  readonly sectionReorderedNames: ReorderedResumeSectionNames[] = ["education", "employmentHistory", "languages", "skills", "links", "courses", "customSections"];
-  readonly customSectionsName: "customSections" = "customSections";
-
-  isSingleResumeSection(name: string): name is SingleResumeSectionNames {
-    return this.sectionSingleNames.includes(name as SingleResumeSectionNames);
-  }
-  isListResumeSection(name: string): name is ListResumeSectionNames {
-    return this.sectionListNames.includes(name as ListResumeSectionNames);
-  }
-  isListResumeSectionByData(data: UpdateResumeDto[ResumeSectionNames]): data is UpdateResumeDto[ListResumeSectionNames] {
-    return (typeof data === "object" && data !== null && "data" in data);
-  }
-  isReorderedResumeSection(name: string): name is ReorderedResumeSectionNames {
-    return this.sectionReorderedNames.includes(name as ReorderedResumeSectionNames);
-  }
-  getSectionAndDataModelNames(sectionName: ResumeSectionNames) {
-    const sectionModels = {
-      personalDetails: {
-        sectionName: "personalDetails",
-      },
-      professionalSummary: {
-        sectionName: "professionalSummary",
-      },
-      employmentHistory: {
-        sectionName: "employmentHistory",
-        subsectionName: "employmentHistorySubsection",
-      },
-      education: {
-        sectionName: "education",
-        subsectionName: "educationSubsection",
-      },
-      links: {
-        sectionName: "links",
-        subsectionName: "linkSubsection",
-      },
-      skills: {
-        sectionName: "skills",
-        subsectionName: "skillSubsection",
-      },
-      languages: {
-        sectionName: "languages",
-        subsectionName: "languageSubsection",
-      },
-      courses: {
-        sectionName: "courses",
-        subsectionName: "courseSubsection",
-      },
-      customSections: {
-        sectionName: "customSections",
-        subsectionName: "customDataSubsection",
-      },
-    };
-
-    return sectionModels[sectionName] as { sectionName: ResumeSectionNames, subsectionName?: ResumeSubsectionNames };
-  }
 
   async findOneByName({ sectionName, resumeId, prisma = this.prisma }: FindOneByName) {
     return (prisma[sectionName] as any).findFirst({ where: { resumeId } });
@@ -83,19 +25,19 @@ export class SectionResumeService {
   }
 
   async createOne({ sectionName, resumeId, updates = {}, order: orderProp, prisma = this.prisma}: CreateOne) {
-    if (sectionName !== this.customSectionsName) {
+    if (sectionName !== CUSTOM_SECTIONS_NAME) {
       const isSectionExist = await this.findOneByName({ sectionName, resumeId });
       if (isSectionExist) throw new NotFoundException(`Section ${sectionName} exists in resume`);
     }
 
     const order = orderProp || await this.getSectionCount(resumeId, prisma);
 
-    if (this.isSingleResumeSection(sectionName)) {
+    if (isSingleResumeSection(sectionName)) {
       const section = await (prisma[sectionName] as any).create({
         data: {
           ...updates,
           defaultTitle: "Без названия",
-          ...(this.isReorderedResumeSection(sectionName) ? { order } : {}),
+          ...(isReorderedResumeSection(sectionName) ? { order } : {}),
           resume: { connect: { id: resumeId } },
         },
       });
@@ -113,7 +55,7 @@ export class SectionResumeService {
       data: {
         ...sectionUpdates,
         defaultTitle: "Без названия",
-        ...(this.isReorderedResumeSection(sectionName) ? { order } : {}),
+        ...(isReorderedResumeSection(sectionName) ? { order } : {}),
         resume: { connect: { id: resumeId } },
       },
     });
@@ -122,7 +64,7 @@ export class SectionResumeService {
       throw new NotFoundException(`Couldn't create ${sectionName} section`);
     }
         
-    const subsectionName = this.getSectionAndDataModelNames(sectionName).subsectionName;
+    const subsectionName = SECTION_MODEL_MAP[sectionName]?.subsectionName;
     if (!subsectionName) throw new NotFoundException(`Couldn't create ${subsectionName} subsection for ${sectionName} section`);
 
     const subsections = subsectionUpdates?.length ? await Promise.all(subsectionUpdates.map((updates: any) => {
@@ -142,8 +84,7 @@ export class SectionResumeService {
     };
   }
   async createDefaultOnes({ resumeId, prisma = this.prisma}: CreateDefaultOnes) {
-    const createSectionPromises = Promise.all(this.sectionDefaultNames.map((sectionName, i) => this.createOne({ sectionName, resumeId, order: i, prisma })));
-
+    const createSectionPromises = Promise.all(SECTION_DEFAULT_NAMES.map((sectionName, i) => this.createOne({ sectionName, resumeId, order: i, prisma })));
     
     const sectionsData = await createSectionPromises;
 
@@ -175,7 +116,7 @@ export class SectionResumeService {
 
     if (!data) return section;
 
-    const subsectionName = this.getSectionAndDataModelNames(sectionName).subsectionName;
+    const subsectionName = SECTION_MODEL_MAP[sectionName]?.subsectionName;
     if (!subsectionName) throw new NotFoundException(`Section not found in resume`);
 
     const subsections = await Promise.all(data.map((updates: any) => {
@@ -201,12 +142,12 @@ export class SectionResumeService {
   }
 
   private async getSectionCount(resumeId: string, tx: Prisma.TransactionClient) {
-    const sectionCounts = await Promise.all(this.sectionReorderedNames.map(name => (tx[name] as any).count({ where: { resumeId } })));
+    const sectionCounts = await Promise.all(SECTION_REORDERED_NAMES.map(name => (tx[name] as any).count({ where: { resumeId } })));
   
     return sectionCounts.reduce((acc, count) => acc + count , 0);
   }
   private async reorderSectionsAfterDelete(tx: Prisma.TransactionClient, resumeId: string, deletedOrder: number) {
-    const updatePromises = this.sectionReorderedNames.map(sectionName => {
+    const updatePromises = SECTION_REORDERED_NAMES.map(sectionName => {
       return (tx[sectionName] as any).updateMany({
         where: {
           resumeId,

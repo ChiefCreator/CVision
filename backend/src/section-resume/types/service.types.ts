@@ -1,5 +1,5 @@
 import { Prisma } from "prisma/generated/client";
-import { ResumeSectionNames } from "src/section-resume/types/ResumeSectionNames"
+import { ResumeSectionNames } from "src/section-resume/types/section-names.types"
 
 interface BaseMethod {
   sectionName: ResumeSectionNames;
