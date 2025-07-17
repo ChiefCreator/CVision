@@ -21,6 +21,7 @@ import { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
+import ExtraCurricularActivities from "./sections/ExtraCurricularActivities/ExtraCurricularActivities";
 
 interface ResumeEditorForm extends BaseComponent {
   resume?: Resume;
@@ -167,6 +168,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Languages
           sectionData={resume!.languages}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <ExtraCurricularActivities
+          sectionData={resume!.extraCurricularActivities}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}
