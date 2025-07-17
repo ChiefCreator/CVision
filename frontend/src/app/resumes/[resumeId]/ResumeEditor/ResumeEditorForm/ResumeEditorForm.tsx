@@ -13,6 +13,7 @@ import Internships from "./sections/Internships/Internships";
 import Languages from "./sections/Languages/Languages";
 import ExtraCurricularActivities from "./sections/ExtraCurricularActivities/ExtraCurricularActivities";
 import Hobbies from "./sections/Hobbies/Hobbies";
+import References from "./sections/References/References";
 
 import { SECTION_NAMES } from "@/constants/sectionNames";
 
@@ -183,6 +184,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Hobbies
           sectionData={resume!.hobbies}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <References
+          sectionData={resume!.references}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}
