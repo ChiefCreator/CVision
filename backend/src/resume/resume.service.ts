@@ -23,6 +23,7 @@ export class ResumeService {
     this.resumeInclude = {
       personalDetails: true,
       professionalSummary: true,
+      hobbies: true,
       ...SECTION_LIST_NAMES.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true } }}}), {})
     };
   };

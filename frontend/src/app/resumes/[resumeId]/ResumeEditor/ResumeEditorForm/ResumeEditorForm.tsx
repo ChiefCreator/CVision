@@ -11,6 +11,8 @@ import Courses from "./sections/Courses/Courses";
 import Skills from "./sections/Skills/Skills";
 import Internships from "./sections/Internships/Internships";
 import Languages from "./sections/Languages/Languages";
+import ExtraCurricularActivities from "./sections/ExtraCurricularActivities/ExtraCurricularActivities";
+import Hobbies from "./sections/Hobbies/Hobbies";
 
 import { SECTION_NAMES } from "@/constants/sectionNames";
 
@@ -21,7 +23,6 @@ import { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
-import ExtraCurricularActivities from "./sections/ExtraCurricularActivities/ExtraCurricularActivities";
 
 interface ResumeEditorForm extends BaseComponent {
   resume?: Resume;
@@ -175,6 +176,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <ExtraCurricularActivities
           sectionData={resume!.extraCurricularActivities}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <Hobbies
+          sectionData={resume!.hobbies}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}
