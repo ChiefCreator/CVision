@@ -9,6 +9,8 @@ import Education from "./sections/Education/Education";
 import Links from "./sections/Links/Links";
 import Courses from "./sections/Courses/Courses";
 import Skills from "./sections/Skills/Skills";
+import Internships from "./sections/Internships/Internships";
+import Languages from "./sections/Languages/Languages";
 
 import { SECTION_NAMES } from "@/constants/sectionNames";
 
@@ -19,7 +21,6 @@ import { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
-import Internships from "./sections/Internships/Internships";
 
 interface ResumeEditorForm extends BaseComponent {
   resume?: Resume;
@@ -159,6 +160,13 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
 
         <Internships
           sectionData={resume!.internships}
+          onChange={changeField}
+          isOpen={checkIsOpen}
+          onToggle={toggleSection}
+        />
+
+        <Languages
+          sectionData={resume!.languages}
           onChange={changeField}
           isOpen={checkIsOpen}
           onToggle={toggleSection}
