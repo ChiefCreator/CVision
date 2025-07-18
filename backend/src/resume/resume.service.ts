@@ -7,6 +7,7 @@ import { SECTION_LIST_NAMES, SECTION_NAMES } from 'src/section-resume/constants/
 
 import { updateResumeField } from './utils/updateResumeField';
 import { splitPath } from "./utils/splitPath";
+import { flattenGeneralSection } from './utils/flattenGeneralSection';
 
 import type { ResumeSectionNames } from '../section-resume/types/section-names.types';
 import { CreateResumeDto } from './dto/create-resume.dto';
@@ -21,15 +22,17 @@ export class ResumeService {
     private readonly sectionResumeService: SectionResumeService
   ) {
     this.resumeInclude = {
-      personalDetails: true,
-      professionalSummary: true,
-      hobbies: true,
-      ...SECTION_LIST_NAMES.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true } }}}), {})
+      personalDetails: { include: { generalSection: true } },
+      professionalSummary: { include: { generalSection: true } },
+      hobbies: { include: { generalSection: true } },
+      ...SECTION_LIST_NAMES.reduce((acc, name) => ({ ...acc, ...{ [name]: { include: { data: true, generalSection: true } }}}), {})
     };
   };
 
   async findAll() {
-    return this.prisma.resume.findMany({ include: this.resumeInclude });
+    const resumes = await this.prisma.resume.findMany({ include: this.resumeInclude });
+
+    return resumes.map(resume => flattenGeneralSection(resume));
   }
   async findOne(id: string) {
     const resume = await this.prisma.resume.findUnique({
@@ -41,7 +44,7 @@ export class ResumeService {
       throw new NotFoundException(`Resume with id ${id} not found`);
     }
 
-    return resume;
+    return flattenGeneralSection(resume);
   }
 
   async createOne(userId: string, dto: CreateResumeDto) {

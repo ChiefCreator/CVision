@@ -45,10 +45,48 @@ model Resume {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum SectionTypes {
+  personalDetails
+  professionalSummary
+  employmentHistory
+  education
+  links
+  skills
+  languages
+  courses
+  internships
+  hobbies
+  extraCurricularActivities
+  references
+  customSections
+}
+
+model GeneralSection {
+  id        String       @id @default(uuid())
+  type      SectionTypes @unique
+
+  defaultTitle String
+  icon         String?
+  description  String?
+
+  personalDetails           PersonalDetails[]
+  professionalSummary       ProfessionalSummary[]
+  employmentHistory         EmploymentHistory[]
+  education                 Education[]
+  links                     Links[]
+  skills                    Skills[]
+  languages                 Languages[]
+  courses                   Courses[]
+  internships               Internships[]
+  hobbies                   Hobbies[]
+  extraCurricularActivities ExtraCurricularActivities[]
+  references                References[]
+  customSections            CustomSections[]
+}
+
 model PersonalDetails {
   id           String  @id @default(uuid())
   title        String?
-  defaultTitle String?
 
   avatarUrl      String?   @map("avatar_url")
   jobTitle       String?   @map("job_title")
@@ -61,36 +99,40 @@ model PersonalDetails {
   postalCode     String?   @map("postal_code")
   drivingLicense String?   @map("driving_license")
   birthPlace     String?   @map("birth_place")
-  birthDate      String? @map("birth_date")
+  birthDate      String?   @map("birth_date")
   nationality    String?
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
 model ProfessionalSummary {
   id           String  @id @default(uuid())
   title        String?
-  defaultTitle String?
 
   summary String?
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
 model EmploymentHistory {
   id           String              @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         EmploymentHistorySubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model EmploymentHistorySubsection {
   id String @id @default(uuid())
@@ -110,13 +152,14 @@ model EmploymentHistorySubsection {
 model Education {
   id           String      @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         EducationSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model EducationSubsection {
   id String @id @default(uuid())
@@ -136,13 +179,14 @@ model EducationSubsection {
 model Links {
   id           String  @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         LinkSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model LinkSubsection {
   id String @id @default(uuid())
@@ -158,14 +202,15 @@ model LinkSubsection {
 model Skills {
   id           String  @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   isShowLevel  Boolean @default(true)
   data         SkillSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model SkillSubsection {
   id String @id @default(uuid())
@@ -181,13 +226,14 @@ model SkillSubsection {
 model Languages {
   id           String     @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         LanguageSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model LanguageSubsection {
   id String @id @default(uuid())
@@ -203,13 +249,14 @@ model LanguageSubsection {
 model Courses {
   id           String   @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         CourseSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model CourseSubsection {
   id String @id @default(uuid())
@@ -227,13 +274,14 @@ model CourseSubsection {
 model Internships {
   id           String      @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         InternshipSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model InternshipSubsection {
   id String @id @default(uuid())
@@ -253,25 +301,27 @@ model InternshipSubsection {
 model Hobbies {
   id           String      @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   description  String?
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 
 model ExtraCurricularActivities {
   id           String      @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         ExtraCurricularActivitySubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model ExtraCurricularActivitySubsection {
   id String @id @default(uuid())
@@ -291,13 +341,14 @@ model ExtraCurricularActivitySubsection {
 model References {
   id           String      @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         ReferenceSubsection[]
 
-  resumeId String @unique @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model ReferenceSubsection {
   id String @id @default(uuid())
@@ -315,13 +366,14 @@ model ReferenceSubsection {
 model CustomSections {
   id           String       @id @default(uuid())
   title        String?
-  defaultTitle String?
   order        Int
   data         CustomSubsection[]
 
-  resumeId String @map("resume_id")
+  generalSectionId String @unique @map("general_section_id")
+  resumeId         String @unique @map("resume_id")
 
-  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
+  resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 }
 model CustomSubsection {
   id String @id @default(uuid())

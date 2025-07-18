@@ -8,7 +8,7 @@ import { SECTION_DEFAULT_NAMES, SECTION_REORDERED_NAMES, CUSTOM_SECTIONS_NAME } 
 import { SECTION_MODEL_MAP } from './constants/section-model-map';
 import { isReorderedResumeSection, isSingleResumeSection } from './utils/section-names.utils';
 
-import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
+import type { CreateDefaultOnes, CreateOne, DeleteOne, findGeneralSectionByType, FindGeneralSections, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
 
 @Injectable()
 export class SectionResumeService {
@@ -23,6 +23,12 @@ export class SectionResumeService {
   async findOneById({ sectionName, id, prisma = this.prisma }: FindOneById) {
     return (prisma[sectionName] as any).findUnique({ where: { id } });
   }
+  async findGeneralSections({ prisma = this.prisma }: FindGeneralSections) {
+    return prisma.generalSection.findMany();
+  }
+  async findGeneralSectionByType({ type, prisma = this.prisma }: findGeneralSectionByType) {
+    return prisma.generalSection.findFirst({ where: { type } });
+  }
 
   async createOne({ sectionName, resumeId, updates = {}, order: orderProp, prisma = this.prisma}: CreateOne) {
     if (sectionName !== CUSTOM_SECTIONS_NAME) {
@@ -31,38 +37,22 @@ export class SectionResumeService {
     }
 
     const order = orderProp || await this.getSectionCount(resumeId, prisma);
-
-    if (isSingleResumeSection(sectionName)) {
-      const section = await (prisma[sectionName] as any).create({
-        data: {
-          ...updates,
-          defaultTitle: "Без названия",
-          ...(isReorderedResumeSection(sectionName) ? { order } : {}),
-          resume: { connect: { id: resumeId } },
-        },
-      });
-
-      if (!section) {
-        throw new NotFoundException(`Couldn't create ${sectionName} section`);
-      }
-
-      return { [sectionName]: section };
-    }
-
     const { data: subsectionUpdates, ...sectionUpdates } = updates;
-  
+
+    const generalSection = await this.findGeneralSectionByType({ type: sectionName, prisma });
+    if (!generalSection) throw new NotFoundException(`Couldn't find generalSection with type ${sectionName}`);
+
     const section = await (prisma[sectionName] as any).create({
       data: {
         ...sectionUpdates,
-        defaultTitle: "Без названия",
         ...(isReorderedResumeSection(sectionName) ? { order } : {}),
         resume: { connect: { id: resumeId } },
+        generalSection: { connect: { id: generalSection.id } },
       },
     });
+    if (!section) throw new NotFoundException(`Couldn't create ${sectionName} section`);
 
-    if (!section) {
-      throw new NotFoundException(`Couldn't create ${sectionName} section`);
-    }
+    if (isSingleResumeSection(sectionName)) return { [sectionName]: { ...generalSection, ...section } };
         
     const subsectionName = SECTION_MODEL_MAP[sectionName]?.subsectionName;
     if (!subsectionName) throw new NotFoundException(`Couldn't create ${subsectionName} subsection for ${sectionName} section`);
@@ -78,6 +68,7 @@ export class SectionResumeService {
 
     return {
       [sectionName]: {
+        ...generalSection,
         ...section,
         data: subsections,
       }

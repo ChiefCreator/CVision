@@ -12,6 +12,13 @@ export interface FindOneByName extends BaseMethod {
 export interface FindOneById extends BaseMethod {
   id: string;
 }
+export interface FindGeneralSections {
+  prisma?: BaseMethod["prisma"];
+}
+export interface findGeneralSectionByType {
+  type: ResumeSectionNames;
+  prisma?: BaseMethod["prisma"];
+}
 
 export interface CreateDefaultOnes {
   prisma?: BaseMethod["prisma"];
