@@ -11,10 +11,11 @@ import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormF
 import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
 import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Internship } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Internship } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./EmploymentHistorySubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
 
 interface InternshipSubsectionProps extends Internship, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;

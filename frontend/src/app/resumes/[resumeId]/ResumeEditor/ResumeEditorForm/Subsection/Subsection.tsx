@@ -6,9 +6,9 @@ import styles from "./Subsection.module.scss";
 import clsx from "clsx";
 import { ChevronDown, Ellipsis, Pencil, Trash2 } from "lucide-react";
 import DropdownMenu, { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
-import { useDeleteSubsection } from "@/api/resume/hooks";
+import { useDeleteSubsection } from "@/api/resumeSubsection/hooks";
 import { useResumeId } from "../../context/ResumeIdContext";
-import { ResumeListSectionName } from "@/types/resumeTypes";
+import { ResumeListSectionName } from "@/types/sectionTypes/sectionName";
 
 export interface SubsectionProps extends BaseComponent {
   id: string;

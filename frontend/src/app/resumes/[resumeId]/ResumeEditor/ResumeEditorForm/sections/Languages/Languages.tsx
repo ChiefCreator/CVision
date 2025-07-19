@@ -4,11 +4,12 @@ import { useFieldChange } from "@/api/resume/hooks";
 import Section from "../../Section/Section";
 import LanguageSubsection from "../../subsections/LanguageSubsection/LanguageSubsection";
 
-import type { ResumeSectionChangeObj, LanguageSection } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { LanguageSection } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 interface LanguagesProps {
-  sectionData?: LanguageSection;
+  sectionData: LanguageSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -25,23 +26,24 @@ export default React.memo(function Languages({ sectionData, isOpen, onToggle, on
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sectionData.data.map(subsection => (
         <LanguageSubsection
           key={subsection.id}
           {...subsection}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
   
           checkIsOpen={isOpen}

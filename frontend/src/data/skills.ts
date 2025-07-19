@@ -1,4 +1,4 @@
-import { SkillLevel } from "@/types/resumeTypes";
+import { SkillLevel } from "@/types/sectionTypes/sections";
 
 interface Skill {
   value: SkillLevel;

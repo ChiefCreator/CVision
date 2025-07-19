@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
 import { useChange } from "../../Subsection/hooks/useChange";
 
@@ -7,10 +7,11 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Link } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Link } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./LinkSubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
 
 interface LinkSubsectionProps extends Link, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;

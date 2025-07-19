@@ -3,6 +3,7 @@ import { useFieldChange } from "@/api/resume/hooks";
 
 import { transformStringDatesToRangeFormat } from "@/utils/dateUtils";
 import { transformStringsToSlashFormat } from "@/utils/stringUtils";
+import { useChange } from "../../Subsection/hooks/useChange";
 
 import Subsection from "../../Subsection/Subsection";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
@@ -10,11 +11,11 @@ import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Link, Course } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Course } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./CourseSubsection.module.scss";
-import { useChange } from "../../Subsection/hooks/useChange";
+import styles from "./../../Subsection/Subsection.module.scss";
 
 interface CourseSubsectionProps extends Course, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;

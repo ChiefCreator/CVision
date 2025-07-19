@@ -9,23 +9,31 @@ import type { IconButtonProps } from "@/components/button/IconButton/IconButton"
 
 import clsx from 'clsx';
 import styles from "./TitleEditor.module.scss"
+import IconButton from "@/components/button/IconButton/IconButton";
+
+export interface Control extends IconButtonProps {
+  id: string;
+  onClick: () => void;
+}
 
 interface TitleEditorProps extends BaseComponent {
   controlClassName?: string;
   value?: string;
   defaultValue?: string;
-  isControlsShow?: boolean | "auto";
+  isControlsShow?: boolean | "alwaysShow" | "neverShow";
   inputRef?: React.RefObject<HTMLInputElement>;
+  controls?: Control[];
 
   controlProps?: IconButtonProps;
 
   onChange?: (value: string) => void;
 }
 
-export default React.memo(function TitleEditor({ className, value: valueProp, defaultValue: defaultValueProp, isControlsShow = "auto", inputRef, controlClassName, onChange }: TitleEditorProps) {
+export default React.memo(function TitleEditor({ className, value: valueProp, defaultValue: defaultValueProp, isControlsShow: isControlsShowProp, inputRef, controlClassName, controls, onChange }: TitleEditorProps) {
   const defaultValue = defaultValueProp || "Без названия";
   const [value, setValue] = useState(valueProp || "");
 
+  const [isControlsShow, setIsControlsShow] = useState<TitleEditorProps["isControlsShow"]>(isControlsShowProp || false);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -33,8 +41,22 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
   const contentWrapperRef = useRef<HTMLDivElement>(null);
   const finalInputRef = inputRef ? inputRef : useRef<HTMLInputElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<HTMLUListElement>(null);
 
+  const changeIsControlsShow = (isShow?: boolean) => {
+    setIsControlsShow(prev => {
+      if (prev === "alwaysShow" || prev === "neverShow") return prev;
+
+      return isShow;
+    })
+  }
+  const isShowControls = () => {
+    if (typeof isControlsShow === "boolean") {
+      return isControlsShow;
+    }
+    if (isControlsShow === "alwaysShow") return true;
+    if (isControlsShow === "neverShow") return false;
+  }
   const setContentWrapperWidth = () => {
     const controls = controlsRef.current;
     const contentWrapper = contentWrapperRef.current;
@@ -74,6 +96,9 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
     setContentWrapperWidth();
   }, [value]);
   useEffect(() => {
+    changeIsControlsShow(isHovered || isFocused);
+  }, [isHovered, isFocused]);
+  useEffect(() => {
     const handleResize = () => setContentWrapperWidth();
 
     window.addEventListener("resize", handleResize);
@@ -110,9 +135,26 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
           <InputLine className={styles.inputLine} ref={lineRef} />
         </div>
   
-        <div className={styles.controls} ref={controlsRef}>
-          {((typeof isControlsShow === "boolean" && isControlsShow) || (isHovered && isControlsShow === "auto")) && <EditButton className={clsx(styles.button, controlClassName)} iconProps={{ className: styles.buttonIcon }} onClick={handleFocus} />}
-        </div>
+        {isShowControls() && (
+          <ul className={styles.controls} ref={controlsRef}>
+            <li>
+              <EditButton
+                className={clsx(styles.button, controlClassName)}
+                iconClassName={styles.buttonIcon}
+                onClick={handleFocus}
+              />
+            </li>
+            
+            {controls?.map(control => (
+              <li key={control.id}>
+                <IconButton
+                  {...control}
+                  iconClassName={clsx(styles.button, controlClassName)}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

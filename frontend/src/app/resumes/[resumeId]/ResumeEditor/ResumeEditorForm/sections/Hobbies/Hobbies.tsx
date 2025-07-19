@@ -6,13 +6,14 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
 
-import type { Hobbies, ResumeSectionChangeObj } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { Hobbies } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 import styles from "./Hobbies.module.scss";
 
 interface HobbiesProps {
-  sectionData?: Hobbies;
+  sectionData: Hobbies;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (id: string) => void;
@@ -22,17 +23,18 @@ interface HobbiesProps {
 const sectionName = "hobbies";
 
 export default React.memo(function Hobbies({ sectionData, isOpen, onToggle, onChange }: HobbiesProps) {
-  const changeObj: ResumeSectionChangeObj<Hobbies> = {
+  const changeObj: ResumeSectionChangeObj<Hobbies, "description"> = {
     title: useFieldChange(onChange, `${sectionName}.title`),
-    description: useFieldChange(onChange, `${sectionName}.description`),
+    hobbyDescription: useFieldChange(onChange, `${sectionName}.hobbyDescription`),
   }
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
@@ -46,9 +48,9 @@ export default React.memo(function Hobbies({ sectionData, isOpen, onToggle, onCh
 
             placeholder="Например занятие спортом, чтение книг..."
 
-            onChange={changeObj.description}
+            onChange={changeObj.hobbyDescription}
           >
-            {sectionData?.description}
+            {sectionData.hobbyDescription}
           </FormFieldTextEditor>
         </FormGroupCell>
       </FormGroup>

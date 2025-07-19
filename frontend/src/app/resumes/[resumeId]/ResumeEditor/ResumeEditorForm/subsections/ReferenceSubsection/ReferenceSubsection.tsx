@@ -7,10 +7,11 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Internship, Reference } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Reference } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./ReferenceSubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
 
 interface ReferenceSubsectionProps extends Reference, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;

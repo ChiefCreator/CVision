@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SectionResumeService } from 'src/section-resume/section-resume.service';
@@ -12,6 +12,7 @@ import { flattenGeneralSection } from './utils/flattenGeneralSection';
 import type { ResumeSectionNames } from '../section-resume/types/section-names.types';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates, UpdateResumeDto } from './dto/update-resume.dto';
+import { findGeneralSectionByType, FindGeneralSections } from './types/service.types';
 
 @Injectable()
 export class ResumeService {
@@ -19,6 +20,7 @@ export class ResumeService {
 
   constructor(
     private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => SectionResumeService))
     private readonly sectionResumeService: SectionResumeService
   ) {
     this.resumeInclude = {
@@ -102,5 +104,12 @@ export class ResumeService {
 
       return this.findOne(resumeId);
     });
+  }
+
+  async findGeneralSections({ prisma = this.prisma }: FindGeneralSections) {
+    return prisma.generalSection.findMany();
+  }
+  async findGeneralSectionByType({ type, prisma = this.prisma }: findGeneralSectionByType) {
+    return prisma.generalSection.findFirst({ where: { type } });
   }
 }

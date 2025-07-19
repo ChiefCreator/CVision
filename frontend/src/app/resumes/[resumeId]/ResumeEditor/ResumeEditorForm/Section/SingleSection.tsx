@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useSection } from "./hooks/useSection";
+import { useResumeId } from "../../context/ResumeIdContext";
+import { useDelete } from "./hooks/useDelete";
 
 import TitleEditor from "@/components/input/TitleEditor/TitleEditor";
 import { ChevronDown } from "lucide-react";
 
+import { isDefaultResumeSection } from "@/utils/sectionNamesUtils";
+
+import type { SingleSectionProps } from "./Section";
+
 import styles from "./Section.module.scss";
 import clsx from "clsx";
-import { useSection } from "./hooks/useSection";
-import { DefaultSectionProps } from "./Section";
 
-export default function DefaultSection({ className, id, sectionName, title, description, defaultTitle, children, additionalContent, checkIsOpen, onToggle, onChange }: DefaultSectionProps) {
+export default function SingleSection({ className, id, sectionName, title, description, defaultTitle, children, additionalContent, checkIsOpen, onToggle, onChange }: SingleSectionProps) {
+  const resumeId = useResumeId();
   const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
+  const deleteControlObj = useDelete({ resumeId, sectionName , sectionId: id});
+
+  const controls = useMemo(() => [...deleteControlObj], [deleteControlObj]);
 
   return (
     <div className={clsx(styles.section, className)}>
@@ -19,6 +28,7 @@ export default function DefaultSection({ className, id, sectionName, title, desc
           controlClassName={styles.titleEditorControl}
           value={title}
           defaultValue={defaultTitle}
+          controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
   
           onChange={onChange}
         />

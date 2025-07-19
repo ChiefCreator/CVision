@@ -7,9 +7,6 @@ import { Bold, Italic, List, ListOrdered, Strikethrough, Underline } from "lucid
 
 import styles from "./TextEditor.module.scss";
 import clsx from "clsx";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-gsap.registerPlugin(useGSAP);
 
 export interface TextEditorProps {
   placeholder?: string;
@@ -88,37 +85,37 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
     return [
       {
         id: "editable-button-bold",
-        icon: <Bold className={styles.controlIcon} />,
+        Icon: Bold,
         isActive: isBold,
         onClick: toggleBold,
       },
       {
         id: "editable-button-italic",
-        icon: <Italic className={styles.controlIcon} />,
+        Icon: Italic,
         isActive: isItalic,
         onClick: toggleItalic,
       },
       {
         id: "editable-button-underlined",
-        icon: <Underline className={styles.controlIcon} />,
+        Icon: Underline,
         isActive: isUnderlined,
         onClick: toggleUnderline,
       },
       {
         id: "editable-button-crossed-out",
-        icon: <Strikethrough className={styles.controlIcon} />,
+        Icon: Strikethrough,
         isActive: isCrossedOut,
         onClick: toggleCrossedOut,
       },
       {
         id: "editable-button-ordered-list",
-        icon: <ListOrdered className={styles.controlIcon} />,
+        Icon: ListOrdered,
         isActive: isOrderedList,
         onClick: toggleOrderedList,
       },
       {
         id: "editable-button-unordered-list",
-        icon: <List className={styles.controlIcon} />,
+        Icon: List,
         isActive: isUnorderedList,
         onClick: toggleUnorderedList,
       },
@@ -132,28 +129,28 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
       <header className={styles.head}>
         <div className={styles.controls}>
           <div className={styles.controlsBlock}>
-            {editableButtonsData.slice(0, 4).map(({ id, isActive, icon, onClick }) => (
+            {editableButtonsData.slice(0, 4).map(({ id, isActive, Icon, onClick }) => (
               <IconButton
                 key={id}
+                Icon={Icon}
+                iconClassName={styles.controlIcon}
                 className={clsx(styles.control, { [styles.controlActive]: isActive })}
                 onClick={onClick}
-              >
-                {icon}
-              </IconButton>
+              />
             ))}
           </div>
 
           <span className={styles.controlsSeparator}></span>
 
           <div className={styles.controlsBlock}>
-            {editableButtonsData.slice(4, 6).map(({ id, isActive, icon, onClick }) => (
+            {editableButtonsData.slice(4, 6).map(({ id, isActive, Icon, onClick }) => (
               <IconButton
                 key={id}
+                Icon={Icon}
+                iconClassName={styles.controlIcon}
                 className={clsx(styles.control, { [styles.controlActive]: isActive })}
                 onClick={onClick}
-              >
-                {icon}
-              </IconButton>
+              />
             ))}
           </div>
         </div>

@@ -1,7 +1,7 @@
 import axios, { type CreateAxiosDefaults } from "axios"
 
 import { getErrorMessage } from "./error";
-import { authTokenService } from "@/services/authTokenService";
+import { authTokenService } from "@/api/authToken/authTokenService";
 
 const options: CreateAxiosDefaults = {
   baseURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/api`,

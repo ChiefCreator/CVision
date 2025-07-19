@@ -102,7 +102,7 @@ model PersonalDetails {
   birthDate      String?   @map("birth_date")
   nationality    String?
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -115,7 +115,7 @@ model ProfessionalSummary {
 
   summary String?
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -128,7 +128,7 @@ model EmploymentHistory {
   order        Int
   data         EmploymentHistorySubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -155,7 +155,7 @@ model Education {
   order        Int
   data         EducationSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -182,7 +182,7 @@ model Links {
   order        Int
   data         LinkSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -206,7 +206,7 @@ model Skills {
   isShowLevel  Boolean @default(true)
   data         SkillSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -229,7 +229,7 @@ model Languages {
   order        Int
   data         LanguageSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -252,7 +252,7 @@ model Courses {
   order        Int
   data         CourseSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -277,7 +277,7 @@ model Internships {
   order        Int
   data         InternshipSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -302,9 +302,9 @@ model Hobbies {
   id           String      @id @default(uuid())
   title        String?
   order        Int
-  description  String?
+  hobbyDescription  String?
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -317,7 +317,7 @@ model ExtraCurricularActivities {
   order        Int
   data         ExtraCurricularActivitySubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -344,7 +344,7 @@ model References {
   order        Int
   data         ReferenceSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
+  generalSectionId String @map("general_section_id")
   resumeId         String @unique @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
@@ -369,8 +369,8 @@ model CustomSections {
   order        Int
   data         CustomSubsection[]
 
-  generalSectionId String @unique @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
+  generalSectionId String @map("general_section_id")
+  resumeId         String @map("resume_id")
 
   generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
   resume         Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)

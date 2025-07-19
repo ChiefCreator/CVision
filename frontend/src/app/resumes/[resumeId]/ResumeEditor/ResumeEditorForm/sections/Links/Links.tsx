@@ -4,11 +4,12 @@ import { useFieldChange } from "@/api/resume/hooks";
 import LinkSubsection from "../../subsections/LinkSubsection/LinkSubsection";
 import Section from "../../Section/Section";
 
-import type { ResumeSectionChangeObj, LinkSection } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { LinkSection } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 interface LinksProps {
-  sectionData?: LinkSection;
+  sectionData: LinkSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -25,24 +26,24 @@ export default React.memo(function Links({ sectionData, isOpen, onToggle, onChan
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
-      description="Вы можете добавить ссылки на веб-сайты, которые хотите показать менеджерам по найму! Возможно, это будет ссылка на ваше портфолио, профиль в LinkedIn или личный веб-сайт."
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sectionData.data.map(subsection => (
         <LinkSubsection
           key={subsection.id}
           {...subsection}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
   
           checkIsOpen={isOpen}

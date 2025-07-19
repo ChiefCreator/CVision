@@ -3,13 +3,8 @@ import { Pencil } from "lucide-react";
 
 import type { IconButtonProps } from "../IconButton";
 
-import baseStyles from "./../IconButton.module.scss";
-import clsx from "clsx";
-
-export default function EditButton(props: IconButtonProps) {
-  const { className: iconClassName } = props.iconProps || {};
-
+export default function EditButton(props: Omit<IconButtonProps, "Icon">) {
   return (
-    <IconButton {...props}>{<Pencil className={clsx(baseStyles.buttonIcon, iconClassName)} />}</IconButton>
+    <IconButton {...props} Icon={Pencil} />
   );
 }

@@ -8,5 +8,6 @@ import { SubsectionResumeService } from 'src/subsection-resume/subsection-resume
 @Module({
   controllers: [ResumeController],
   providers: [ResumeService, PrismaService, SectionResumeService, SubsectionResumeService],
+  exports: [ResumeService],
 })
 export class ResumeModule {}

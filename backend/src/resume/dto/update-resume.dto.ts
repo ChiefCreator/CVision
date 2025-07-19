@@ -208,7 +208,7 @@ export class HobbiesSectionDto {
   @IsOptional() @IsString() defaultTitle?: string;
   @IsNumber() order: number;
 
-  @IsOptional() @IsString() description?: string;
+  @IsOptional() @IsString() hobbyDescription?: string;
 }
 
 export class CustomDataDto {

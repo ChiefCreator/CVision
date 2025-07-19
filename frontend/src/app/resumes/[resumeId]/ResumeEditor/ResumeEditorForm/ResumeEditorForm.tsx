@@ -2,25 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 
 import ResumeEditorFormSkeleton from "@/app/resumes/[resumeId]/ResumeEditor/ResumeEditorForm/ResumeEditorFormSkeleton";
 import Head from "./Head/Head";
-import PersonalDetails from "./sections/PersonalDetails/PersonalDetails";
-import ProfessionalSummary from "./sections/ProfessionalSummary/ProfessionalSummary";
-import EmploymentHistory from "./sections/EmploymentHistory/EmploymentHistory";
-import Education from "./sections/Education/Education";
-import Links from "./sections/Links/Links";
-import Courses from "./sections/Courses/Courses";
-import Skills from "./sections/Skills/Skills";
-import Internships from "./sections/Internships/Internships";
-import Languages from "./sections/Languages/Languages";
-import ExtraCurricularActivities from "./sections/ExtraCurricularActivities/ExtraCurricularActivities";
-import Hobbies from "./sections/Hobbies/Hobbies";
-import References from "./sections/References/References";
+import AddSection from "./AddSection/AddSection";
 
 import { SECTION_NAMES } from "@/constants/sectionNames";
+import { SECTION_COMPONENTS_MAP, SectionComponentProps } from "./constants/sectionComponentsMap";
 
 import { isListResumeSectionByData } from "@/utils/sectionNamesUtils";
+import { resumeToSections } from "@/utils/resumeUtils/resumeToSections"
 
-import { ChangeResumeField, Resume } from "@/types/resumeTypes";
-import { BaseComponent } from "@/types/rootTypes";
+import type { Resume } from "@/types/resumeTypes/resume";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { BaseComponent } from "@/types/rootTypes";
 
 import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
@@ -94,10 +86,19 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
       const section = resume[name];
       if (!section) return acc;
 
-      acc[section.id] = {
-        isOpen: true,
-        openSubsections: isListResumeSectionByData(section) ? section.data.map(o => o.id) : undefined,
-      };
+      if (Array.isArray(section)) {
+        section.forEach(section => {
+          acc[section.id] = {
+            isOpen: true,
+            openSubsections: isListResumeSectionByData(section) ? section.data.map(o => o.id) : undefined,
+          };
+        })
+      } else {
+        acc[section.id] = {
+          isOpen: true,
+          openSubsections: isListResumeSectionByData(section) ? section.data.map(o => o.id) : undefined,
+        };
+      }
     
       return acc;
     }, {} as SectionsOpenState);
@@ -106,96 +107,33 @@ export default function ResumeEditorForm({ className, resume, changeField, isGet
   }, [isGetResumeLoading]);
 
   if (isGetResumeLoading) return <ResumeEditorFormSkeleton className={className} />
+  if (!resume) return <>Error</>
 
   return (
     <div className={clsx(styles.form, className)}>
       <Head title={resume?.title} changeField={changeField} />
 
-      <div className={styles.formSections}>
-        <PersonalDetails
-          sectionData={resume!.personalDetails}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
+      <section className={styles.formSections}>
+        <ul className={styles.sectionsList}>
+          {resumeToSections(resume).map(({ data, name }) => {
+            const Section = SECTION_COMPONENTS_MAP[name] as React.ComponentType<SectionComponentProps<typeof name>> | null;
+            if (!Section || !data) return null;
+  
+            return Section && (
+              <li key={data.id}>
+                <Section 
+                  sectionData={data}
+                  onChange={changeField}
+                  isOpen={checkIsOpen}
+                  onToggle={toggleSection}
+                />
+              </li>
+            )
+          })}
+        </ul>
+      </section>
 
-        <ProfessionalSummary
-          sectionData={resume!.professionalSummary}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <EmploymentHistory
-          sectionData={resume!.employmentHistory}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Education 
-          sectionData={resume!.education}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Links
-          sectionData={resume!.links}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Courses
-          sectionData={resume!.courses}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Skills
-          sectionData={resume!.skills}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Internships
-          sectionData={resume!.internships}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Languages
-          sectionData={resume!.languages}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <ExtraCurricularActivities
-          sectionData={resume!.extraCurricularActivities}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <Hobbies
-          sectionData={resume!.hobbies}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-
-        <References
-          sectionData={resume!.references}
-          onChange={changeField}
-          isOpen={checkIsOpen}
-          onToggle={toggleSection}
-        />
-      </div>
+      <AddSection resume={resume} toggleSection={toggleSection} />
     </div>
   );
 }

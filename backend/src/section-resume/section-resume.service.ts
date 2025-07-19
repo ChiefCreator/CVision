@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'prisma/generated/client';
 
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -8,12 +8,15 @@ import { SECTION_DEFAULT_NAMES, SECTION_REORDERED_NAMES, CUSTOM_SECTIONS_NAME } 
 import { SECTION_MODEL_MAP } from './constants/section-model-map';
 import { isReorderedResumeSection, isSingleResumeSection } from './utils/section-names.utils';
 
-import type { CreateDefaultOnes, CreateOne, DeleteOne, findGeneralSectionByType, FindGeneralSections, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
+import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
+import { ResumeService } from 'src/resume/resume.service';
 
 @Injectable()
 export class SectionResumeService {
   constructor(
     private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => ResumeService))
+    private readonly resumeService: ResumeService,
     private readonly subsectionResumeService: SubsectionResumeService
   ) {}
 
@@ -23,14 +26,8 @@ export class SectionResumeService {
   async findOneById({ sectionName, id, prisma = this.prisma }: FindOneById) {
     return (prisma[sectionName] as any).findUnique({ where: { id } });
   }
-  async findGeneralSections({ prisma = this.prisma }: FindGeneralSections) {
-    return prisma.generalSection.findMany();
-  }
-  async findGeneralSectionByType({ type, prisma = this.prisma }: findGeneralSectionByType) {
-    return prisma.generalSection.findFirst({ where: { type } });
-  }
 
-  async createOne({ sectionName, resumeId, updates = {}, order: orderProp, prisma = this.prisma}: CreateOne) {
+  async createOne({ sectionName, resumeId, sectionId, updates = {}, order: orderProp, prisma = this.prisma}: CreateOne) {
     if (sectionName !== CUSTOM_SECTIONS_NAME) {
       const isSectionExist = await this.findOneByName({ sectionName, resumeId });
       if (isSectionExist) throw new NotFoundException(`Section ${sectionName} exists in resume`);
@@ -39,13 +36,14 @@ export class SectionResumeService {
     const order = orderProp || await this.getSectionCount(resumeId, prisma);
     const { data: subsectionUpdates, ...sectionUpdates } = updates;
 
-    const generalSection = await this.findGeneralSectionByType({ type: sectionName, prisma });
+    const generalSection = await this.resumeService.findGeneralSectionByType({ type: sectionName, prisma });
     if (!generalSection) throw new NotFoundException(`Couldn't find generalSection with type ${sectionName}`);
 
     const section = await (prisma[sectionName] as any).create({
       data: {
         ...sectionUpdates,
         ...(isReorderedResumeSection(sectionName) ? { order } : {}),
+        id: sectionId || undefined,
         resume: { connect: { id: resumeId } },
         generalSection: { connect: { id: generalSection.id } },
       },

@@ -1,0 +1,31 @@
+.button {
+  --font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  text-align: start;
+  gap: 5px;
+
+  font-size: var(--font-size);
+  color: var(--color-neutral-contrast--light);
+  font-weight: 500;
+
+  &__icon {
+    flex: 0 0 calc(1.5 * var(--font-size));
+    height: calc(1.5 * var(--font-size));
+    color: var(--color-primary);
+  }
+
+  &:disabled {
+    color: var(--color-neutral-contrast--lighten);
+    cursor: initial;
+
+    .button__icon {
+      color: var(--color-neutral-contrast--lighten);
+    }
+  }
+}
+
+.skeleton-container {
+  width: 100%;
+}

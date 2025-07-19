@@ -2,13 +2,14 @@ import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
 
 import Section from "../../Section/Section";
-
-import type { ResumeSectionChangeObj, LinkSection } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
 import CourseSubsection from "../../subsections/CourseSubsection/CourseSubsection";
 
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { CourseSection } from "@/types/sectionTypes/sections";
+
 interface LinksProps {
-  sectionData?: LinkSection;
+  sectionData: CourseSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -19,29 +20,30 @@ const sectionName = "courses";
 const subsectionName = "courseSubsection";
 
 export default React.memo(function Courses({ sectionData, isOpen, onToggle, onChange }: LinksProps) {
-  const changeObj: ResumeSectionChangeObj<LinkSection, keyof Omit<LinkSection, "title">> = {
+  const changeObj: ResumeSectionChangeObj<CourseSection, keyof Omit<CourseSection, "title">> = {
     title: useFieldChange(onChange, `${sectionName}.title`),
   }
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sectionData.data.map(subsection => (
         <CourseSubsection
           key={subsection.id}
           {...subsection}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
   
           checkIsOpen={isOpen}

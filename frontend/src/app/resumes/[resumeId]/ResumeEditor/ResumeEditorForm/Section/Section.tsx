@@ -1,17 +1,13 @@
 import React from "react";
 
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent, BaseSectionResume } from "@/types/rootTypes";
+import type { ResumeSectionName } from "@/types/sectionTypes/sectionName";
 
-import { ResumeSectionName } from "@/types/resumeTypes";
-import DefaultSection from "./DefaultSection";
-import SubsectionSection from "./SubsectionSection";
+import SingleSection from "./SingleSection";
+import ListSection from "./ListSection";
 
-interface BaseSectionProps extends BaseComponent {
-  id?: string;
+interface BaseSectionProps extends BaseComponent, Omit<BaseSectionResume, "order"> {
   sectionName: ResumeSectionName;
-  title?: string;
-  defaultTitle?: string;
-  description?: string;
   children: React.ReactNode;
   additionalContent?: React.ReactNode;
 
@@ -20,21 +16,21 @@ interface BaseSectionProps extends BaseComponent {
   onChange: (value: string) => void;
 }
 
-export interface DefaultSectionProps extends BaseSectionProps {
-  type?: "default";
+export interface SingleSectionProps extends BaseSectionProps {
+  type?: "singleSection";
 }
-export interface SubsectionSectionProps extends BaseSectionProps {
-  type: "subsection";
+export interface ListSectionProps extends BaseSectionProps {
+  type: "list";
   subsectionName: string;
   addSubsectionDto?: any;
 }
 
-type SectionProps = DefaultSectionProps | SubsectionSectionProps;
+export type SectionProps = SingleSectionProps | ListSectionProps;
 
 export default function Section(props: SectionProps) {
-  if (props.type === "subsection") {
-    return <SubsectionSection {...props} />;
+  if (props.type === "list") {
+    return <ListSection {...props} />;
   }
 
-  return <DefaultSection {...props} />;
+  return <SingleSection {...props} />;
 }

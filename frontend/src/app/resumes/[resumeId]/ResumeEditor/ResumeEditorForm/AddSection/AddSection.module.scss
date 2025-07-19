@@ -1,0 +1,17 @@
+.section {
+  background-color: var(--color-neutral-primary);
+  border-top-left-radius: var(--section-border-radius);
+  border-top-right-radius: var(--section-border-radius);
+  padding: var(--section-padding);
+}
+
+.title {
+  font-size: 20px;
+}
+
+.list {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}

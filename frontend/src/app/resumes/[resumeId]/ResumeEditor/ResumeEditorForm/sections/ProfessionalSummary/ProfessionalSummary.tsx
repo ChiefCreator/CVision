@@ -6,13 +6,14 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
 
-import type { ProfessionalSummary, ResumeSectionChangeObj } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { ProfessionalSummary } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 import styles from "./ProfessionalSummary.module.scss";
 
 interface ProfessionalSummaryProps {
-  sectionData?: ProfessionalSummary;
+  sectionData: ProfessionalSummary;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (id: string) => void;
@@ -22,18 +23,19 @@ interface ProfessionalSummaryProps {
 const sectionName = "professionalSummary";
 
 export default React.memo(function ProfessionalSummary({ sectionData, isOpen, onToggle, onChange }: ProfessionalSummaryProps) {
-  const changeObj: ResumeSectionChangeObj<ProfessionalSummary> = {
+  const changeObj: ResumeSectionChangeObj<ProfessionalSummary, "description"> = {
     title: useFieldChange(onChange, `${sectionName}.title`),
     summary: useFieldChange(onChange, `${sectionName}.summary`),
   }
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
-      description="Напишите 2-4 коротких, энергичных предложения о том, какой вы замечательный. Упомяните о своей роли и о том, что вы сделали. Каковы были ваши главные достижения? Опишите свою мотивацию и перечислите свои навыки."
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
+      
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}

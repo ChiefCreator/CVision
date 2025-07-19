@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef } from 'react';
-import { resumeKeys } from './queryKeys';
-import { resumeService } from '@/services/resumeService';
-import { resumeSubsectionService } from '@/services/resumeSubsectionService/resumeSubsectionService';
+import { generalSections, resumeKeys } from './queryKeys';
+import { resumeService } from '@/api/resume/resumeService';
+import { resumeSubsectionService } from '@/api/resumeSubsection/resumeSubsectionService';
 import { updateResumeFields } from '@/utils/resumeUtils';
 import debounce from 'lodash.debounce';
 
-import type { Resume, CreateResume, ResumeFieldUpdates, ChangeResumeField, ResumeSectionName, ResumeListSectionName } from '@/types/resumeTypes';
+import type { ResumeListSectionName } from '@/types/sectionTypes/sectionName';
+import type { ChangeResumeField } from '@/types/resumeTypes/resumeUpdateFunctions';
+import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resumeTypes/resume';
 
 export const useResumesQuery = () => {
   return useQuery({
@@ -111,68 +113,13 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
   };
 }
 
-export const useAddSubsection = (resumeId: Resume["id"], sectionId: string, sectionName: ResumeListSectionName, subsectionName: string) => {
-  const queryClient = useQueryClient();
-  const queryKey = resumeKeys.detail(resumeId);
-
-  return useMutation({
-    mutationFn: ({ subsectionId, dto } : { subsectionId: string; dto?: any }) => resumeSubsectionService.create({ resumeId, subsectionId, subsectionName, sectionId, dto }),
-    onMutate: async ({ subsectionId, dto = {} }) => {
-      await queryClient.cancelQueries({ queryKey });
-
-      const previousResume = queryClient.getQueryData(queryKey) as Resume;
-      const newResume = structuredClone(previousResume);
-
-      (newResume[sectionName] as any)?.data?.push({ ...dto, id: subsectionId });
-
-      queryClient.setQueryData(queryKey, newResume);
-
-      return { previousResume };
-    },
-    onError: (_err, _newData, context) => {
-      const previousResume = context?.previousResume;
-
-      if (previousResume) {
-        queryClient.setQueryData(queryKey, previousResume);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey });
-    }
-  });
-}
-export const useDeleteSubsection = (resumeId: Resume["id"], sectionId: string, sectionName: ResumeListSectionName, subsectionName: string) => {
-  const queryClient = useQueryClient();
-  const queryKey = resumeKeys.detail(resumeId);
-
-
-  return useMutation({
-    mutationFn: (subsectionId: string) => resumeSubsectionService.delete({ resumeId, subsectionId, subsectionName, sectionId }),
-    onMutate: async (subsectionId) => {
-      await queryClient.cancelQueries({ queryKey });
-
-      const previousResume = queryClient.getQueryData(queryKey) as Resume;
-      const newResume = structuredClone(previousResume);
-
-      (newResume[sectionName] as any).data = (newResume[sectionName] as any).data.filter((subsection: any) => subsection.id !== subsectionId);
-
-      queryClient.setQueryData(queryKey, newResume);
-
-      return { previousResume };
-    },
-    onError: (_err, _newData, context) => {
-      const previousResume = context?.previousResume;
-
-      if (previousResume) {
-        queryClient.setQueryData(queryKey, previousResume);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey });
-    }
-  });
-}
-
 export const useFieldChange = (onChange: ChangeResumeField, path: string) => {
   return useCallback((val: any) => onChange(path, val), [onChange, path]);
 }
+
+export const useGeneralSectionsQuery = () => {
+  return useQuery({
+    queryKey: generalSections.list(),
+    queryFn: () => resumeService.getGeneralSections(),
+  });
+};

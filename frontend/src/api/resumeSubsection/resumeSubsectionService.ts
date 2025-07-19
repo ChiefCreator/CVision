@@ -5,16 +5,16 @@ import { CreateOne, DeleteOne } from './serviceTypes';
 class ResumeSubsectionService {
   constructor() {}
 
-  private readonly BASE_URL_SEGMENT = (resumeId: string, sectionId: string) => `resumes/${resumeId}/sections/${sectionId}/subsections`;
+  private readonly BASE_URL_SEGMENT = (resumeId: string, sectionId: string) => `/resumes/${resumeId}/sections/${sectionId}/subsections`;
   private readonly api = apiClassic;
 
   async create({ resumeId, sectionId, subsectionId, subsectionName, dto }: CreateOne) {
-    const res = await this.api.post<any>(`/${this.BASE_URL_SEGMENT(resumeId, sectionId)}`, { subsectionId, subsectionName, dto });
+    const res = await this.api.post<any>(this.BASE_URL_SEGMENT(resumeId, sectionId), { subsectionId, subsectionName, dto });
 
     return res.data;
   }
   async delete({ resumeId, sectionId, subsectionId, subsectionName }: DeleteOne) {
-    const res = await this.api.post<any>(`/${this.BASE_URL_SEGMENT(resumeId, sectionId)}/${subsectionId}`, { subsectionName });
+    const res = await this.api.post<any>(`${this.BASE_URL_SEGMENT(resumeId, sectionId)}/${subsectionId}`, { subsectionName });
 
     return res.data;
   }

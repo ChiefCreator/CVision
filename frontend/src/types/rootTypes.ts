@@ -1,14 +1,14 @@
+import { GeneralSection } from "./sectionTypes/generalSection";
+
 export interface BaseEntityFields {
   id: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface BaseSectionResume {
+export interface BaseSectionResume extends Omit<GeneralSection, "id" | "type"> {
   id: string;
-  title: string;
-  defaultTitle: string;
-
+  title?: string;
   order: number;
 }
 

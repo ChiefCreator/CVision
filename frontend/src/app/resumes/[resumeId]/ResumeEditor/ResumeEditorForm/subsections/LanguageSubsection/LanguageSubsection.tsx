@@ -11,10 +11,12 @@ import FormField from "@/components/form/FormField/FormField";
 
 import { languages } from "@/constants/languages";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Language } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Language } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./LanguageSubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
+
 interface LanguageSubsectionProps extends Language, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;
 }

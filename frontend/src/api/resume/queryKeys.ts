@@ -4,6 +4,12 @@ export const resumeKeys = {
   detail: (id: string) => [...resumeKeys.all, "detail", id] as const,
 };
 
+export const generalSections = {
+  all: ["generalSections"] as const,
+  list: () => [...generalSections.all, "list"] as const,
+  detail: (id: string) => [...generalSections.all, "detail", id] as const,
+};
+
 export const resumeSubsectionKeys = {
   all: ["subsections"] as const,
   list: (sectionId: string) => [...resumeSubsectionKeys.all, "list", sectionId] as const,

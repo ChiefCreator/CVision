@@ -5,11 +5,12 @@ import Section from "../../Section/Section";
 import SkillSubsection from "../../subsections/SkillSubsection/SkillSubsection";
 import Toggle from "@/components/button/Toggle/Toggle";
 
-import { type ResumeSectionChangeObj, type SkillSection, SkillLevel } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import { type SkillSection, SkillLevel } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 interface SkillsProps {
-  sectionData?: SkillSection;
+  sectionData: SkillSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -35,13 +36,13 @@ export default React.memo(function Skills({ sectionData, isOpen, onToggle, onCha
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
-      description="Выберите 5 важных навыков, которые показывают, что вы подходите на эту должность. Убедитесь, что они соответствуют ключевым навыкам, указанным в списке вакансий (особенно при подаче заявления через онлайн-систему)."
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
       additionalContent={additionalContent}
       addSubsectionDto={{ level: SkillLevel.Expert }}
 
@@ -49,12 +50,12 @@ export default React.memo(function Skills({ sectionData, isOpen, onToggle, onCha
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sectionData.data.map(subsection => (
         <SkillSubsection
           {...subsection}
           key={subsection.id}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
           isShowLevel={sectionData?.isShowLevel}
   

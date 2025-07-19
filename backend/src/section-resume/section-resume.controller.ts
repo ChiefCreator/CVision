@@ -8,8 +8,8 @@ export class SectionResumeController {
   constructor(private readonly sectionResumeService: SectionResumeService) {}
 
   @Post()
-  async createOne(@Param("resumeId") resumeId: string, @Body("sectionName", SectionNameValidationPipe) sectionName: ResumeSectionNames) {
-    return this.sectionResumeService.createOne({ sectionName, resumeId });
+  async createOne(@Param("resumeId") resumeId: string, @Body("sectionName", SectionNameValidationPipe) sectionName: ResumeSectionNames, @Body("sectionId") sectionId?: string, @Body("dto") dto?: any) {
+    return this.sectionResumeService.createOne({ resumeId, sectionName, sectionId, updates: dto });
   }
   @Post("default-ones")
   async createDefaultOnes(@Param("resumeId") resumeId: string) {

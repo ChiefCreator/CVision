@@ -6,13 +6,14 @@ import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 
-import type { PersonalDetails, ResumeSectionChangeObj } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { PersonalDetails } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 import styles from "./PersonalDetails.module.scss";
 
 interface PersonalDetailsProps {
-  sectionData?: PersonalDetails;
+  sectionData: PersonalDetails;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (id: string) => void;
@@ -22,7 +23,7 @@ interface PersonalDetailsProps {
 const sectionName = "personalDetails";
 
 export default React.memo(function PersonalDetails({ sectionData, isOpen, onToggle, onChange }: PersonalDetailsProps) {
-  const changeObj: ResumeSectionChangeObj<PersonalDetails> = {
+  const changeObj: ResumeSectionChangeObj<PersonalDetails, "description"> = {
     title: useFieldChange(onChange, `${sectionName}.title`),
     avatarUrl: useFieldChange(onChange, `${sectionName}.avatarUrl`),
     jobTitle: useFieldChange(onChange, `${sectionName}.jobTitle`),
@@ -41,10 +42,12 @@ export default React.memo(function PersonalDetails({ sectionData, isOpen, onTogg
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
+      
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}

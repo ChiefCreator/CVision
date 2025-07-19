@@ -11,10 +11,11 @@ import SliderSelectSkill from "@/components/select/SliderSelect/SliderSelectSkil
 
 import { skills } from "@/data/skills";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Skill } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Skill } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./SkillSubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
 import sliderStyles from "@/components/select/SliderSelect/SliderSelectSkill/SliderSelectSkill.module.scss";
 
 interface SkillSubsectionProps extends Skill, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {

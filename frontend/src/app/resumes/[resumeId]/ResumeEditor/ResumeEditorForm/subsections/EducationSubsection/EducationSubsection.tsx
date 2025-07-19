@@ -12,10 +12,11 @@ import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormF
 import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
 import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
 
-import type { ResumeSectionChangeObj, ChangeResumeField, Education } from "@/types/resumeTypes"
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { Education } from "@/types/sectionTypes/sections";
 import type { SubsectionProps } from "../../Subsection/Subsection";
 
-import styles from "./EducationSubsection.module.scss";
+import styles from "./../../Subsection/Subsection.module.scss";
 
 interface EducationSubsectionProps extends Education, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;

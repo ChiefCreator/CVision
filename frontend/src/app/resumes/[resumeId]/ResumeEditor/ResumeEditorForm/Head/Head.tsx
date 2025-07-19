@@ -15,7 +15,7 @@ export default function Head({ title, changeField }: HeadProps) {
         className={styles.headTitle}
         controlClassName={styles.headTitleControl}
         value={title}  
-        isControlsShow={true}
+        isControlsShow={"alwaysShow"}
 
         onChange={(val) => changeField("title", val)}
       />

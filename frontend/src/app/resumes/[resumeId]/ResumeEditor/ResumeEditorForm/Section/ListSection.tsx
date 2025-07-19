@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useSection } from "./hooks/useSection";
+import { useResumeId } from "../../context/ResumeIdContext";
+import { useDelete } from "./hooks/useDelete";
+import { useAddSubsection } from "@/api/resumeSubsection/hooks";
+
+import { v4 } from "uuid";
 
 import TitleEditor from "@/components/input/TitleEditor/TitleEditor";
 import AddSubsectionButton from "./AddSubsectionButton/AddSubsectionButton";
 import { ChevronDown } from "lucide-react";
 
+import { isDefaultResumeSection } from "@/utils/sectionNamesUtils";
+
+import type { ListSectionProps } from "./Section";
+import type { ResumeListSectionName } from "@/types/sectionTypes/sectionName";
+
 import styles from "./Section.module.scss";
 import clsx from "clsx";
-import { v4 } from "uuid";
-import { useAddSubsection } from "@/api/resume/hooks";
-import { ResumeListSectionName } from "@/types/resumeTypes";
-import { SubsectionSectionProps } from "./Section";
-import { useSection } from "./hooks/useSection";
-import { useResumeId } from "../../context/ResumeIdContext";
 
-export default function SubsectionSection({ className, id, sectionName, subsectionName, title, description, defaultTitle, children, additionalContent, addSubsectionDto = {}, checkIsOpen, onToggle, onChange }: SubsectionSectionProps) {
-  const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
+export default function ListSection({ className, id, sectionName, subsectionName, title, description, defaultTitle, children, additionalContent, addSubsectionDto = {}, checkIsOpen, onToggle, onChange }: ListSectionProps) {
   const resumeId = useResumeId();
+  const { isOpen, handleClickHead } = useSection(id!, checkIsOpen, onToggle);
+  const deleteControlObj = useDelete({ resumeId, sectionName , sectionId: id});
+
   const { mutate } = useAddSubsection(resumeId, id!, sectionName as ResumeListSectionName, subsectionName);
 
   const addSubsection = async () => {
@@ -25,6 +32,8 @@ export default function SubsectionSection({ className, id, sectionName, subsecti
     onToggle(id!, subsectionId);
   }
 
+  const controls = useMemo(() => [...deleteControlObj], [deleteControlObj]);
+
   return (
     <div className={clsx(styles.section, className)}>
       <header className={styles.head} onClick={handleClickHead}>
@@ -33,6 +42,7 @@ export default function SubsectionSection({ className, id, sectionName, subsecti
           controlClassName={styles.titleEditorControl}
           value={title}
           defaultValue={defaultTitle}
+          controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
   
           onChange={onChange}
         />

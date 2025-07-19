@@ -1,4 +1,4 @@
-import { LanguageLevel } from "@/types/resumeTypes";
+import { LanguageLevel } from "@/types/sectionTypes/sections";
 
 interface Language {
   value: LanguageLevel;

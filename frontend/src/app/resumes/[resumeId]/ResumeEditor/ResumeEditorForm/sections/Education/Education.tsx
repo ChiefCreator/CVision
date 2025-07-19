@@ -4,11 +4,12 @@ import { useFieldChange } from "@/api/resume/hooks";
 import Section from "../../Section/Section";
 import EducationSubsection from "../../subsections/EducationSubsection/EducationSubsection";
 
-import type { ResumeSectionChangeObj, EducationSection } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { EducationSection } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 interface EducationProps {
-  sectionData?: EducationSection;
+  sectionData: EducationSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -25,24 +26,24 @@ export default React.memo(function Education({ sectionData, isOpen, onToggle, on
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
-      description="Разнообразное образование, указанное в вашем резюме, подытоживает ценность ваших знаний и опыта работы."
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sectionData.data.map(subsection => (
         <EducationSubsection
           key={subsection.id}
           {...subsection}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
   
           checkIsOpen={isOpen}

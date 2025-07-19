@@ -1,4 +1,8 @@
-import type { ResumeFieldUpdates, UpdateResume } from "@/types/resumeTypes";
+import type { Resume, ResumeFieldUpdates, UpdateResume } from "@/types/resumeTypes/resume";
+
+import { SECTION_NAMES } from "@/constants/sectionNames";
+import type { Section } from "@/types/sectionTypes/section";
+import { ResumeSectionName } from "@/types/sectionTypes/sectionName";
 
 export function updateResumeField<T extends UpdateResume>(resume: T, path: string, value: any): T {
   const keys = path.replace(/\[(["']?)([^\]"']+)\1\]/g, '.[$2]').split('.');
@@ -66,4 +70,13 @@ export function updateResumeFields<T extends UpdateResume>(resume: T, updates: R
     result = updateResumeField(result, path, value);
   }
   return result;
+}
+
+export function transformResumeToSectionList(resume: Resume) {
+  return SECTION_NAMES.reduce((acc, sectionName) => {
+    return [...acc, { section: resume[sectionName], sectionName }];
+  }, [] as { section: Section; sectionName: ResumeSectionName }[]);
+}
+export function getAvailableSections(resume: Resume) {
+  return SECTION_NAMES.filter(sectionName => !!resume[sectionName]);
 }

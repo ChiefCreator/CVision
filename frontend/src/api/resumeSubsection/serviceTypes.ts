@@ -1,4 +1,4 @@
-import { CreateResume } from "@/types/resumeTypes";
+import { CreateResume } from "@/types/resumeTypes/resume";
 
 export interface CreateOne {
   resumeId: string;

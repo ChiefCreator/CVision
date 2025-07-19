@@ -4,11 +4,12 @@ import { useFieldChange } from "@/api/resume/hooks";
 import Section from "../../Section/Section";
 import ReferenceSubsection from "../../subsections/ReferenceSubsection/ReferenceSubsection";
 
-import type { ResumeSectionChangeObj, ReferenceSection } from "@/types/resumeTypes"
-import type { ChangeResumeField } from "@/types/resumeTypes";
+import type { ReferenceSection } from "@/types/sectionTypes/sections";
+import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
+import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 
 interface ReferencesProps {
-  sectionData?: ReferenceSection;
+  sectionData: ReferenceSection;
   isOpen: (sectionId: string, subsectionId?: string) => boolean;
 
   onToggle: (sectionId: string, subsectionId?: string, open?: boolean) => void;
@@ -25,12 +26,13 @@ export default React.memo(function References({ sectionData, isOpen, onToggle, o
 
   return (
     <Section
-      id={sectionData?.id}
+      id={sectionData.id}
       sectionName={sectionName}
       subsectionName={subsectionName}
-      type="subsection"
-      title={sectionData?.title}
-      defaultTitle={sectionData?.defaultTitle}
+      type="list"
+      title={sectionData.title}
+      defaultTitle={sectionData.defaultTitle}
+      description={sectionData.description}
 
       checkIsOpen={isOpen}
       onToggle={onToggle}
@@ -41,7 +43,7 @@ export default React.memo(function References({ sectionData, isOpen, onToggle, o
           key={subsection.id}
           {...subsection}
           subsectionName={subsectionName}
-          sectionId={sectionData?.id}
+          sectionId={sectionData.id}
           sectionName={sectionName}
   
           checkIsOpen={isOpen}

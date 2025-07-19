@@ -7,6 +7,11 @@ import { ResumeFieldUpdates } from './dto/update-resume.dto';
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
 
+  @Get("general-sections")
+  findGeneralSections() {
+    return this.resumeService.findGeneralSections({});
+  }
+
   @Get()
   findAll() {
     return this.resumeService.findAll();

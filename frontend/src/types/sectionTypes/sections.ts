@@ -1,26 +1,4 @@
-import type { BaseEntityFields, BaseSectionResume, BaseSubsectionResume } from "./rootTypes";
-
-export interface Resume extends BaseEntityFields {
-  title?: string;
-
-  personalDetails?: PersonalDetails;
-  professionalSummary?: ProfessionalSummary;
-  employmentHistory?: EmploymentHistorySection;
-  education?: EducationSection;
-  skills?: SkillSection;
-  languages?: LanguageSection;
-  links?: LinkSection;
-  courses?: CourseSection;
-  internships?: InternshipSection;
-  hobbies?: Hobbies;
-  extraCurricularActivities?: ExtraCurricularActivitySection;
-  references?: ReferenceSection;
-  customSections?: CustomSection;
-}
-
-export type CreateResume = Resume["title"];
-export type UpdateResume = Partial<Omit<Resume, keyof BaseEntityFields>>;
-export type ResumeFieldUpdates = Record<string, UpdateResume>;
+import type { BaseSectionResume, BaseSubsectionResume } from "@/types/rootTypes";
 
 export interface PersonalDetails extends BaseSectionResume {
   avatarUrl?: string;
@@ -113,12 +91,10 @@ export interface CourseSection extends BaseSectionResume {
   data: Course[];
 }
 export interface Course extends BaseSubsectionResume {
-  jobTitle?: string;
-  employer?: string;
+  title?: string;
+  institution?: string;
   startDate?: string;
   endDate?: string;
-  city?: string;
-  description?: string;
 }
 
 export interface InternshipSection extends BaseSectionResume {
@@ -134,7 +110,7 @@ export interface Internship extends BaseSubsectionResume {
 }
 
 export interface Hobbies extends BaseSectionResume {
-  description?: string;
+  hobbyDescription?: string;
 }
 
 export interface ExtraCurricularActivitySection extends BaseSectionResume {
@@ -169,15 +145,3 @@ export interface CustomData extends BaseSubsectionResume {
   endDate?: string;
   description?: string;
 }
-
-export type ResumeSectionName = keyof Omit<Resume, keyof BaseEntityFields | "title">;
-export type ResumeSingleSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "hobbies">;
-export type ResumeListSectionName = Exclude<ResumeSectionName, ResumeSingleSectionName>;
-export type ResumeDefaultSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "employmentHistory" | "education" | "links" | "skills">;
-export type ResumeReorderedSectionNames = Exclude<ResumeSectionName, "personalDetails" | "professionalSummary">;
-
-export type ChangeResumeField = (path: string, value: any) => void;
-
-export type ResumeSectionChangeObj<T, P extends keyof T = never> = {
-  [key in keyof Required<Omit<T, "id" | "defaultTitle" | "order" | (P extends never ? never : P)>>]: (val: any) => void
-};

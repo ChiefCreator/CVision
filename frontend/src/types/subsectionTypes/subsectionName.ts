@@ -1,0 +1,1 @@
+export type ResumeSubsectionName = "employmentHistorySubsection" | "educationSubsection" | "linkSubsection" | "skillSubsection" | "languageSubsection" | "courseSubsection" | "internshipSubsection" | "hobbySubsection" | "extraCurricularActivitySubsection" | "referenceSubsection" | "customSubsection";
