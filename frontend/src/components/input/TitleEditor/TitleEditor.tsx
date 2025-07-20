@@ -57,12 +57,17 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
     if (isControlsShow === "alwaysShow") return true;
     if (isControlsShow === "neverShow") return false;
   }
-  const setContentWrapperWidth = () => {
+  const setContentWrapperWidth = (isFullWidth: boolean) => {
     const controls = controlsRef.current;
     const contentWrapper = contentWrapperRef.current;
     const container = containerRef.current;
 
     if (!controls || !contentWrapper || !container) return;
+
+    if (isFullWidth) {
+      contentWrapper.style.maxWidth = `100%`;
+      return;
+    }
 
     const containerGap = parseFloat(getComputedStyle(container).gap);
     const controlsWidth = controls.offsetWidth;
@@ -92,19 +97,16 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
   const handleMouseenter = () => setIsHovered(true);
   const handleMouseleave = () => setIsHovered(false);
 
-  useLayoutEffect(() => {
-    setContentWrapperWidth();
-  }, [value]);
   useEffect(() => {
     changeIsControlsShow(isHovered || isFocused);
-  }, [isHovered, isFocused]);
-  useEffect(() => {
-    const handleResize = () => setContentWrapperWidth();
+    setContentWrapperWidth(!(isHovered || isFocused));
+
+    const handleResize = () => setContentWrapperWidth(!(isHovered || isFocused));
 
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isHovered, isFocused]);
 
   useAnimateInputLine({ isFocused, isHovered, lineRef });
 
@@ -129,10 +131,10 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
               onBlur={handleBlur}
             ></input>
   
-            <div className={clsx(styles.editorHiddenContent, "invisible")}>{value || defaultValue}</div>
+            <div className={clsx(styles.editorHiddenContent, "invisible")} aria-hidden="true">{value || defaultValue}</div>
+
+            <InputLine className={styles.inputLine} ref={lineRef} />
           </div>
-  
-          <InputLine className={styles.inputLine} ref={lineRef} />
         </div>
   
         {isShowControls() && (
