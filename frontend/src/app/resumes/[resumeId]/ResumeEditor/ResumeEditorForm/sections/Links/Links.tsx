@@ -7,6 +7,7 @@ import Section from "../../Section/Section";
 import type { LinkSection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface LinksProps {
   sectionData: LinkSection;
@@ -38,7 +39,7 @@ export default React.memo(function Links({ sectionData, isOpen, onToggle, onChan
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <LinkSubsection
           key={subsection.id}
           {...subsection}

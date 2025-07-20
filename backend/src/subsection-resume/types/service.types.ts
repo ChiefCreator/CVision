@@ -24,3 +24,11 @@ export interface UpsertOne extends BaseMethod {
   subsectionId: string;
   updates: any;
 }
+
+export interface GetCount extends BaseMethod {
+  sectionId: string;
+}
+export interface ReorderOnesAfterDelete extends BaseMethod {
+  sectionId: string;
+  deletedOrder: number;
+}

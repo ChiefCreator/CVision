@@ -7,6 +7,7 @@ import ReferenceSubsection from "../../subsections/ReferenceSubsection/Reference
 import type { ReferenceSection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface ReferencesProps {
   sectionData: ReferenceSection;
@@ -38,7 +39,7 @@ export default React.memo(function References({ sectionData, isOpen, onToggle, o
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData?.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <ReferenceSubsection
           key={subsection.id}
           {...subsection}

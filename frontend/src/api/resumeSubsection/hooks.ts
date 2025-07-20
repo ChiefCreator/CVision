@@ -2,36 +2,43 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { resumeKeys } from './../resume/queryKeys';
 import { resumeSubsectionService } from '@/api/resumeSubsection/resumeSubsectionService';
 
+import { CUSTOM_SECTIONS_NAME } from '@/constants/sectionNames';
+
 import type { ResumeListSectionName } from '@/types/sectionTypes/sectionName';
 import type { Resume } from '@/types/resumeTypes/resume';
-
+import { isListResumeSection } from '@/utils/sectionNamesUtils';
 
 export const useAddSubsection = (resumeId: Resume["id"], sectionId: string, sectionName: ResumeListSectionName, subsectionName: string) => {
   const queryClient = useQueryClient();
   const queryKey = resumeKeys.detail(resumeId);
 
   return useMutation({
-    mutationFn: ({ subsectionId, dto } : { subsectionId: string; dto?: any }) => resumeSubsectionService.create({ resumeId, subsectionId, subsectionName, sectionId, dto }),
+    mutationFn: ({ subsectionId, dto } : { subsectionId: string; dto?: any }) => resumeSubsectionService.create({ resumeId, subsectionId, subsectionName, sectionName, sectionId, dto }),
     onMutate: async ({ subsectionId, dto = {} }) => {
       await queryClient.cancelQueries({ queryKey });
 
       const previousResume = queryClient.getQueryData(queryKey) as Resume;
       const newResume = structuredClone(previousResume);
 
-      if (sectionName === "customSections") {
+      const subsection = {
+        ...dto,
+        id: subsectionId
+      }
+
+      if (sectionName === CUSTOM_SECTIONS_NAME) {
         const updatedCustomSections = newResume.customSections?.map(section => {
           if (section.data.some(sub => sub.id === subsectionId)) {
             return {
               ...section,
-              data: [section.data, { ...dto, id: subsectionId }]
+              data: [section.data, subsection]
             };
           }
           return section;
         });
 
-        newResume.customSections= updatedCustomSections;
-      } else {
-        (newResume[sectionName] as any)?.data?.push({ ...dto, id: subsectionId });
+        newResume.customSections = updatedCustomSections;
+      } else if (isListResumeSection(sectionName)) {
+        newResume[sectionName]?.data.push(subsection);
       }
 
       queryClient.setQueryData(queryKey, newResume);

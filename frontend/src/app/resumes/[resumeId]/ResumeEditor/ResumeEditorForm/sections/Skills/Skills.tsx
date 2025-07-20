@@ -8,6 +8,7 @@ import Toggle from "@/components/button/Toggle/Toggle";
 import { type SkillSection, SkillLevel } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface SkillsProps {
   sectionData: SkillSection;
@@ -50,7 +51,7 @@ export default React.memo(function Skills({ sectionData, isOpen, onToggle, onCha
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <SkillSubsection
           {...subsection}
           key={subsection.id}

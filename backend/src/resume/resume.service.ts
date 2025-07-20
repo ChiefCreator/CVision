@@ -13,6 +13,7 @@ import type { ResumeSectionNames } from '../section-resume/types/section-names.t
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates, UpdateResumeDto } from './dto/update-resume.dto';
 import { findGeneralSectionByType, FindGeneralSections } from './types/service.types';
+import { isResumeCustomSection } from 'src/section-resume/utils/section-names.utils';
 
 @Injectable()
 export class ResumeService {
@@ -99,7 +100,19 @@ export class ResumeService {
       }
 
       await Promise.all(Object.entries(sections).map(([sectionName, updates]) => (
-        this.sectionResumeService.upsertOne({ sectionName: sectionName as ResumeSectionNames, resumeId, updates, prisma: tx })
+        !isResumeCustomSection(sectionName) ?
+          this.sectionResumeService.upsertOne({
+            sectionName: sectionName as ResumeSectionNames,
+            sectionId: updates?.id ?? undefined,
+            resumeId,
+            updates,
+            prisma: tx
+          }) :
+          this.sectionResumeService.upsertCustomOnes({
+            resumeId,
+            updates,
+            prisma: tx
+          })
       )))
 
       return this.findOne(resumeId);

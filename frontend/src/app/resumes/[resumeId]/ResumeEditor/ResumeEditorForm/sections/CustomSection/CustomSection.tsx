@@ -3,6 +3,8 @@ import React from "react";
 import Section from "../../Section/Section";
 import CustomSubsection from "../../subsections/CustomSubsection/CustomSubsection";
 
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
+
 import type { CustomSection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 
@@ -32,7 +34,7 @@ export default React.memo(function CustomSection({ sectionData, isOpen, onToggle
       onToggle={onToggle}
       onChange={value => onChange(`${sectionName}[${sectionData.id}].title`, value)}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <CustomSubsection
           key={subsection.id}
           {...subsection}

@@ -33,7 +33,12 @@ export interface UpdateOne extends BaseMethod {
   updates: any;
 }
 export interface UpsertOne extends BaseMethod {
-//   sectionId: string;
+  sectionId?: string;
   resumeId: string;
   updates: any;
+}
+export interface UpsertCustomOnes {
+  resumeId: string;
+  updates: any;
+  prisma?: Prisma.TransactionClient;
 }

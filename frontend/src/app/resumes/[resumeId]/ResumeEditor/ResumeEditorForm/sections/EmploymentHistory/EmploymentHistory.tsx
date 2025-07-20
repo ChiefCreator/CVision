@@ -7,6 +7,7 @@ import EmploymentHistorySubsection from "../../subsections/EmploymentHistorySubs
 import type { EmploymentHistorySection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface EmploymentHistoryProps {
   sectionData: EmploymentHistorySection;
@@ -38,7 +39,7 @@ export default React.memo(function EmploymentHistory({ sectionData, isOpen, onTo
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <EmploymentHistorySubsection
           key={subsection.id}
           {...subsection}

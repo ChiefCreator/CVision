@@ -4,6 +4,8 @@ import { useFieldChange } from "@/api/resume/hooks";
 import Section from "../../Section/Section";
 import CourseSubsection from "../../subsections/CourseSubsection/CourseSubsection";
 
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
+
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { CourseSection } from "@/types/sectionTypes/sections";
@@ -38,7 +40,7 @@ export default React.memo(function Courses({ sectionData, isOpen, onToggle, onCh
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <CourseSubsection
           key={subsection.id}
           {...subsection}

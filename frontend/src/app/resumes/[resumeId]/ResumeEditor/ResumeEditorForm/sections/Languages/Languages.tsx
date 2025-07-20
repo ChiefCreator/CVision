@@ -7,6 +7,7 @@ import LanguageSubsection from "../../subsections/LanguageSubsection/LanguageSub
 import type { LanguageSection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface LanguagesProps {
   sectionData: LanguageSection;
@@ -38,7 +39,7 @@ export default React.memo(function Languages({ sectionData, isOpen, onToggle, on
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <LanguageSubsection
           key={subsection.id}
           {...subsection}

@@ -24,7 +24,7 @@ interface CustomSubsectionProps extends CustomData, Omit<SubsectionProps, "child
 export default React.memo(function CustomSubsection({ id, subsectionName, sectionId, sectionName, title, startDate, endDate, city, description, checkIsOpen, onToggle, onChange }: CustomSubsectionProps) {
   const { isFirstInputFocused, setIsFirstInputFocused, changeOnClick } = useChange({ id, sectionId, onToggle });
     
-  const rootPath = `${sectionName}.data[${id}]`;
+  const rootPath = `${sectionName}[${sectionId}].data[${id}]`;
   const changeObj: ResumeSectionChangeObj<CustomData> = {
     title: useFieldChange(onChange, `${rootPath}.title`),
     startDate: useFieldChange(onChange, `${rootPath}.startDate`),

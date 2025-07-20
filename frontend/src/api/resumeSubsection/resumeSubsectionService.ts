@@ -8,8 +8,8 @@ class ResumeSubsectionService {
   private readonly BASE_URL_SEGMENT = (resumeId: string, sectionId: string) => `/resumes/${resumeId}/sections/${sectionId}/subsections`;
   private readonly api = apiClassic;
 
-  async create({ resumeId, sectionId, subsectionId, subsectionName, dto }: CreateOne) {
-    const res = await this.api.post<any>(this.BASE_URL_SEGMENT(resumeId, sectionId), { subsectionId, subsectionName, dto });
+  async create({ resumeId, sectionId, sectionName, subsectionId, subsectionName, dto }: CreateOne) {
+    const res = await this.api.post<any>(this.BASE_URL_SEGMENT(resumeId, sectionId), { subsectionId, subsectionName, sectionName, dto });
 
     return res.data;
   }

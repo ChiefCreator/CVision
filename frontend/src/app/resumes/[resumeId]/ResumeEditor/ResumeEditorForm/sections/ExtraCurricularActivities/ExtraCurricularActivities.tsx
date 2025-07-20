@@ -7,6 +7,7 @@ import ExtraCurricularActivitySubsection from "../../subsections/ExtraCurricular
 import type { ExtraCurricularActivitySection } from "@/types/sectionTypes/sections";
 import type { ChangeResumeField } from "@/types/resumeTypes/resumeUpdateFunctions";
 import type { ResumeSectionChangeObj } from "@/types/resumeTypes/resumeUpdateFunctions";
+import { sortByOrder } from "@/utils/subsectionUtils/sortByOrder";
 
 interface ExtraCurricularActivitiesProps {
   sectionData: ExtraCurricularActivitySection;
@@ -38,7 +39,7 @@ export default React.memo(function ExtraCurricularActivities({ sectionData, isOp
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      {sectionData.data.map(subsection => (
+      {sortByOrder(sectionData.data).map(subsection => (
         <ExtraCurricularActivitySubsection
           key={subsection.id}
           {...subsection}

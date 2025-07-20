@@ -6,9 +6,9 @@ import { SubsectionResumeService } from 'src/subsection-resume/subsection-resume
 
 import { SECTION_DEFAULT_NAMES, SECTION_REORDERED_NAMES, CUSTOM_SECTIONS_NAME } from './constants/section-names';
 import { SECTION_MODEL_MAP } from './constants/section-model-map';
-import { isReorderedResumeSection, isSingleResumeSection } from './utils/section-names.utils';
+import { isReorderedResumeSection, isResumeCustomSection, isSingleResumeSection } from './utils/section-names.utils';
 
-import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertOne } from './types/service.types';
+import type { CreateDefaultOnes, CreateOne, DeleteOne, FindOneById, FindOneByName, UpdateOne, UpsertCustomOnes, UpsertOne } from './types/service.types';
 import { ResumeService } from 'src/resume/resume.service';
 
 @Injectable()
@@ -122,12 +122,28 @@ export class SectionResumeService {
       data: subsections,
     }
   }
-  async upsertOne({ sectionName, resumeId, updates, prisma = this.prisma }: UpsertOne) {
-    const existingSection = await (prisma[sectionName] as any).findUnique({ where: { resumeId }});
+  async upsertOne({ sectionName, sectionId, resumeId, updates, prisma = this.prisma }: UpsertOne) {
+    let existingSection: any = {};
+    if (isResumeCustomSection(sectionName)) {
+      existingSection = await (prisma[sectionName] as any).findUnique({ where: { id: sectionId }});
+    } else {
+      existingSection = await (prisma[sectionName] as any).findUnique({ where: { resumeId }});
+    }
 
     return existingSection
       ? this.updateOne({ sectionName, sectionId: existingSection.id, updates, prisma })
       : this.createOne({ sectionName, resumeId, updates, prisma });
+  }
+  async upsertCustomOnes({ resumeId, updates, prisma = this.prisma }: UpsertCustomOnes) {
+    return Promise.all(updates.map((update: any) => (
+      this.upsertOne({ 
+        resumeId,
+        sectionName: "customSections",
+        sectionId: update.id,
+        updates: update,
+        prisma
+      })
+    )))
   }
 
   private async getSectionCount(resumeId: string, tx: Prisma.TransactionClient) {
