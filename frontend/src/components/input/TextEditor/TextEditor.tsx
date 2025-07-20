@@ -45,14 +45,29 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
   const toggleCrossedOut = () => executeCommand("strikeThrough");
   const toggleOrderedList = () => executeCommand("insertOrderedList");
   const toggleUnorderedList = () => executeCommand("insertUnorderedList");
+
   const updateButtonStates = () => {
-    setIsBold(document.queryCommandState("bold"));
-    setIsItalic(document.queryCommandState("italic"));
-    setIsUnderlined(document.queryCommandState("underline"));
-    setIsCrossedOut(document.queryCommandState("strikeThrough"));
-    setIsOrderedList(document.queryCommandState("insertOrderedList"));
-    setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
-  }
+    const selection = document.getSelection();
+    const anchorNode = selection?.anchorNode ?? null;
+  
+    const isInsideEditor = contentRef.current?.contains(anchorNode);
+  
+    if (!isInsideEditor) {
+      setIsBold(false);
+      setIsItalic(false);
+      setIsUnderlined(false);
+      setIsCrossedOut(false);
+      setIsOrderedList(false);
+      setIsUnorderedList(false);
+    } else {
+      setIsBold(document.queryCommandState("bold"));
+      setIsItalic(document.queryCommandState("italic"));
+      setIsUnderlined(document.queryCommandState("underline"));
+      setIsCrossedOut(document.queryCommandState("strikeThrough"));
+      setIsOrderedList(document.queryCommandState("insertOrderedList"));
+      setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
+    }
+  };
   const checkIsContentEmpty = () => {
     return content === "" || content === "<br>" || !content;
   }
@@ -78,7 +93,7 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
     return () => document.removeEventListener("selectionchange", updateButtonStates);
   }, []);
   useEffect(() => {
-    checkIsContentEmpty() ? setIsPlaceholderActive(true) : setIsPlaceholderActive(false);
+    setIsPlaceholderActive(checkIsContentEmpty())
   }, [content]);
 
   const editableButtonsData = useMemo(() => {
@@ -134,7 +149,7 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
                 key={id}
                 Icon={Icon}
                 iconClassName={styles.controlIcon}
-                className={clsx(styles.control, { [styles.controlActive]: isActive })}
+                className={clsx(styles.control, isActive && styles.controlActive)}
                 onClick={onClick}
               />
             ))}
@@ -148,7 +163,7 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
                 key={id}
                 Icon={Icon}
                 iconClassName={styles.controlIcon}
-                className={clsx(styles.control, { [styles.controlActive]: isActive })}
+                className={clsx(styles.control, isActive && styles.controlActive)}
                 onClick={onClick}
               />
             ))}
