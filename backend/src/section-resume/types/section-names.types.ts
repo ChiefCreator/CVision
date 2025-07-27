@@ -1,6 +1,6 @@
 import { UpdateResumeDto } from "../../resume/dto/update-resume.dto";
 
-export type ResumeSectionNames = keyof Omit<UpdateResumeDto, "title">;
+export type ResumeSectionNames = keyof Omit<UpdateResumeDto, "title" | "template">;
 
 export type SingleResumeSectionNames = Extract<ResumeSectionNames, "personalDetails" | "professionalSummary" | "hobbies">;
 export type ListResumeSectionNames = Exclude<ResumeSectionNames, SingleResumeSectionNames>;

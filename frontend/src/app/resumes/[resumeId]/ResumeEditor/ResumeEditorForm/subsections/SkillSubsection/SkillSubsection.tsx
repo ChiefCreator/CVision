@@ -64,13 +64,13 @@ export default React.memo(function SkillSubsection({ id, subsectionName, section
             label="Уровень"
             themeClassName={sliderStyles.sliderTheme}
             selectedValue={level}
-            isDisabled={isShowLevel}
+            isDisabled={!isShowLevel}
             selectedLabel={levelLabel}
           >
             <SliderSelectSkill
               selectedValue={level}
               data={skills}
-              isDisabled={isShowLevel}
+              isDisabled={!isShowLevel}
               onSelect={changeObj.level}
             />
           </FormFieldSliderSelect>

@@ -1,0 +1,24 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__head {
+    
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__foot {
+    margin-top: auto;
+  }
+}
+
+.document {
+  flex: 0 1 450px;
+}

@@ -1,6 +1,5 @@
 .editor {
   display: flex;
-  height: 100%;
   background-color: var(--color-neutral-primary--dark);
 
   &__form {
@@ -11,9 +10,7 @@
   &__preview {
     position: sticky;
     top: 0;
-    flex: 1 1 auto;
-    max-width: 50%;
     height: 100vh;
-    padding: 20px;
+    flex: 1 1 auto;
   }
 }

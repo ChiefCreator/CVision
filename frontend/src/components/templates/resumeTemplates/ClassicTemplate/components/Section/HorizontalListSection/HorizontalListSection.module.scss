@@ -1,0 +1,15 @@
+.section {
+  display: flex;
+  gap: 30px;
+}
+
+.title {
+  flex: 1 1 var(--column-1);
+  max-width: var(--column-1);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.content {
+  flex: 1 1 var(--column-2);
+}

@@ -30,7 +30,7 @@ export default React.memo(function Skills({ sectionData, isOpen, onToggle, onCha
   const additionalContent = (
     <Toggle
       isActive={sectionData?.isShowLevel}
-      label="Не показывать уровень навыков"
+      label={["Показать уровень навыков", "Скрыть уровнь навыков"]}
       onChange={changeObj.isShowLevel}
     />
   );

@@ -1,7 +1,7 @@
 import { Resume } from "../resumeTypes/resume";
 import { BaseEntityFields } from "../rootTypes";
 
-export type ResumeSectionName = keyof Omit<Resume, keyof BaseEntityFields | "title">;
+export type ResumeSectionName = keyof Omit<Resume, keyof BaseEntityFields | "title" | "template">;
 export type ResumeSingleSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "hobbies">;
 export type ResumeListSectionName = Exclude<ResumeSectionName, ResumeSingleSectionName>;
 export type ResumeDefaultSectionName = Extract<ResumeSectionName, "personalDetails" | "professionalSummary" | "employmentHistory" | "education" | "links" | "skills">;

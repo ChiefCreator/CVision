@@ -1,0 +1,37 @@
+.template {
+  --color-primary: black;
+  --color-contrast: black;
+  --color-contrast--light: rgb(69, 69, 69);
+
+  --font-primary: var(--font-title);
+
+  --font-size: 12px;
+  --font-size-title: 22px;
+  --line-height: 130%;
+
+  --column-1: 30%;
+  --column-2: 70%;
+
+  font-family: var(--font-primary);
+  font-size: var(--font-size);
+  color: var(--color-contrast);
+  line-height: var(--line-height);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+.title {
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: var(--font-size-title);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+.addressAndContact {
+  text-align: center;
+}
+
+.link {
+  text-decoration: underline;
+}

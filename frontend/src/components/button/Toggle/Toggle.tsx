@@ -3,12 +3,15 @@ import styles from "./Toggle.module.scss";
 
 export interface ToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
   isActive?: boolean;
-  label?: string;
+  label?: string | [string, string];
 
   onChange?: (isActive: boolean) => void;
 }
 
 export default function Toggle({ isActive = true, label, onChange }: ToggleProps) {
+  const isLabelString = typeof label === "string";
+  const isLabelTyple = Array.isArray(label);
+
   const handleClick = () => {
     onChange?.(!isActive);
   }
@@ -19,7 +22,8 @@ export default function Toggle({ isActive = true, label, onChange }: ToggleProps
         <span className={clsx(styles.circle, isActive && styles.circleActive)}></span>
       </button>
 
-      {label && <label className={styles.label} htmlFor="button">{label}</label>}
+      {isLabelString && <label className={styles.label} htmlFor="button">{label}</label>}
+      {isLabelTyple && <label className={styles.label} htmlFor="button">{isActive ? label[1] : label[0]}</label>}
     </div>
   );
 }

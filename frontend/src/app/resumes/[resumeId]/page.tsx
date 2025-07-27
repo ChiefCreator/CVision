@@ -10,8 +10,6 @@ export default async function Page({ params }: PageProps) {
   const { resumeId } = await params;
   
   return (
-    <div className={styles.page}>
-      <ResumeEditor resumeId={resumeId} />
-    </div>
+    <ResumeEditor resumeId={resumeId} />
   );
 }

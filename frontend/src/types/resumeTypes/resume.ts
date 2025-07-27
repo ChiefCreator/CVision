@@ -1,8 +1,10 @@
 import type { BaseEntityFields } from "../rootTypes";
 import type { PersonalDetails, ProfessionalSummary, EmploymentHistorySection, EducationSection, SkillSection, LanguageSection, LinkSection, CourseSection, InternshipSection, Hobbies, ExtraCurricularActivitySection, ReferenceSection, CustomSection } from "../sectionTypes/sections";
+import type { ResumeTemplateName } from "./template";
 
 export interface Resume extends BaseEntityFields {
   title?: string;
+  template: ResumeTemplateName;
 
   personalDetails?: PersonalDetails;
   professionalSummary?: ProfessionalSummary;

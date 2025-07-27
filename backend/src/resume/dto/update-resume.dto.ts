@@ -231,6 +231,7 @@ export class CustomSectionDto {
 
 export class UpdateResumeDto {
   @IsOptional() @IsString() title?: string;
+  @IsOptional() @IsString() template?: string;
 
   @IsOptional() @ValidateNested() @Type(() => PersonalDetailsDto)
   personalDetails?: PersonalDetailsDto;
