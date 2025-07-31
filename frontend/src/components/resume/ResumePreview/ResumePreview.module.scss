@@ -1,0 +1,40 @@
+.preview {
+  padding: 20px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 450px;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__foot {
+    margin-top: auto;
+    display: flex;
+    position: relative;
+  }
+}
+
+.document {
+  width: 100%;
+}
+
+.buttons {
+  margin: 0 auto;
+}
+
+.loading-status {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}

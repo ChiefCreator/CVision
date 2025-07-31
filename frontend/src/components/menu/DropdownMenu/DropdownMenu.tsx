@@ -7,6 +7,7 @@ import clsx from "clsx";
 import styles from "./DropdownMenu.module.scss";
 
 interface DropdownMenuProps {
+  id?: string;
   ref?: React.RefObject<HTMLDivElement | null>;
   items: DropdownMenuItemType[];
   depth?: number;
@@ -26,11 +27,11 @@ export interface DropdownMenuItemType {
   onClick?: () => void;
 }
 
-export default function DropdownMenu({ ref, items, depth = 0, positionProps, onClose }: DropdownMenuProps) {
+export default function DropdownMenu({ id, ref, items, depth = 0, positionProps, onClose }: DropdownMenuProps) {
   return (
     <Portal>
       <Positioner {...positionProps}>
-        <div className={clsx(styles.menu, depth && styles.submenu)} ref={ref}>
+        <div className={clsx(styles.menu, depth && styles.submenu)} id={id} ref={ref} role="menu">
           <ul className={styles.list}>
             {items.map(item => (
               <li key={item.id}>

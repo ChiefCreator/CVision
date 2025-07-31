@@ -1,7 +1,7 @@
 import { apiClassic } from '@/api/api'
 
-import type { Resume, CreateResume, ResumeFieldUpdates } from "@/types/resumeTypes/resume";
-import type { GeneralSection } from '@/types/sectionTypes/generalSection';
+import type { Resume, CreateResume, ResumeFieldUpdates } from "@/types/resume/resume";
+import type { GeneralSection } from '@/types/resumeSection/generalSection';
 
 class ResumeService {
   constructor() {}

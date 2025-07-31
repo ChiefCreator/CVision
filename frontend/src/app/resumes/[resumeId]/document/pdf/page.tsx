@@ -1,5 +1,6 @@
 import { resumeService } from "@/api/resume/resumeService";
 import Document from "@/components/document/Document/Document";
+import { DocumentPageProvider } from "@/hooks/document/useDocumentPage";
 import { notFound } from "next/navigation";
 
 interface PrintPageProps {
@@ -12,12 +13,16 @@ export default async function PrintPage({ params }: PrintPageProps) {
 
   if (!resume) return notFound();
 
-  return <Document
-    type="print"
-    template={{
-      type: "resume",
-      data: resume,
-      template: "classic"
-    }}
-  />
+  return (
+    <DocumentPageProvider>
+      <Document
+        performance="print"
+        template={{
+          type: "resume",
+          data: resume,
+          template: "classic"
+        }}
+      />
+    </DocumentPageProvider>
+  );
 }

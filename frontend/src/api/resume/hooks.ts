@@ -1,14 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { generalSections, resumeKeys } from './queryKeys';
 import { resumeService } from '@/api/resume/resumeService';
-import { resumeSubsectionService } from '@/api/resumeSubsection/resumeSubsectionService';
-import { updateResumeFields } from '@/utils/resumeUtils';
+import { updateResumeFields } from '@/utils/resume/updateResumeFields';
 import debounce from 'lodash.debounce';
 
-import type { ResumeListSectionName } from '@/types/sectionTypes/sectionName';
-import type { ChangeResumeField } from '@/types/resumeTypes/resumeUpdateFunctions';
-import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resumeTypes/resume';
+import type { ChangeResumeField } from '@/types/resume/resumeUpdateFunctions';
+import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resume/resume';
 
 export const useResumesQuery = () => {
   return useQuery({
@@ -78,22 +76,42 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
   const updateQueue = useRef<ResumeFieldUpdates>({});
   const queryKey = useMemo(() => resumeKeys.detail(id), [id]);
 
-  const { data: resume, isLoading: isGetResumeLoading } = useResumeQuery(id);
-  const { mutate, isPending: isUpdateResumeLoading } = useUpdateResume(id);
+  const [isAllUpdating, setIsAllUpdating] = useState(false);
+  const [resumeDelayed, setResumeDelayed] = useState<Resume | undefined>(undefined);
+
+  const { data: resume, isLoading: isResumeLoading, isError: isResumeError } = useResumeQuery(id);
+  const { mutateAsync, isPending: isUpdateResumePending } = useUpdateResume(id);
+
+  const changeIsAllUpdating = useCallback((isUpdating: boolean) => {
+    setIsAllUpdating(isUpdating);
+  }, [setIsAllUpdating]);
 
   const debouncedSend = useRef(
-    debounce(() => {
+    debounce(async () => {
       const updates = { ...updateQueue.current };
 
       updateQueue.current = {};
 
       if (Object.keys(updates).length > 0) {
-        mutate(updates);
+        await mutateAsync(updates);
+
+        setIsAllUpdating(false);
       }
     }, timer)
   ).current;
 
+  useEffect(() => {
+    setResumeDelayed(resume);
+  }, [isResumeLoading])
+  useEffect(() => {
+    if (!isAllUpdating) {
+      setResumeDelayed(resume);
+    }
+  }, [isAllUpdating])
+
   const changeField: ChangeResumeField = useCallback((path, value) => {
+    setIsAllUpdating(true);
+
     updateQueue.current[path] = value;
 
     queryClient.setQueryData(queryKey, (previousResume: Resume | undefined) => {
@@ -107,9 +125,13 @@ export const useResumeAutoUpdate = (id: Resume["id"], timer: number = 800) => {
 
   return {
     resume,
+    resumeDelayed,
+    isResumeLoading,
+    isResumeError,
+    isUpdateResumePending,
+    isAllUpdating,
     changeField,
-    isGetResumeLoading,
-    isUpdateResumeLoading,
+    changeIsAllUpdating
   };
 }
 

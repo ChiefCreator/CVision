@@ -2,11 +2,7 @@ import TemplateRenderer from "../TemplateRenderer/TemplateRenderer";
 
 import type { PrintDocumentProps } from "./Document";
 
-export default function PrintDocument({ className, template, printRef }: PrintDocumentProps) {
+export default function PrintDocument({ template, performance }: PrintDocumentProps) {
 
-  return (
-    <div ref={printRef}>
-      <TemplateRenderer {...template} />
-    </div>
-  );
+  return <TemplateRenderer {...template} performance={performance} />
 }

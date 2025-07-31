@@ -1,0 +1,20 @@
+.loading-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.spinner {
+  --color: var(--color-neutral-contrast--lighten);
+  --diameter: 20px;
+}
+.icon {
+  color: var(--color-neutral-contrast--lighten);
+  width: 20px;
+  height: 20px;
+}
+
+.label {
+  font-size: 14px;
+  color: var(--color-neutral-contrast--lighten);
+}

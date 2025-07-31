@@ -1,19 +1,24 @@
 import React from "react";
 
-import type { Resume } from "@/types/resumeTypes/resume";
-import type { ResumeTemplateName } from "@/types/resumeTypes/template";
-import { CoverLetter } from "@/types/coverLetterTypes/coverLetter";
+import type { Resume } from "@/types/resume/resume";
+import type { ResumeTemplateName } from "@/types/resume/template";
+import { CoverLetter } from "@/types/coverLetter/coverLetter";
 import ResumeTemplateRenderer from "./ResumeTemplateRenderer";
 import CoverLetterTemplateRenderer from "./CoverLetterTemplateRenderer";
-import { CoverLetterTemplateName } from "@/types/coverLetterTypes/template";
+import { CoverLetterTemplateName } from "@/types/coverLetter/template";
+import { DocumentPerformance } from "@/types/document/document";
 
-export interface ResumeTemplateRendererProps {
+interface BaseTemplateRendererProps {
+  performance?: DocumentPerformance;
+}
+
+export interface ResumeTemplateRendererProps extends BaseTemplateRendererProps {
   type: "resume";
   template: ResumeTemplateName;
   data: Resume;
 }
 
-export interface CoverLetterTemplateRendererProps {
+export interface CoverLetterTemplateRendererProps extends BaseTemplateRendererProps {
   type: "coverLetter";
   template: CoverLetterTemplateName;
   data: CoverLetter;

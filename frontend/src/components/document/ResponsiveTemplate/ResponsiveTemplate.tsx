@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 
-import { DOCUMENT_SIZE } from "@/constants/documentSize";
+import { DOCUMENT_SIZE } from "@/constants/root/documentSize";
 
 import styles from "./ResponsiveTemplate.module.scss";
 

@@ -1,9 +1,12 @@
+import { ClassicTemplateSectionName } from "../../types/section";
 import ColumnListSection from "./ColumnListSection/ColumnListSection";
 import HorizontalListSection from "./HorizontalListSection/HorizontalListSection";
 
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent } from "@/types/root";
 
 interface BaseSectionProps extends BaseComponent {
+  id: string;
+  name: ClassicTemplateSectionName;
   title?: string;
   children: React.ReactNode;
 }

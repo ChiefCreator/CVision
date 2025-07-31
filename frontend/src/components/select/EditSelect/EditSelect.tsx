@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
+import { useClickOutside } from "@/hooks/root/useClickOutside";
 import { usePositionerHandleRef } from "@/components/position/Positioner/hooks/usePositionerHandleRef";
 
 import InputLine from "@/components/input/InputLine/InputLine";
@@ -127,7 +127,7 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
         </div>
 
         <InputLine className={styles.inputLine} ref={lineRef} />
-        <input className={styles.selectInput} value={selectedValue || ""} aria-hidden></input>
+        <input className={styles.selectInput} value={selectedValue || ""} aria-hidden readOnly></input>
       </button>
 
       <Portal>

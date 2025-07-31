@@ -1,4 +1,4 @@
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent } from "@/types/root";
 
 import styles from "./FormGroup.module.scss"
 import clsx from "clsx";

@@ -6,7 +6,7 @@ import type { FormFieldProps } from "../FormField";
 
 import styles from "./FormFieldSliderSelect.module.scss";
 import clsx from "clsx";
-import { SkillLevel } from "@/types/sectionTypes/sections";
+import { SkillLevel } from "@/types/skill/skillLevel";
 
 interface FormFieldSliderSelectProps extends FormFieldProps {
   selectedValue: SkillLevel

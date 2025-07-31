@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import type { TemplateRendererProps } from "../TemplateRenderer/TemplateRenderer";
 
@@ -9,19 +11,18 @@ interface BaseDocumentProps {
   template: TemplateRendererProps;
 }
 export interface PrintDocumentProps extends BaseDocumentProps {
-  type: "print";
-  printRef?: React.RefObject<HTMLDivElement | null>;
+  performance: "print";
 }
 export interface PreviewDocumentProps extends BaseDocumentProps {
-  type: "preview";
+  performance: "preview";
 }
 type DocumentProps = PreviewDocumentProps | PrintDocumentProps;
 
 export default React.memo(function Document(props: DocumentProps) {
-  const type = props.type;
+  const performance = props.performance;
 
   const getDocument = () => {
-    switch(type) {
+    switch(performance) {
       case "preview": 
         return <PreviewDocument {...props} />
       case "print":

@@ -9,9 +9,9 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
   isActive?: boolean;
 }
 
-export default function IconButton({ className, Icon, iconClassName, isActive, type = "button", onClick }: IconButtonProps) {
+export default function IconButton({ className, Icon, iconClassName, isActive, type = "button", disabled = false, onClick }: IconButtonProps) {
   return (
-    <button className={clsx(styles.button, className, { [styles.buttonActive]: isActive })} type={type} onClick={onClick}>
+    <button className={clsx(styles.button, className, { [styles.buttonActive]: isActive })} type={type} onClick={onClick} disabled={disabled}>
       {Icon && <Icon className={clsx(styles.icon, iconClassName)} />}
     </button>
   );

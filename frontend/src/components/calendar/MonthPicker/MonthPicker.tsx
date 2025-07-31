@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import { isValid, setMonth, setYear, getYear } from "date-fns";
-import { formatDate, parseFlexibleDate } from "@/utils/dateUtils";
+import { formatDate } from "@/utils/date/formatDate";
+import { parseFlexibleDate } from "@/utils/date/parseFlexibleDate";
 
 import Portal from "@/components/position/Portal/Portal";
 import Positioner, { type PositionerProps } from "@/components/position/Positioner/Positioner";

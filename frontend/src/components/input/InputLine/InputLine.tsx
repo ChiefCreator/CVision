@@ -1,4 +1,4 @@
-import { BaseComponent } from "@/types/rootTypes";
+import { BaseComponent } from "@/types/root";
 
 import styles from "./InputLine.module.scss";
 import clsx from "clsx";

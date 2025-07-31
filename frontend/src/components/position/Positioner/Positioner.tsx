@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import React, { useImperativeHandle, useLayoutEffect, useRef } from "react";
 
 import stylesPositioner from "./Positioner.module.scss";
 import { useCalculatePosition } from "./hooks/useRecalculatePosition";

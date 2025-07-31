@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { resumeKeys } from './../resume/queryKeys';
 import { resumeSubsectionService } from '@/api/resumeSubsection/resumeSubsectionService';
 
-import { CUSTOM_SECTIONS_NAME } from '@/constants/sectionNames';
+import { CUSTOM_SECTIONS_NAME } from '@/constants/resumeSection/sectionNames';
 
-import type { ResumeListSectionName } from '@/types/sectionTypes/sectionName';
-import type { Resume } from '@/types/resumeTypes/resume';
-import { isListResumeSection } from '@/utils/sectionNamesUtils';
+import type { ResumeListSectionName } from '@/types/resumeSection/sectionName';
+import type { Resume } from '@/types/resume/resume';
+import { isListResumeSection } from '@/utils/resumeSection/isResumeSection';
 
 export const useAddSubsection = (resumeId: Resume["id"], sectionId: string, sectionName: ResumeListSectionName, subsectionName: string) => {
   const queryClient = useQueryClient();

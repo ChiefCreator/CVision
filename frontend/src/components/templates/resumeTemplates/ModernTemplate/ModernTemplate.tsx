@@ -1,6 +1,5 @@
-import type { ResumeTemplateProps } from "@/types/resumeTypes/template";
 
-export default function ModernTemplate({ data }: ResumeTemplateProps) {
+export default function ModernTemplate() {
   return (
     <>modern</>
   );

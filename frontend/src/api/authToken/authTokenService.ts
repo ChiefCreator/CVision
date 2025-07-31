@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie'
 
 import { apiClassic } from '@/api/api'
-import { EnumTokens } from "@/types/authTokenTypes"
-import type { Auth } from '@/types/authTypes'
+import { EnumTokens } from "@/types/auth/token"
+import type { Auth } from '@/types/auth/auth'
 
 class AuthTokenService {
   constructor() {}

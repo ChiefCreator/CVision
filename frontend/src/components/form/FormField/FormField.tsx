@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent } from "@/types/root";
 
 import styles from "./FormField.module.scss"
 import clsx from "clsx";

@@ -1,0 +1,39 @@
+.buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pages-count {
+  font-size: 14px;
+  color: var(--color-neutral-contrast--lighten);
+  font-variant-numeric: tabular-nums;
+}
+
+.button {
+  --icon-size: 24px;
+
+  width: var(--icon-size);
+  height: var(--icon-size);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover  {
+    background-color: initial;
+    color: inherit;
+  }
+  &:disabled:hover .icon {
+    color: rgb(165, 172, 191);
+  }
+}
+
+.icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+
+  &_disabled {
+    color: rgb(165, 172, 191);
+  }
+}

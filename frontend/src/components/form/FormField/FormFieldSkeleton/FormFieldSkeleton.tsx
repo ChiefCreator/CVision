@@ -2,7 +2,7 @@ import React from "react";
 
 import Skeleton from "react-loading-skeleton";
 
-import { BaseComponent } from "@/types/rootTypes";
+import { BaseComponent } from "@/types/root";
 
 import styles from "./../FormField.module.scss";
 import clsx from "clsx";

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { documentService } from '@/api/document/documentService';
-import { DocumentType } from '@/types/documentTypes.ts/document';
+import { DocumentType } from '@/types/document/document';
 
 export function usePdfDownloader() {
   const downloadPdf = useCallback(async (type: DocumentType, id: string) => {

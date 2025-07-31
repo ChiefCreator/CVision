@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react"
 
 import styles from "./SliderSelect.module.scss";
-import { BaseComponent } from "@/types/rootTypes";
+import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
 
 interface SliderSelectItem {

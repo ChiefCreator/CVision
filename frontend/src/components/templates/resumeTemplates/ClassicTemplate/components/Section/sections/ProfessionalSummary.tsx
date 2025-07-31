@@ -4,7 +4,7 @@ import Section from "../Section";
 
 import parse from 'html-react-parser';
 
-import type { ProfessionalSummary } from "@/types/sectionTypes/sections";
+import type { ProfessionalSummary } from "@/types/resumeSection/sections";
 
 interface ProfessionalSummaryProps {
   data: ProfessionalSummary;
@@ -14,7 +14,7 @@ export default React.memo(function ProfessionalSummary({ data }: ProfessionalSum
   if (!data.summary) return null;
 
   return (
-    <Section type="horizontalList" title={data.title ?? data.defaultTitle}>
+    <Section type="horizontalList" title={data.title ?? data.defaultTitle} id={data.id} name="professionalSummary">
       {parse(data.summary)}
     </Section>
   );

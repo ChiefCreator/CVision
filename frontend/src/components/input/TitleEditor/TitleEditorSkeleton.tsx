@@ -2,7 +2,7 @@ import React from "react";
 
 import Skeleton from "react-loading-skeleton";
 
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent } from "@/types/root";
 
 import clsx from 'clsx';
 import styles from "./TitleEditor.module.scss"

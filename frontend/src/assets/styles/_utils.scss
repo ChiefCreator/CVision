@@ -19,3 +19,8 @@
   transition: background-color 1s var(--transition-power--in-out), color 1s var(--transition-power--in-out), stroke 1s var(--transition-power--in-out), fill 1s var(--transition-power--in-out) !important;
 }
 
+@media print {
+  .pdf-page {
+    page-break-after: always;
+  }
+}

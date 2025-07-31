@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
+import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
 
 import InputLine from "../InputLine/InputLine";
 

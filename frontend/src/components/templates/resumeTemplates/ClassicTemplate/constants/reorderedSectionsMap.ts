@@ -10,9 +10,9 @@ import Languages from "../components/Section/sections/Languages";
 import References from "../components/Section/sections/References";
 import CustomSection from "../components/Section/sections/CustomSection";
 
-import type { ReorderedSectionComponentMap } from "../types/reorderedSection";
+import type { ClassicTemplateReorderedSectionComponentsMap } from "../types/reorderedTypes";
 
-export const reorderedSectionsMap: ReorderedSectionComponentMap = {
+export const CLASSIC_TEMPLATE_REORDERED_SECTION_COMPONENTS_MAP: ClassicTemplateReorderedSectionComponentsMap = {
   professionalSummary: ProfessionalSummary,
   employmentHistory: EmploymentHistory,
   education: Education,

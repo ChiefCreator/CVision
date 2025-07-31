@@ -3,7 +3,7 @@ import React from "react";
 import FormFieldSkeleton from "../FormFieldSkeleton/FormFieldSkeleton";
 import TextEditorSkeleton from "@/components/input/TextEditor/TextEditorSkeleton";
 
-import { BaseComponent } from "@/types/rootTypes";
+import { BaseComponent } from "@/types/root";
 
 interface FormFieldTextEditorProps extends BaseComponent {};
 

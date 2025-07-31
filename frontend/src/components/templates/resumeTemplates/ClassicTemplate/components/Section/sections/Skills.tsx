@@ -2,10 +2,10 @@ import React from "react";
 
 import Section from "../Section";
 
-import { skills } from "@/data/skills";
-import { checkIsAllSubsectionsEmpty } from "@/utils/templateUtils/checkIsSubsectionEmpty";
+import { skills } from "@/constants/root/skills";
+import { checkIsAllSubsectionsEmpty } from "@/utils/template/checkIsSubsectionEmpty";
 
-import type { SkillSection } from "@/types/sectionTypes/sections";
+import type { SkillSection } from "@/types/resumeSection/sections";
 import LabelValueBlockList from "../../LabelValueBlockList/LabelValueBlockList";
 
 interface SkillsProps {
@@ -13,12 +13,12 @@ interface SkillsProps {
 }
 
 export default React.memo(function Skills({ data }: SkillsProps) {
-  const { title, defaultTitle, isShowLevel, data: subsections } = data;
+  const { id, title, defaultTitle, isShowLevel, data: subsections } = data;
 
   if (checkIsAllSubsectionsEmpty(subsections)) return null;
 
   return (
-    <Section type="horizontalList" title={title ?? defaultTitle}>
+    <Section type="horizontalList" title={title ?? defaultTitle} id={id} name="skills">
       <LabelValueBlockList
         data={subsections.map(({ title, level }) => ({ label: title, value: skills.find(({ value }) => value == level)?.label }))}
         isShowLevel={isShowLevel}

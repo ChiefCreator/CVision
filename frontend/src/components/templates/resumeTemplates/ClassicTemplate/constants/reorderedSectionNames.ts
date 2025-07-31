@@ -1,5 +1,5 @@
-import { SECTION_NAMES } from "@/constants/sectionNames";
+import { CLASSIC_TEMPLATE_SECTION_NAMES } from "./sectionNames";
 
-import type { ReorderedSectionName } from "../types/reorderedSectionName";
+import type { ClassicTemplateReorderedSectionName } from "../types/reorderedTypes";
 
-export const reorderedSectionNames = SECTION_NAMES.filter(name => !["links", "personalDetails"].includes(name)) as ReorderedSectionName[];
+export const reorderedSectionNames = CLASSIC_TEMPLATE_SECTION_NAMES.filter(name => !["links", "personalDetails", "head"].includes(name)) as ClassicTemplateReorderedSectionName[];

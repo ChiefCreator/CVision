@@ -1,5 +1,5 @@
 import { apiClassic } from '@/api/api'
-import { DocumentType } from '@/types/documentTypes.ts/document';
+import { DocumentType } from '@/types/document/document';
 
 class DocumentService {
   constructor() {}

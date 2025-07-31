@@ -1,23 +1,19 @@
 import React from "react";
 import Section from "../Section";
 import LabelValueBlockList from "../../LabelValueBlockList/LabelValueBlockList";
+import { ClassicTemplateSectionsMap } from "../../../types/section";
 
 interface PersonalInformationProps {
-  data: {
-    birthDate?: string;
-    birthPlace?: string;
-    nationality?: string;
-    drivingLicense?: string;
-  };
+  data: ClassicTemplateSectionsMap["personalInformation"];
 }
 
 export default React.memo(function PersonalInformation({ data }: PersonalInformationProps) {
-  const { birthDate, birthPlace, nationality, drivingLicense } = data;
+  const { id, birthDate, birthPlace, nationality, drivingLicense } = data;
 
-  if (!birthDate || !birthPlace || !nationality || !drivingLicense ) return null;
+  if (!birthDate && !birthPlace && !nationality && !drivingLicense ) return null;
 
   return (
-    <Section type="horizontalList">
+    <Section type="horizontalList" id={id} name="personalInformation">
       <LabelValueBlockList
         data={[
           { label: "Дата рождения", value: birthDate },

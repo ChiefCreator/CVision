@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
+import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
 
 import IconButton from "@/components/button/IconButton/IconButton";
 import InputLine from "../InputLine/InputLine";

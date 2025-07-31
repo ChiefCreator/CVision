@@ -1,10 +1,10 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
-import { useAnimateInputLine } from "@/hooks/useAnimateInputLine";
+import React, { useState, useRef, useEffect } from "react";
+import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
 
 import EditButton from "@/components/button/IconButton/EditButton/EditButton";
 import InputLine from "../InputLine/InputLine";
 
-import type { BaseComponent } from "@/types/rootTypes";
+import type { BaseComponent } from "@/types/root";
 import type { IconButtonProps } from "@/components/button/IconButton/IconButton";
 
 import clsx from 'clsx';

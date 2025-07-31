@@ -1,0 +1,27 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: white;
+  cursor: pointer;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  color: white;
+}
+
+.arrow {
+  width: 16px;
+  height: 16px;
+  color: white;
+  transition: transform .2s var(--transition-primary);
+
+  &_active {
+    transform: rotate(180deg);
+  }
+}

@@ -1,5 +1,5 @@
-import { CreateResume } from "@/types/resumeTypes/resume";
-import { ResumeListSectionName } from "@/types/sectionTypes/sectionName";
+import { CreateResume } from "@/types/resume/resume";
+import { ResumeListSectionName } from "@/types/resumeSection/sectionName";
 
 export interface CreateOne {
   resumeId: string;

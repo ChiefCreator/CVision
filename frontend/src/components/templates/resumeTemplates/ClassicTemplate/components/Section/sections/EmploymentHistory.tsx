@@ -4,22 +4,22 @@ import Subsection from "../../Subsection/Subsection";
 import Section from "../Section";
 import SubsectionList from "../../SubsectionList/SubsectionList";
 
-import { join } from "@/utils/stringUtils";
-import { checkIsAllSubsectionsEmpty } from "@/utils/templateUtils/checkIsSubsectionEmpty";
+import { join } from "@/utils/string/join";
+import { checkIsAllSubsectionsEmpty } from "@/utils/template/checkIsSubsectionEmpty";
 
-import type { EmploymentHistorySection } from "@/types/sectionTypes/sections";
+import type { EmploymentHistorySection } from "@/types/resumeSection/sections";
 
 interface EmploymentHistoryProps {
   data: EmploymentHistorySection;
 }
 
 export default React.memo(function EmploymentHistory({ data }: EmploymentHistoryProps) {
-  const { title, defaultTitle, data: subsections } = data;
+  const { id, title, defaultTitle, data: subsections } = data;
     
   if (checkIsAllSubsectionsEmpty(subsections)) return null;
 
   return (
-    <Section type="columnList" title={title ?? defaultTitle}>
+    <Section type="columnList" title={title ?? defaultTitle} id={id} name="employmentHistory">
       <SubsectionList>
         {subsections?.map(({ id, jobTitle, employer, startDate, endDate, description, city }) => (
           <li key={id}>

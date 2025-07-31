@@ -1,6 +1,4 @@
-import ResumeEditor from "./ResumeEditor/ResumeEditor"
-
-import styles from "@/app/resumes/[resumeId]/page.module.scss"
+import ResumeEditor from "@/components/resume/ResumeEditor/ResumeEditor";
 
 interface PageProps {
   params: Promise<{ resumeId: string }>
