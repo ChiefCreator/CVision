@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 300px;
+}
+
+.content {
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 20px;
+}
