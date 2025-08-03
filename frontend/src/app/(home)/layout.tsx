@@ -8,19 +8,23 @@ import "@/assets/styles/_reset.scss";
 import "@/assets/styles/_base.scss";
 
 import styles from "./layout.module.scss";
+import Sidebar from "@/components/menu/Sidebar/Sidebar";
+import { SidebarProvider } from "@/components/menu/Sidebar/hooks/useSidebar";
 
 export default function HomeLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className={styles.layout}>
-      <Container className={styles.container}>
-        <aside className={styles.sidebar}>sidebar</aside>
-    
-        <div className={styles.content}>
-          <Header className={styles.header} />
-
-          <div className={styles.page}>{children}</div>
-        </div>
-      </Container>
-    </div>
+    <SidebarProvider performance="static">
+      <div className={styles.layout}>
+        <Container className={styles.container}>
+          <Sidebar className={styles.sidebar} />
+      
+          <div className={styles.content}>
+            <Header className={styles.header} />
+  
+            <div className={styles.page}>{children}</div>
+          </div>
+        </Container>
+      </div>
+    </SidebarProvider>
   );
 }

@@ -1,0 +1,22 @@
+.button {
+  &__content {
+    display: flex;
+    align-items: center;
+  }
+
+  &_active {
+    color: var(--color-primary) !important;
+    background-color: var(--color-primary--light) !important;
+  }
+}
+
+.arrow {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  transition: transform .2s var(--transition-primary);
+
+  &_active {
+    transform: rotate(180deg);
+  }
+}

@@ -21,3 +21,10 @@ input, textarea, fieldset {
   border: none;
   outline: none;
 }
+
+input, select, textarea, button, option, a, area {
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--color-neutral-contrast);
+  }
+}

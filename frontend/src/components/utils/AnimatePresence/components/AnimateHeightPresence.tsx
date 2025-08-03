@@ -4,7 +4,7 @@ interface AnimateHeightPresenceProps extends Omit<AnimatePresenceProps, "childre
   children: React.ReactNode;
 }
 
-export default function AnimateHeightPresence({ children, ...restProps }: AnimateHeightPresenceProps) {
+export default function AnimateHeightPresence({ children, styles, ...restProps }: AnimateHeightPresenceProps) {
   const enter: gsap.TweenVars = {
     height: "auto",
     duration: .4,
@@ -17,7 +17,7 @@ export default function AnimateHeightPresence({ children, ...restProps }: Animat
   };
 
   return (
-    <AnimatePresence {...restProps} enter={enter} exit={exit} styles={{ overflow: "hidden" }}>
+    <AnimatePresence {...restProps} enter={enter} exit={exit} styles={{ ...styles, overflow: "hidden" }}>
       {children}
     </AnimatePresence>
   );

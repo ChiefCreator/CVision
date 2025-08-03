@@ -1,0 +1,30 @@
+.dropdown {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .2s var(--transition-primary);
+  overflow: hidden;
+  margin-top: 3px;
+
+  &__container {
+    width: 100%;
+    min-height: 0;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &_open {
+    grid-template-rows: 1fr;
+  }
+}
+
+.dropdown-absolute {
+  width: 200px;
+  flex-direction: column;
+  gap: 3px;
+  background-color: var(--color-neutral-primary);
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0 0 5px var(--color-neutral-primary--darken);
+}

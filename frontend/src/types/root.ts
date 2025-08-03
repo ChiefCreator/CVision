@@ -1,3 +1,4 @@
+import { LucideProps } from "lucide-react";
 import { GeneralSection } from "./resumeSection/generalSection";
 
 export interface BaseEntityFields {
@@ -19,3 +20,6 @@ export interface BaseSubsectionResume {
 export interface BaseComponent {
   className?: string;
 }
+
+export type IconProps = React.RefAttributes<SVGSVGElement> & LucideProps;
+export type IconComponent = React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
