@@ -22,7 +22,7 @@ export default function DocumentTabs({ tabs }: DocumentTabsProps) {
 
   const changeTab = (tab: DocumentFullType) => setActiveTab(tab);
   const calcIndicatorSize = (activeTab: DocumentFullType) => {
-    const tabButtonActive = tabButtonsRef.current.find(button => button.id === activeTab);
+    const tabButtonActive = tabButtonsRef.current.find(button => button.id === `tab-${activeTab}`);
 
     if (!tabButtonActive) return { width: 0, left: 0 };
 
