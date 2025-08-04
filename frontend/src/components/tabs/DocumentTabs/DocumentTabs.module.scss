@@ -1,0 +1,50 @@
+.header {
+  margin-bottom: 20px;
+  position: relative;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+}
+.buttons-list {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+.button {
+  text-align: left;
+  font-size: 18px;
+  color: var(--color-neutral-contrast--lighten);
+  transition: color 0.2s var(--transition-primary);
+
+  &_active {
+    color: var(--color-neutral-contrast) !important;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.controls-list {
+  display: flex;
+  gap: 20px;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-neutral-primary--dark);
+  position: relative;
+}
+.indicator {
+  position: absolute;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 20px;
+  transition: width .2s var(--transition-primary), left .2s var(--transition-primary);
+}

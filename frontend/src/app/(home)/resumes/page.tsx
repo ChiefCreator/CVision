@@ -1,3 +1,5 @@
+
 export default function ResumesPage() {
-  return "resumes"
+  return "resume"
+
 }
