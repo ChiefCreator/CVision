@@ -20,6 +20,9 @@ button {
 input, textarea, fieldset {
   border: none;
   outline: none;
+  &:focus {
+    box-shadow: none !important;
+  }
 }
 
 input, select, textarea, button, option, a, area {

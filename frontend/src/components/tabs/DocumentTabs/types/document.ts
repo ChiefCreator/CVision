@@ -1,20 +1,18 @@
-import { DocumentType } from "@/types/document/document";
-import { Resume } from "@/types/resume/resume";
-import { CoverLetter } from "@/types/coverLetter/coverLetter";
+import { DocumentType, DocumentMap, Document } from "@/types/document/document";
 
-export type DocumentFullType = DocumentType | "all";
+export type DocumentTabType = DocumentType | "all";
 
 export interface DocumentTabDataMap {
-  resume: Resume[] | null;
-  coverLetter: CoverLetter[] | null;
-  all: (Resume | CoverLetter)[] | null;
-}
-
-export interface DocumentTab<T extends DocumentFullType = DocumentFullType> {
-  title: string;
-  data: DocumentTabDataMap[T];
+  resume?: DocumentMap["resume"][];
+  coverLetter?: DocumentMap["coverLetter"][];
+  all?: Document[];
 }
 
 export type DocumentTabsMap = {
-  [T in DocumentFullType]: DocumentTab<T>;
+  [T in DocumentTabType]: DocumentTab;
+}
+
+export interface DocumentTab {
+  title: string;
+  data?: Document[];
 }

@@ -1,42 +1,24 @@
-import AllTabPanel from "./AllTabPanel";
-import CoverLetterTabPanel from "./CoverLetterTabPanel";
-import ResumeTabPanel from "./ResumeTabPanel";
+import { DocumentPageProvider } from "@/hooks/document/useDocumentPage";
 
-import type { DocumentTabDataMap } from "../types/document";
+import DocumentCardList from "@/components/document/DocumentCardList/DocumentCardList";
+
+import type { Document } from "@/types/document/document";
 
 import styles from "./../DocumentTabs.module.scss";
 
-interface BaseTabPanelProps {
+interface TabPanelProps {
   id: string;
+  data?: Document[];
 }
 
-export interface AllTabPanelProps extends BaseTabPanelProps {
-  type: "all";
-  data: DocumentTabDataMap["all"];
-}
-export interface ResumeTabPanelProps extends BaseTabPanelProps {
-  type: "resume";
-  data: DocumentTabDataMap["resume"];
-}
-export interface CoverLetterTabPanelProps extends BaseTabPanelProps {
-  type: "coverLetter";
-  data: DocumentTabDataMap["coverLetter"];
-}
-
-type TabPanelProps = AllTabPanelProps | ResumeTabPanelProps | CoverLetterTabPanelProps;
-
-export default function TabPanel(props: TabPanelProps) {
-  const getTabPanel = () => {
-    switch(props.type) {
-      case "all": return <AllTabPanel {...props} />
-      case "resume": return <ResumeTabPanel {...props} />
-      case "coverLetter": return <CoverLetterTabPanel {...props} />
-    }
-  }
+export default function TabPanel({ id, data }: TabPanelProps) {
+  if (!data) return;
 
   return (
-    <div className={styles.panel} role="tabpanel" id={props.id}>
-      {getTabPanel()}
-    </div>
+    <DocumentPageProvider>
+      <div className={styles.panel} role="tabpanel" id={id}>
+        <DocumentCardList data={data} />
+      </div>
+    </DocumentPageProvider>
   );
 }

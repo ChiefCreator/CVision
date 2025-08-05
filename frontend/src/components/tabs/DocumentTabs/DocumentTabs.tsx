@@ -1,27 +1,31 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react";
+import { ResponsiveTemplateProvider } from "@/components/document/hooks/useResponsiveTemplateContext";
+
 
 import TabButton from "./TabButton";
 import TabPanel from "./TabPanel/TabPanel";
+import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 
-import type { DocumentFullType, DocumentTabsMap } from "./types/document";
+import type { DocumentTabType, DocumentTabsMap } from "./types/document";
 
 import styles from "./DocumentTabs.module.scss";
 import Button from "@/components/button/Button/Button";
-import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
+import { useSidebar } from "@/components/menu/Sidebar/hooks/useSidebar";
 
 interface DocumentTabsProps {
   tabs: DocumentTabsMap;
 }
 
 export default function DocumentTabs({ tabs }: DocumentTabsProps) {
-  const [activeTab, setActiveTab] = useState<DocumentFullType>("all");
+  const { isAnimating } = useSidebar();
+  const [activeTab, setActiveTab] = useState<DocumentTabType>("resume");
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });
   const tabButtonsRef = useRef<HTMLButtonElement[]>([]);
 
-  const changeTab = (tab: DocumentFullType) => setActiveTab(tab);
-  const calcIndicatorSize = (activeTab: DocumentFullType) => {
+  const changeTab = (tab: DocumentTabType) => setActiveTab(tab);
+  const calcIndicatorSize = (activeTab: DocumentTabType) => {
     const tabButtonActive = tabButtonsRef.current.find(button => button.id === `tab-${activeTab}`);
 
     if (!tabButtonActive) return { width: 0, left: 0 };
@@ -63,7 +67,7 @@ export default function DocumentTabs({ tabs }: DocumentTabsProps) {
                 role="tab"
                 aria-selected={type === activeTab}
                 aria-controls={`tabpanel-${type}`}
-                onClick={() => changeTab(type as DocumentFullType)}
+                onClick={() => changeTab(type as DocumentTabType)}
               >{title}</TabButton>
             ))}
           </div>
@@ -82,11 +86,12 @@ export default function DocumentTabs({ tabs }: DocumentTabsProps) {
       </header>
 
       <div className={styles.body}>
-        <TabPanel
-          type={activeTab}
-          data={tabs[activeTab].data as any}
-          id={`tabpanel-${activeTab}`}
-        />
+        <ResponsiveTemplateProvider isRecalc={isAnimating}>
+          <TabPanel
+            data={tabs[activeTab].data}
+            id={`tabpanel-${activeTab}`}
+          />
+        </ResponsiveTemplateProvider>
       </div>
     </div>
   );

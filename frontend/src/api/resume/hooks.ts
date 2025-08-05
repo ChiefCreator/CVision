@@ -11,7 +11,7 @@ import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resume/re
 export const useResumesQuery = () => {
   return useQuery({
     queryKey: resumeKeys.list(),
-    queryFn: resumeService.getAll,
+    queryFn: () => resumeService.getAll(),
   });
 };
 export const useResumeQuery = (id: Resume["id"]) => {
