@@ -9,12 +9,12 @@ class ResumeSubsectionService {
   private readonly api = apiClassic;
 
   async create({ resumeId, sectionId, sectionName, subsectionId, subsectionName, dto }: CreateOne) {
-    const res = await this.api.post<any>(this.BASE_URL_SEGMENT(resumeId, sectionId), { subsectionId, subsectionName, sectionName, dto });
+    const res = await this.api.post<any>(this.BASE_URL_SEGMENT(resumeId, sectionId), { resumeId, subsectionId, subsectionName, sectionName, dto });
 
     return res.data;
   }
   async delete({ resumeId, sectionId, subsectionId, subsectionName }: DeleteOne) {
-    const res = await this.api.post<any>(`${this.BASE_URL_SEGMENT(resumeId, sectionId)}/${subsectionId}`, { subsectionName });
+    const res = await this.api.post<any>(`${this.BASE_URL_SEGMENT(resumeId, sectionId)}/${subsectionId}`, { resumeId, subsectionName });
 
     return res.data;
   }

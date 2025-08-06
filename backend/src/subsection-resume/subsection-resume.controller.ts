@@ -8,13 +8,13 @@ export class SubsectionResumeController {
   constructor(private readonly subsectionResumeService: SubsectionResumeService) {}
 
   @Post()
-  async create(@Param("sectionId") sectionId: string, @Body("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("dto") dto: any) {
-    return this.subsectionResumeService.createOne({ subsectionId, subsectionName, sectionId, updates: dto });
+  async create(@Param("sectionId") sectionId: string, @Body("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("dto") dto: any, @Body("resumeId") resumeId: string) {
+    return this.subsectionResumeService.createOne({ resumeId, subsectionId, subsectionName, sectionId, updates: dto });
   }
 
   @Post(":subsectionId")
-  async delete(@Param("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames) {
-    return this.subsectionResumeService.deleteOne({ subsectionName, subsectionId });
+  async delete(@Param("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("resumeId") resumeId: string) {
+    return this.subsectionResumeService.deleteOne({ resumeId, subsectionName, subsectionId });
   }
 
   @Get("count")

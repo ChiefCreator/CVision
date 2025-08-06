@@ -12,7 +12,7 @@ import { flattenGeneralSection } from './utils/flattenGeneralSection';
 import type { ResumeSectionNames } from '../section-resume/types/section-names.types';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates, UpdateResumeDto } from './dto/update-resume.dto';
-import { findGeneralSectionByType, FindGeneralSections } from './types/service.types';
+import { findGeneralSectionByType, FindGeneralSections, SetUpdatedAt } from './types/service.types';
 import { isResumeCustomSection } from 'src/section-resume/utils/section-names.utils';
 
 @Injectable()
@@ -21,7 +21,6 @@ export class ResumeService {
 
   constructor(
     private readonly prisma: PrismaService,
-    @Inject(forwardRef(() => SectionResumeService))
     private readonly sectionResumeService: SectionResumeService
   ) {
     this.resumeInclude = {
@@ -115,7 +114,18 @@ export class ResumeService {
           })
       )))
 
+      this.setUpdatedAt({ resumeId, prisma: tx });
+
       return this.findOne(resumeId);
+    });
+  }
+
+  async setUpdatedAt({ resumeId, prisma = this.prisma }: SetUpdatedAt) {
+    await (prisma.resume as any).update({
+      where: { id: resumeId },
+      data: {
+        updatedAt: new Date().toISOString(),
+      },
     });
   }
 
