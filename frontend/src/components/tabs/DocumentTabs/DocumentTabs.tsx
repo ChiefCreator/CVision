@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ResponsiveTemplateProvider } from "@/components/document/hooks/useResponsiveTemplateContext";
 
 
-import TabButton from "./TabButton";
+import TabButton from "./TabButton/TabButton";
 import TabPanel from "./TabPanel/TabPanel";
 import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 
@@ -13,18 +13,16 @@ import type { DocumentTabType, DocumentTabsMap } from "./types/document";
 import styles from "./DocumentTabs.module.scss";
 import Button from "@/components/button/Button/Button";
 import { useSidebar } from "@/components/menu/Sidebar/hooks/useSidebar";
+import DocumentTabsSkeleton from "./DocumentTabsSkeleton";
+import { useDocumentTabsContext } from "./hooks/useDocumentTabsContext";
 
-interface DocumentTabsProps {
-  tabs: DocumentTabsMap;
-}
-
-export default function DocumentTabs({ tabs }: DocumentTabsProps) {
+export default function DocumentTabs() {
   const { isAnimating } = useSidebar();
-  const [activeTab, setActiveTab] = useState<DocumentTabType>("resume");
+  const { resumesDoc, isLoading, createResume, changeTab, activeTab } = useDocumentTabsContext();
+  
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });
   const tabButtonsRef = useRef<HTMLButtonElement[]>([]);
 
-  const changeTab = (tab: DocumentTabType) => setActiveTab(tab);
   const calcIndicatorSize = (activeTab: DocumentTabType) => {
     const tabButtonActive = tabButtonsRef.current.find(button => button.id === `tab-${activeTab}`);
 
@@ -37,21 +35,39 @@ export default function DocumentTabs({ tabs }: DocumentTabsProps) {
   }
 
   useEffect(() => {
-    setIndicatorSize(calcIndicatorSize(activeTab));
-  }, [activeTab])
+    if (isLoading) return;
 
-  const menuData: DropdownMenuItemType[] = [
+    setIndicatorSize(calcIndicatorSize(activeTab));
+  }, [activeTab, isLoading])
+
+  const tabs = useMemo<DocumentTabsMap>(() => ({
+    all: {
+      title: "Все документы",
+      data: resumesDoc
+    },
+    resume: {
+      title: "Резюме",
+      data: resumesDoc
+    },
+    coverLetter: {
+      title: "Сопроводительные письма",
+      data: undefined
+    },
+  }), [resumesDoc]);
+  const menuData = useMemo<DropdownMenuItemType[]>(() => ([
     {
       id: "create-resume",
       label: "Резюме",
-      onClick: () => console.log("create-resume"),
+      onClick: () => createResume({}),
     },
     {
       id: "create-cover-letter",
       label: "Сопроводительное письмо",
       onClick: () => console.log("create-cover-letter"),
     },
-  ];
+  ]), []);
+
+  if (isLoading) return <DocumentTabsSkeleton />
 
   return (
     <div className={styles.tabs}>

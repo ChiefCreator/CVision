@@ -15,20 +15,6 @@
   gap: 20px;
   position: relative;
 }
-.button {
-  text-align: left;
-  font-size: 18px;
-  color: var(--color-neutral-contrast--lighten);
-  transition: color 0.2s var(--transition-primary);
-
-  &_active {
-    color: var(--color-neutral-contrast) !important;
-  }
-
-  &:hover {
-    color: var(--color-primary);
-  }
-}
 
 .controls-list {
   display: flex;

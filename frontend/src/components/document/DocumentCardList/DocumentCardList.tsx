@@ -14,7 +14,7 @@ export default function DocumentCardList({ data }: DocumentCardListProps) {
   return (
     <ul className={styles.list}>
       {data.map(({ type, data }) => (
-        <li key={data.id} className={styles.item}>
+        <li key={data.id}>
           <DocumentCard type={type} data={data} />
         </li>
       ))}

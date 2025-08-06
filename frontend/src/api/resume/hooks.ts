@@ -26,7 +26,7 @@ export const useCreateResume = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (dto: CreateResume) => resumeService.create(dto),
+    mutationFn: (dto?: CreateResume) => resumeService.create(dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: resumeKeys.list() });
     },

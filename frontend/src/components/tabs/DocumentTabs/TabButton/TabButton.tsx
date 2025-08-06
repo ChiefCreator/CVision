@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import styles from './DocumentTabs.module.scss';
+import styles from './TabButton.module.scss';
 
 interface TabButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive: boolean;

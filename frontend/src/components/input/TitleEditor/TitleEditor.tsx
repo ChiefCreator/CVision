@@ -107,6 +107,9 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
 
     return () => window.removeEventListener("resize", handleResize);
   }, [isHovered, isFocused]);
+  useEffect(() => {
+    if (valueProp) setValue(valueProp)
+  }, [valueProp, setValue])
 
   useAnimateInputLine({ isFocused, isHovered, lineRef });
 

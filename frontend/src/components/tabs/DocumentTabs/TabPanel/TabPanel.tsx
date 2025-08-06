@@ -1,5 +1,3 @@
-import { DocumentPageProvider } from "@/hooks/document/useDocumentPage";
-
 import DocumentCardList from "@/components/document/DocumentCardList/DocumentCardList";
 
 import type { Document } from "@/types/document/document";
@@ -12,13 +10,11 @@ interface TabPanelProps {
 }
 
 export default function TabPanel({ id, data }: TabPanelProps) {
-  if (!data) return;
+  if (!data) return "Не найдено";
 
   return (
-    <DocumentPageProvider>
-      <div className={styles.panel} role="tabpanel" id={id}>
-        <DocumentCardList data={data} />
-      </div>
-    </DocumentPageProvider>
+    <div className={styles.panel} role="tabpanel" id={id}>
+      <DocumentCardList data={data} />
+    </div>
   );
 }

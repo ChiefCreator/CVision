@@ -20,7 +20,7 @@ class ResumeService {
     return res.data;
   }
 
-  async create(dto: CreateResume) {
+  async create(dto?: CreateResume) {
     const res = await this.api.post<Resume>(this.BASE_URL_SEGMENT, dto);
 
     return res.data;

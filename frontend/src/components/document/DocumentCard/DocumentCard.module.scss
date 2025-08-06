@@ -1,7 +1,6 @@
 .card {
   display: grid;
   grid-template-columns: repeat(2, 50%);
-  gap: 25px;
 }
 
 .preview-wrapper {
@@ -13,6 +12,7 @@
 }
 
 .info {
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
 
