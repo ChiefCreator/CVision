@@ -7,11 +7,12 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
   Icon: React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
   iconClassName?: string;
   isActive?: boolean;
+  ref?: React.RefObject<HTMLButtonElement | null>;
 }
 
-export default function IconButton({ className, Icon, iconClassName, isActive, type = "button", disabled = false, onClick }: IconButtonProps) {
+export default function IconButton({ className, Icon, iconClassName, isActive, type = "button", ref, disabled = false, onClick }: IconButtonProps) {
   return (
-    <button className={clsx(styles.button, className, { [styles.buttonActive]: isActive })} type={type} onClick={onClick} disabled={disabled}>
+    <button className={clsx(styles.button, className, { [styles.buttonActive]: isActive })} type={type} onClick={onClick} disabled={disabled} ref={ref}>
       {Icon && <Icon className={clsx(styles.icon, iconClassName)} />}
     </button>
   );
