@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import cookieConfig from './config/cookie.config';
+import sessionConfig from './config/session.config';
+import redisConfig from './config/redis.config';
 
 import { isProd } from './utils/env.utils';
 
@@ -23,7 +25,7 @@ import { isProd } from './utils/env.utils';
       ignoreEnvFile: isProd(),
       envFilePath: ".env",
       cache: true,
-      load: [appConfig, databaseConfig, cookieConfig]
+      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig]
     })
   ],
 })
