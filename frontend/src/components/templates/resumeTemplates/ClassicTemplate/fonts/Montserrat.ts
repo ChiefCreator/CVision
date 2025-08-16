@@ -1,6 +1,3 @@
-import { Montserrat } from "next/font/google";
+import { montserrat as baseMontserrat } from "@/assets/fonts/montserrat";
 
-export const montserrat = Montserrat({
-  variable: "--font-subtitle",
-  subsets: ["latin", "cyrillic"],
-});
+export const montserrat = baseMontserrat;
