@@ -1,7 +1,8 @@
-import path from 'path';
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   webpack(config) {
     const oneOfRule = config.module?.rules.find((rule: any) => Array.isArray(rule.oneOf));
 
@@ -37,6 +38,8 @@ const nextConfig: NextConfig = {
         });
       });
     }
+
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
 
     return config;
   },

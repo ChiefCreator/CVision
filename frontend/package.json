@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build:prod": "docker build -t pekarskidev/frontend:prod -f Dockerfile.prod .",
+    "docker:run:prod": "docker run -p 3000:3000 pekarskidev/frontend:prod",
+    "docker:push:prod": "docker push pekarskidev/frontend:prod"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
