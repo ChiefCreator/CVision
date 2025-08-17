@@ -13,3 +13,19 @@ compose-build-dev:
 
 compose-logs-dev:
 	docker compose -f compose.dev.yaml logs -f
+
+# Compose Production
+
+.PHONY: compose-up-prod compose-down-prod compose-build-prod compose-logs-prod
+
+compose-up-prod:
+	docker compose -f compose.prod.yaml up --build
+
+compose-down-prod:
+	docker compose -f compose.prod.yaml down
+
+compose-build-prod:
+	docker compose -f compose.prod.yaml build
+
+compose-logs-prod:
+	docker compose -f compose.prod.yaml logs -f
