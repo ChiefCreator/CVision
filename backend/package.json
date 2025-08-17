@@ -20,7 +20,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "docker:build:prod": "docker build -t pekarskidev/backend:prod -f Dockerfile.prod .",
     "docker:run:prod": "docker run -p 4200:4200 --env-file .env pekarskidev/backend:prod",
-    "docker:push:prod": "docker push pekarskidev/backend:prod"
+    "docker:push:prod": "docker push pekarskidev/backend:prod",
+    "docker:build:dev": "docker build -t pekarskidev/backend:dev -f Dockerfile.dev .",
+    "docker:run:dev": "docker run -p 3000:3000 --env-file .env pekarskidev/backend:dev",
+    "docker:push:dev": "docker push pekarskidev/backend:dev"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

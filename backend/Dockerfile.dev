@@ -1,0 +1,19 @@
+ARG NODE_VERSION=20.12.2
+FROM node:${NODE_VERSION}-alpine
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+RUN pnpm add -D nodemon
+RUN pnpm prisma generate
+
+EXPOSE 4200
+
+CMD ["pnpm", "run", "start:dev"]
