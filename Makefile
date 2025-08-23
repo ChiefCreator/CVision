@@ -19,7 +19,7 @@ compose-logs-dev:
 .PHONY: compose-up-prod compose-down-prod compose-build-prod compose-logs-prod
 
 compose-up-prod:
-	docker compose -f compose.prod.yaml up --build
+	cat backend/.env frontend/.env > .env.tmp && docker compose --env-file .env.tmp -f compose.prod.yaml up -d && rm .env.tmp
 
 compose-down-prod:
 	docker compose -f compose.prod.yaml down
