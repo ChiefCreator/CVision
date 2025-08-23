@@ -3,7 +3,7 @@
 .PHONY: compose-up-dev compose-down-dev compose-build-dev compose-logs-dev
 
 compose-up-dev:
-	docker compose -f compose.dev.yaml up --watch
+  cat backend/.env frontend/.env > .env.tmp && docker compose --env-file .env.tmp -f compose.dev.yaml up --watch && rm .env.tmp
 
 compose-down-dev:
 	docker compose -f compose.dev.yaml down

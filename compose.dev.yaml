@@ -1,4 +1,53 @@
 services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    container_name: redis
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "${PORT:-4200}:${PORT:-4200}"
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - ./backend/node_modules/
+        - path: ./backend/package.json
+          action: rebuild
+        - path: ./backend/.env
+          action: rebuild
+        - path: ./backend/tsconfig.json
+          action: rebuild
+        - path: ./backend/tsconfig.build.json
+          action: rebuild
+    depends_on:
+      - postgres
+      - redis
   frontend:
     build:
       context: ./frontend
@@ -8,6 +57,8 @@ services:
       - ./frontend/.env
     ports:
       - "3000:3000"
+    depends_on:
+      - backend
     develop:
       watch:
         - action: sync
@@ -17,3 +68,7 @@ services:
             - ./frontend/node_modules/
         - action: rebuild
           path: ./frontend/package.json
+
+volumes:
+  postgres_data:
+  redis_data:
