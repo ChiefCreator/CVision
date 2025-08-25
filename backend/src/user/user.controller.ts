@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 
+import { Authorization } from "src/auth/decorators/authentication.decorator";
+import { User } from "src/auth/decorators/user.decorator";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UserService } from './user.service';
 
@@ -7,6 +9,14 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {};
 
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Get("profile")
+  async getProfile(@User("id") id: string) {
+    return this.userService.findById(id);
+  }
+
+  @Authorization("admin")
   @Get(":id")
   async findById(@Param("id") id: string) {
     return this.userService.findById(id);
