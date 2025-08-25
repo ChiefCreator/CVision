@@ -6,14 +6,17 @@ import { AppModule } from './app.module';
 
 import { RedisStore } from 'connect-redis';
 import * as session from 'express-session';
-import IORedis from "ioredis";
+import { createClient } from 'redis';
 
 import { toMs } from "ms-typescript";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
-  const redis = new IORedis(config.getOrThrow<string>("redis.uri"))
+
+  const redisClient = createClient({ url: config.getOrThrow<string>("redis.uri")});
+  redisClient.on("error", (err) => console.log("Redis Client Error", err));
+  await redisClient.connect(); 
 
   app.setGlobalPrefix("api");
   app.enableCors({
@@ -36,7 +39,7 @@ async function bootstrap() {
       sameSite: config.getOrThrow<boolean>("session.sameSite"),
     },
     store: new RedisStore({
-      client: redis,
+      client: redisClient,
       prefix: config.getOrThrow<string>("session.folder"),
     })
   }))
