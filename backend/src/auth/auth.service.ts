@@ -1,15 +1,16 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
 
 import { Request, Response } from "express";
-import { User } from "prisma/generated/client";
+import { AuthMethod, User } from "prisma/generated/client";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 
 import { ConfigService } from "@nestjs/config";
 import * as argon2 from "argon2";
+import { ProviderService } from "./provider/provider.service";
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
     private readonly configService: ConfigService,
+    private readonly providerService: ProviderService,
   ) {};
 
   async register(req: Request, dto: RegisterDto) {
@@ -50,6 +52,53 @@ export class AuthService {
 
     return user; 
   }
+
+  async extractProfileFromCode(req: Request, provider: string, code: string) {
+		const providerInstance = this.providerService.findByService(provider);
+
+    if (!providerInstance) {
+      throw new BadRequestException(`${provider} не существует`);
+    }
+
+		const profile = await providerInstance.findUserByCode(code);
+
+		const account = await this.prismaService.account.findFirst({
+			where: {
+				id: profile.id,
+				provider: profile.provider
+			}
+		});
+
+		let user = account?.userId ? await this.userService.findById(account.userId) : null;
+
+		if (user) {
+			return this.saveSession(req, user);
+		}
+
+		user = await this.userService.create({
+      email: profile.email,
+			password: '',
+			name: profile.name,
+			picture: profile.picture,
+			authMethod: profile.provider as AuthMethod,
+			isVerified: true
+    });
+
+		if (!account) {
+			await this.prismaService.account.create({
+				data: {
+					userId: user.id,
+					type: "oauth",
+					provider: profile.provider,
+					accessToken: profile.access_token,
+					refreshToken: profile.refresh_token,
+					expiresAt: profile.expires_at
+				}
+			})
+		}
+
+		return this.saveSession(req, user)
+	}
 
   async logout(req: Request, res: Response) {
     return this.deleteSession(req, res);

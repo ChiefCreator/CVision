@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import appConfig from './config/app.config';
 import cookieConfig from './config/cookie.config';
 import databaseConfig from './config/database.config';
+import providerConfig from "./config/provider.config";
 import redisConfig from './config/redis.config';
 import sessionConfig from './config/session.config';
 
@@ -29,7 +30,7 @@ import { isProd } from './utils/env.utils';
       ignoreEnvFile: isProd(),
       envFilePath: ".env",
       cache: true,
-      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig]
+      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig, providerConfig]
     }),
   ],
 })

@@ -36,6 +36,7 @@ model Account {
 
   refreshToken String? @map("refresh_token")
   accessToken  String  @map("access_token")
+  expiresAt    Int     @map("expires_at")
 
   userId String @map("user_id")
 
@@ -44,6 +45,7 @@ model Account {
 
 model Token {
   id String @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
 
   email     String
   token     String    @unique
