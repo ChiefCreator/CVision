@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { AuthModule } from "./auth/auth.module";
 import { DocumentModule } from './document/document.module';
 import { ResumeModule } from './resume/resume.module';
 import { SectionResumeModule } from './section-resume/section-resume.module';
@@ -22,6 +23,7 @@ import { isProd } from './utils/env.utils';
     SubsectionResumeModule,
     DocumentModule,
     UserModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: isProd(),
