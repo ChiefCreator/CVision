@@ -15,6 +15,9 @@ import providerConfig from "./config/provider.config";
 import redisConfig from './config/redis.config';
 import sessionConfig from './config/session.config';
 
+import { EmailConfirmationModule } from './auth/email-confirmation/email-confirmation.module';
+import mailConfig from "./config/mail.config";
+import { MailModule } from './mail/mail.module';
 import { isProd } from './utils/env.utils';
 
 @Module({
@@ -25,12 +28,14 @@ import { isProd } from './utils/env.utils';
     DocumentModule,
     UserModule,
     AuthModule,
+    MailModule,
+    EmailConfirmationModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: isProd(),
       envFilePath: ".env",
       cache: true,
-      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig, providerConfig]
+      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig, providerConfig, mailConfig]
     }),
   ],
 })

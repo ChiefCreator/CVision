@@ -10,6 +10,7 @@ import { RegisterDto } from "./dto/register.dto";
 
 import { ConfigService } from "@nestjs/config";
 import * as argon2 from "argon2";
+import { EmailConfirmationService } from "./email-confirmation/email-confirmation.service";
 import { ProviderService } from "./provider/provider.service";
 
 @Injectable()
@@ -19,9 +20,10 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
+    private readonly emailConfirmationService: EmailConfirmationService,
   ) {};
 
-  async register(req: Request, dto: RegisterDto) {
+  async register(dto: RegisterDto) {
     const isExists = await this.userService.findByEmail(dto.email);
 
     if (isExists) {
@@ -30,9 +32,11 @@ export class AuthService {
 
     const newUser = await this.userService.create({ ...dto, picture: "", authMethod: "credentials", isVerified: false });
 
-    await this.saveSession(req, newUser);
+    await this.emailConfirmationService.sendVerificationToken(newUser.email);
 
-    return newUser;
+    return {
+			message: "Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес."
+		}
   }
 
   async login(req: Request, { email, password }: LoginDto) {
@@ -47,6 +51,11 @@ export class AuthService {
     if (!isValidPassword) {
       throw new UnauthorizedException("Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, если забыли.")
     }
+
+    if (!user.isVerified) {
+			await this.emailConfirmationService.sendVerificationToken(user.email);
+			throw new UnauthorizedException("Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес.");
+		}
 
     await this.saveSession(req, user);
 
