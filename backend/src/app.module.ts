@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from "./auth/auth.module";
+import { EmailConfirmationModule } from './auth/email-confirmation/email-confirmation.module';
+import { PasswordRecoveryModule } from './auth/password-recovery/password-recovery.module';
 import { DocumentModule } from './document/document.module';
 import { ResumeModule } from './resume/resume.module';
 import { SectionResumeModule } from './section-resume/section-resume.module';
@@ -15,7 +17,6 @@ import providerConfig from "./config/provider.config";
 import redisConfig from './config/redis.config';
 import sessionConfig from './config/session.config';
 
-import { EmailConfirmationModule } from './auth/email-confirmation/email-confirmation.module';
 import mailConfig from "./config/mail.config";
 import { MailModule } from './mail/mail.module';
 import { isProd } from './utils/env.utils';
@@ -30,6 +31,7 @@ import { isProd } from './utils/env.utils';
     AuthModule,
     MailModule,
     EmailConfirmationModule,
+    PasswordRecoveryModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: isProd(),

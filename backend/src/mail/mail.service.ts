@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from "@nestjs/config";
 import { render } from "@react-email/components";
 import { ConfirmationTemplate } from "./templates/confirmation.template";
+import { ResetPasswordTemplate } from "./templates/reset-password.template";
 
 @Injectable()
 export class MailService {
@@ -19,10 +20,17 @@ export class MailService {
     });
   }
 
-  public async sendConfirmationEmail(email: string, token: string) {
+  async sendConfirmationEmail(email: string, token: string) {
 		const domain = this.configService.getOrThrow<string>("app.clientUrl");
 		const html = await render(ConfirmationTemplate({ domain, token }));
 
 		return this.sendMail(email, "Подтверждение почты", html);
 	}
+
+  async sendPasswordResetEmail(email: string, token: string) {
+    const domain = this.configService.getOrThrow<string>("app.clientUrl");
+		const html = await render(ResetPasswordTemplate({ domain, token }));
+ 
+    return this.sendMail(email, "Сброс пароля", html);
+  }
 }
