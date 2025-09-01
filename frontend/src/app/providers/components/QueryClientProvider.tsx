@@ -1,9 +1,9 @@
 "use client"
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider as QCProvider, QueryClient } from '@tanstack/react-query'
 import { PropsWithChildren, useState } from 'react'
 
-export default function Providers({ children }: PropsWithChildren) {
+export default function QueryClientProvider({ children }: PropsWithChildren) {
   const [client] = useState(
     new QueryClient({
   	  defaultOptions: {
@@ -15,8 +15,8 @@ export default function Providers({ children }: PropsWithChildren) {
   )
 
   return (
-  	<QueryClientProvider client={client}>
+  	<QCProvider client={client}>
   	  {children}
-  	</QueryClientProvider>
+  	</QCProvider>
   )
 }

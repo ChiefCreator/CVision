@@ -1,0 +1,55 @@
+.toast {
+	width: 100%;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	font-family: var(--font-primary);
+}
+
+.content {
+	flex: 1 1 auto;
+}
+
+.head {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+}
+
+.title {
+	font-size: 16px;
+	color: black;
+	font-weight: 500;
+}
+.description {
+	margin-top: 5px;
+	font-size: 14px;
+	color: rgb(72, 72, 72);
+}
+
+.icon-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 16px;
+	aspect-ratio: 1;
+	background-color: black;
+	border-radius: 50%;
+}
+.icon {
+	width: 14px;
+	height: 14px;
+	color: white;
+}
+
+.action {
+	flex: 0 0 auto;
+	padding: 10px 0;
+}
+
+.action-button {
+	padding: 4px 8px !important;
+	background-color: black !important;
+}
