@@ -19,3 +19,5 @@ export interface BaseSubsectionResume {
 export interface BaseComponent {
   className?: string;
 }
+
+export type LoadingStatus = "loading" | "success" | "error" | "idle";

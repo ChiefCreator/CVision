@@ -3,7 +3,7 @@ import { Slide, toast, ToastOptions } from 'react-toastify';
 class ToastService {
   private defaultOptions: ToastOptions = {
     position: "top-right",
-    autoClose: false,
+    autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

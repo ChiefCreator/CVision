@@ -2,21 +2,24 @@ import React from "react";
 
 import type { BaseComponent } from "@/types/root";
 
-import styles from "./FormField.module.scss"
 import clsx from "clsx";
+import styles from "./FormField.module.scss";
 
 export interface FormFieldProps extends BaseComponent {
   label?: string | React.ReactElement;
+  labelClassName?: string;
   errorMessage?: string;
   children: React.ReactNode;
 }
 
-export default function FormField({ className, label, errorMessage, children }: FormFieldProps) {
+export default function FormField({ className, label, labelClassName, errorMessage, children }: FormFieldProps) {
   return (
     <div className={clsx(styles.formField, className)}>
-      <header className={styles.formFieldHead}>
-        {label && <label className={styles.formFieldLabel}>{label}</label>}
-      </header>
+      {label && (
+        <header className={styles.formFieldHead}>
+          {<label className={clsx(styles.formFieldLabel, labelClassName)}>{label}</label>}
+        </header>
+      )}
 
       <div className={styles.formFieldBody}>{children}</div>
 

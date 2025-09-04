@@ -1,8 +1,10 @@
 import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 import { PositionerProps } from "@/components/position/Positioner/Positioner";
+import { LoadingStatus } from "@/types/root";
 import { LucideProps } from "lucide-react";
 import ButtonMenu from "./ButtonMenu";
 import SimpleButton from "./SimpleButton";
+import { SubmitButton } from "./SubmitButton/SubmitButton";
 
 export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   Icon?: React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
@@ -12,16 +14,28 @@ export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBut
 }
 
 export interface ButtonMenuProps extends BaseButtonProps {
-  type: "buttonMenu",
+  type: "buttonMenu";
   menuData: DropdownMenuItemType[];
   menuPositionerProps?: PositionerProps;
 }
 
 export interface SimpleButtonProps extends BaseButtonProps {
-  type: "simpleButton",
+  type: "simpleButton";
 }
 
-type ButtonProps = ButtonMenuProps | SimpleButtonProps;
+export interface SubmitButtonProps extends BaseButtonProps {
+  type: "submit";
+  status: LoadingStatus;
+  titleVariants?: {
+    loading: string;
+    success: string;
+    error: string;
+  }
+
+  setStatus: (status: LoadingStatus) => void;
+}
+
+type ButtonProps = ButtonMenuProps | SimpleButtonProps | SubmitButtonProps;
 
 export default function Button(props: ButtonProps) {
   switch(props.type) {
@@ -29,5 +43,7 @@ export default function Button(props: ButtonProps) {
       return <ButtonMenu {...props} />
     case "simpleButton":
       return <SimpleButton {...props} />
+    case "submit":
+      return <SubmitButton {...props} />
   }
 }

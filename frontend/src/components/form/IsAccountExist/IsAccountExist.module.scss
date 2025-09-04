@@ -1,0 +1,16 @@
+.text {
+	display: block;
+	text-align: center;
+	font-size: 14px;
+	line-height: 130%;
+	cursor: pointer;
+}
+
+.link {
+	color: rgb(90, 90, 90);
+	text-decoration: underline;
+
+	&:hover {
+		color: black;
+	}
+}
