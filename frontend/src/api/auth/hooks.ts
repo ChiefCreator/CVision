@@ -21,8 +21,8 @@ export const useRegisterMutation = () => {
 export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (body: LoginFormData) => authService.login(body),
-    onSuccess(data: any) {
-      toastMessageHandler(data);
+    onSuccess() {
+      toastMessageHandler({ message: "Успешный вход в аккаунт" });
     },
     onError(error) {
       toastMessageHandler(error);
@@ -40,8 +40,8 @@ export const useConnectByProviderQuery = (provider: OAuthProvider) => {
 export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: () => authService.logout(),
-    onSuccess(data: any) {
-      toastMessageHandler(data);
+    onSuccess() {
+      toastMessageHandler({ message: "Вы вышли из аккаунта" });
     },
     onError(error) {
       toastMessageHandler(error);
