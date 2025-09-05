@@ -2,9 +2,9 @@ import { LoginFormData } from "@/app/auth/login/components/LoginForm/loginSchema
 import { RegisterFormData } from "@/app/auth/register/components/RegisterForm/registerSchema";
 import { OAuthProvider } from "@/types/auth/oauthProviders";
 import { toastMessageHandler } from "@/utils/toast/toastResponseHandler";
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from "next/navigation";
 import { authService } from "./authService";
-import { authKeys } from "./queryKeys";
 
 export const useRegisterMutation = () => {
   return useMutation({
@@ -30,10 +30,17 @@ export const useLoginMutation = () => {
   });
 };
 
-export const useConnectByProviderQuery = (provider: OAuthProvider) => {
-  return useQuery({
-    queryKey: authKeys.connect(provider),
-    queryFn: () => authService.connectByProvider(provider),
+export const useConnectByProviderMutation = () => {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (provider: OAuthProvider) => authService.connectByProvider(provider),
+    onSuccess({ url }) {
+      router.push(url);
+    },
+    onError(error) {
+      toastMessageHandler(error);
+    }
   });
 };
 

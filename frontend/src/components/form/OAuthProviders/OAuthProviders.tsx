@@ -1,5 +1,6 @@
 "use client"
 
+import { useConnectByProviderMutation } from "@/api/auth/hooks";
 import { OAuthProvider } from "@/types/auth/oauthProviders";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
@@ -11,6 +12,12 @@ interface OAuthProvidersProps extends BaseComponent {
 }
 
 export function OAuthProviders({ className, providers }: OAuthProvidersProps) {
+	const { mutate } = useConnectByProviderMutation();
+
+	const connectProvider = (provider: OAuthProvider) => {
+		mutate(provider);
+	}
+
 	return (
 		<div className={clsx(styles.providers, className)}>
 			<div className={styles.lineBlock}>
@@ -25,7 +32,7 @@ export function OAuthProviders({ className, providers }: OAuthProvidersProps) {
 
 					return (
 						<li className={styles.providerWrapper} key={provider}>
-							<button className={styles.provider}>
+							<button className={styles.provider} onClick={() => connectProvider(provider)}>
 								<Icon className={styles.providerIcon} />
 								<label className={styles.providerLabel}>{label}</label>
 							</button>
