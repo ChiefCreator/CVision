@@ -34,7 +34,6 @@ export const useRequestState = ({ isPending, isSuccess, isError, resetDelay = 20
 	const setState = useCallback((state: LoadingStatus) => setStateDispatch(state), [setStateDispatch]);
 
 	return {
-		isPending, isSuccess, isError, state,
-		setState,
+		isPending, isSuccess, isError, state, resetDelay, setState,
 	}
 }
