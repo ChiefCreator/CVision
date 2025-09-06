@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Put, Param, Body } from '@nestjs/common';
-import { ResumeService } from './resume.service';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Authorization } from "src/auth/decorators/authentication.decorator";
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates } from './dto/update-resume.dto';
+import { ResumeService } from './resume.service';
 
+@Authorization()
 @Controller("resumes")
 export class ResumeController {
   constructor(private readonly resumeService: ResumeService) {}
@@ -25,11 +27,12 @@ export class ResumeController {
   createOne(@Body() dto: CreateResumeDto) {
     return this.resumeService.createOne(process.env.TEST_USER_ID!, dto);
   }
-  @Post(":resumeId")
+  @Delete(":resumeId")
   deleteOne(@Param("resumeId") resumeId: string) {
     return this.resumeService.deleteOne(resumeId);
   }
-  @Post("user/:userId")
+  @Authorization("admin")
+  @Delete("user/:userId")
   deleteUserAll(@Param("userId") userId: string) {
     return this.resumeService.deleteUserAll(userId);
   }
