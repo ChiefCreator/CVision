@@ -1,0 +1,24 @@
+.column {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.inner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  will-change: transform;
+}
+
+.card {
+	width: 200px;
+	height: 200px;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background: #e0f0ff;
+}
