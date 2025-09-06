@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { SubsectionResumeService } from './subsection-resume.service';
-import { SubsectionResumeController } from './subsection-resume.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserModule } from "src/user/user.module";
+import { SubsectionResumeController } from './subsection-resume.controller';
+import { SubsectionResumeService } from './subsection-resume.service';
 
 @Module({
+  imports: [UserModule],
   controllers: [SubsectionResumeController],
   providers: [SubsectionResumeService, PrismaService],
   exports: [SubsectionResumeService],
