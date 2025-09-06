@@ -4,18 +4,16 @@
 import { useEffect, useRef } from "react";
 import { Direction } from "../DocumentSlider";
 
-import Document from "@/components/document/Document/Document";
-import { TemplateRendererProps } from "@/components/document/TemplateRenderer/TemplateRenderer";
-import { DocumentPageProvider } from "@/hooks/document/useDocumentPage";
+import Image from "next/image";
 import styles from "./Column.module.scss";
 
 type ColumnProps = {
-	data: TemplateRendererProps[];
+	imageUrls: string[];
 	speed: number;
 	direction: Direction;
 };
 
-export default function Column({ data, speed, direction }: ColumnProps) {
+export default function Column({ imageUrls, speed, direction }: ColumnProps) {
 	const block1Ref = useRef<HTMLDivElement>(null);
 	const block2Ref = useRef<HTMLDivElement>(null);
 
@@ -81,24 +79,30 @@ export default function Column({ data, speed, direction }: ColumnProps) {
 	return (
 		<div className={styles.column}>
 			<div ref={block1Ref} className={styles.inner}>
-				{data.map((template, i) => (
-          <DocumentPageProvider key={`b1-${i}`}>
-            <Document
-              performance="preview"
-              template={template}
-            />
-          </DocumentPageProvider>
+				{imageUrls.map((url, i) => (
+    			<Image
+						className={styles.image}
+						key={`b1-${i}`}
+    			  src={url}
+    			  alt="Example resume image"
+						width={852}
+						height={1204}
+						loading="lazy"
+    			/>
 				))}
 			</div>
       
 			<div ref={block2Ref} className={styles.inner}>
-				{data.map((template, i) => (
-					<DocumentPageProvider key={`b2-${i}`}>
-            <Document
-              performance="preview"
-              template={template}
-            />
-          </DocumentPageProvider>
+				{imageUrls.map((url, i) => (
+    			<Image
+						className={styles.image}
+						key={`b2-${i}`}
+    			  src={url}
+    			  alt="Example resume image"
+    			  width={852}
+						height={1204}
+						loading="lazy"
+    			/>
 				))}
 			</div>
 		</div>

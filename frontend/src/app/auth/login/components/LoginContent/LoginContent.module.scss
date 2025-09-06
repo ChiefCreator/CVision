@@ -3,4 +3,56 @@
 	height: 100%;
 	background-color: black;
 	border-radius: 20px;
+	padding: 20px;
+
+	display: flex;
+}
+
+.info {
+	flex: 1 1 50%;
+	height: 100%;
+}
+
+.title {
+	color: white;
+	font-size: 28px;
+	text-transform: uppercase;
+	line-height: 130%;
+}
+.description {
+	color: rgb(180, 180, 180);
+	line-height: 130%;
+	margin-top: 20px;
+}
+
+.slider-wrapper {
+	flex: 1 1 50%;
+	height: 100%;
+	margin: 0 auto;
+	position: relative;
+}
+
+.overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.overlay-gradient {
+  position: absolute;
+	z-index: 2;
+  left: 0;
+  width: 100%;
+  height: 20%;
+  
+	&:first-child {
+		top: 0;
+		background: linear-gradient(to bottom,  rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+	}
+
+	&:last-child {
+		bottom: 0;
+		background: linear-gradient(to top,  rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+	}
 }

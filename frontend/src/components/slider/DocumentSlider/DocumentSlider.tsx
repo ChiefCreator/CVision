@@ -1,6 +1,5 @@
 "use client";
 
-import { TemplateRendererProps } from "@/components/document/TemplateRenderer/TemplateRenderer";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
 import Column from "./Column/Column";
@@ -10,7 +9,7 @@ export type Direction = "up" | "down";
 
 export interface DocumentSliderProps extends BaseComponent {
 	columns: {
-		data: TemplateRendererProps[];
+		imageUrls: string[];
 		direction: Direction;
     speed?: number;
 	}[];
@@ -22,7 +21,7 @@ export function DocumentSlider({ className, columns }: DocumentSliderProps) {
       {columns.map((col, i) => (
         <Column
           key={i}
-          data={col.data}
+          imageUrls={col.imageUrls}
           direction={col.direction}
           speed={col.speed ?? 1}
         />
