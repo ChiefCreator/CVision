@@ -4,6 +4,7 @@ import { AuthService } from "./auth.service";
 
 import { ConfigService } from "@nestjs/config";
 import { Request, Response } from "express";
+import { Authorization } from "./decorators/authentication.decorator";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { AuthProviderGuard } from "./guards/provider.guard";
@@ -56,6 +57,7 @@ export class AuthController {
 		return { url: providerInstance.getAuthUrl() };
 	}
 
+	@Authorization()
 	@Post("logout")
 	@HttpCode(HttpStatus.OK)
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
