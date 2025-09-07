@@ -1,13 +1,13 @@
 "use client"
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDocumentPage } from "../../../hooks/document/useDocumentPage";
 
 import { DOCUMENT_SIZE } from "@/constants/root/documentSize";
 
+import type { DocumentPerformance } from "@/types/document/document";
 import type { Resume } from "@/types/resume/resume";
 import type { ResumeTemplateConfig, ResumeTemplateName } from "@/types/resume/template";
-import type { DocumentPerformance } from "@/types/document/document";
 import clsx from "clsx";
 
 interface TemplatePagesProps {

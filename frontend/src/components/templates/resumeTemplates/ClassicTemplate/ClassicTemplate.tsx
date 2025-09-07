@@ -1,19 +1,19 @@
 import React from "react";
 
 import Head from "./components/Section/sections/Head/Head";
-import PersonalInformation from "./components/Section/sections/PersonalInformation";
 import Links from "./components/Section/sections/Links";
+import PersonalInformation from "./components/Section/sections/PersonalInformation";
 
 import { CLASSIC_TEMPLATE_REORDERED_SECTION_COMPONENTS_MAP } from "./constants/reorderedSectionsMap";
 
-import styles from "./ClassicTemplate.module.scss";
 import clsx from "clsx";
-import { pt_serif } from "./fonts/PT_Serif";
+import styles from "./ClassicTemplate.module.scss";
 import { montserrat } from "./fonts/Montserrat";
-import { getReorderedDataItems } from "./utils/getReorderedDataItems";
+import { pt_serif } from "./fonts/PT_Serif";
 import { ClassicTemplateData } from "./types/data";
-import { isTypeOfSection } from "./utils/isTypeOfSection";
 import { ClassicTemplateReorderedSectionComponentProps } from "./types/reorderedTypes";
+import { getReorderedDataItems } from "./utils/getReorderedDataItems";
+import { isTypeOfSection } from "./utils/isTypeOfSection";
 
 interface ClassicTemplateProps {
   data: ClassicTemplateData;

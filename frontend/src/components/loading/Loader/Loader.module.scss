@@ -1,0 +1,15 @@
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.spinner {
+  --color: var(--color-neutral-contrast--lighten);
+  --diameter: 20px;
+}
+
+.label {
+  font-size: 14px;
+  color: var(--color-neutral-contrast--lighten);
+}

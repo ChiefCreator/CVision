@@ -10,7 +10,7 @@ export function usePdfDownloader() {
 
       if (response.statusText !== "OK") throw new Error("Ошибка при получении PDF");
 
-      const blob = new Blob([response.data], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(response.data)], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
   
       documentService.downloadOnClient(type, id, url);

@@ -21,5 +21,7 @@ export interface BaseComponent {
   className?: string;
 }
 
+export type LoadingStatus = "loading" | "success" | "error" | "idle";
+
 export type IconProps = React.RefAttributes<SVGSVGElement> & LucideProps;
 export type IconComponent = React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;

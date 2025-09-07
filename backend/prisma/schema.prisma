@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URI")
 }
 
 model User {
@@ -13,11 +13,61 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String  @unique
-  password String
-  name     String?
+  email              String     @unique
+  password           String
+  name               String
+  picture            String?
+  role               UserRole   @default(regular)
+  isVerified         Boolean    @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean    @default(false) @map("is_two_factor_enabled")
+  authMethod         AuthMethod @default(credentials) @map("auth_method")
 
-  resumes Resume[]
+  accounts Account[]
+  resumes  Resume[]
+}
+
+model Account {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  type     String
+  provider String
+
+  refreshToken String? @map("refresh_token")
+  accessToken  String  @map("access_token")
+  expiresAt    Int     @map("expires_at")
+
+  userId String @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Token {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  email     String
+  token     String    @unique
+  type      TokenType
+  expiresIn DateTime  @map("expires_in")
+}
+
+enum TokenType {
+  verification
+  two_factor
+  password_reset
+}
+
+enum UserRole {
+  regular
+  admin
+}
+
+enum AuthMethod {
+  credentials
+  google
+  yandex
 }
 
 enum ResumeTemplate {
@@ -28,9 +78,9 @@ enum ResumeTemplate {
 }
 
 model Resume {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
   template  ResumeTemplate @default(classic)
 
   title                     String?

@@ -1,0 +1,33 @@
+# Stage 1: Base
+ARG NODE_VERSION=20.12.2
+FROM node:${NODE_VERSION}-alpine AS base
+ENV NODE_ENV=production
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache libc6-compat
+
+# Stage 2: Build
+FROM base AS build
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+RUN pnpm prisma generate
+RUN pnpm run build
+
+# Stage 3: Runtime
+FROM base AS prod
+
+COPY --from=build /app/pnpm-lock.yaml .
+COPY --from=build /app/package.json .
+
+RUN pnpm install --frozen-lockfile
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma
+
+CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/main.js"]

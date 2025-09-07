@@ -1,13 +1,15 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { SubsectionResumeService } from './subsection-resume.service';
-import { SubsectionResumeController } from './subsection-resume.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ResumeService } from 'src/resume/resume.service';
-import { SectionResumeModule } from 'src/section-resume/section-resume.module';
-import { ResumeModule } from 'src/resume/resume.module';
+import { ResumeModule } from "src/resume/resume.module";
+import { ResumeService } from "src/resume/resume.service";
+import { SectionResumeModule } from "src/section-resume/section-resume.module";
+import { UserModule } from "src/user/user.module";
+import { SubsectionResumeController } from './subsection-resume.controller';
+import { SubsectionResumeService } from './subsection-resume.service';
 
 @Module({
   imports: [
+    UserModule,
     forwardRef(() => SectionResumeModule),
     forwardRef(() => ResumeModule),
   ],
