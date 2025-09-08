@@ -16,7 +16,8 @@ export interface StaticDropdownProps extends BaseDropdownProps {
 export interface AbsoluteDropdownProps extends BaseDropdownProps {
   type: "absolute";
   closeSubMenu: () => void;
-  triggerRef?: React.RefObject<HTMLDivElement | null>;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export interface NoneDropdownProps {

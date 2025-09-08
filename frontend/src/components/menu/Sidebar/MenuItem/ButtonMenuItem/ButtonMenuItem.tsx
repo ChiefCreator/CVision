@@ -1,20 +1,20 @@
+import { useArrowNavigation } from "@/hooks/root/useArrowNavigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 import { useSidebar } from "../../hooks/useSidebar";
-import { usePathname } from "next/navigation";
-import { useArrowNavigation } from "@/hooks/root/useArrowNavigation";
 
-import Dropdown from "./Dropdown/Dropdown";
 import AnimateHeightPresence from "@/components/utils/AnimatePresence/components/AnimateHeightPresence";
 import { ChevronDown } from "lucide-react";
+import Dropdown from "./Dropdown/Dropdown";
 
 import { isLinkMenuItemData } from "../../utils/isMenuItemData";
 
-import type { ButtonMenuItemProps } from "../MenuItem";
 import type { MenuItemData } from "../../types/menuItemData";
+import type { ButtonMenuItemProps } from "../MenuItem";
 
+import clsx from "clsx";
 import baseStyles from "./../MenuItem.module.scss";
 import styles from "./ButtonMenuItem.module.scss";
-import clsx from "clsx";
 
 const isChildrenHaveActiveItem = (children: MenuItemData[], activePathname: string) => {
   return !!children.find(item => {
@@ -37,6 +37,7 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
   const activePathname = usePathname();
  
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const isSubMenuOpen = openMenuPath.includes(id);
   const isActive = isChildrenHaveActiveItem(children, activePathname) && !isSubMenuOpen;
@@ -115,7 +116,7 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
         data={children}
         level={level + 1}
         isOpen={isSubMenuOpen}
-        {...(dropdownType === "absolute" ? { triggerRef, closeSubMenu } : {} as any)}
+        {...(dropdownType === "absolute" ? { triggerRef, contentRef, closeSubMenu } : {} as any)}
       />
     </>
   );

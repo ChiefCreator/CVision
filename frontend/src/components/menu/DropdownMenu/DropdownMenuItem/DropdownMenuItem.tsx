@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import DropdownMenu, { DropdownMenuItemType } from "../DropdownMenu";
 
-import styles from "./DropdownMenuItem.module.scss";
+import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
+import styles from "./DropdownMenuItem.module.scss";
 
 interface DropdownMenuItemProps extends DropdownMenuItemType {
   depth: number;
@@ -12,6 +13,8 @@ interface DropdownMenuItemProps extends DropdownMenuItemType {
 }
 
 export default function DropdownMenuItem({ id, label, Icon, children, isDisabled, onClick, depth, onClose }: DropdownMenuItemProps) {
+  const { menuRef } = useDropdownMenu({});
+  
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -68,8 +71,10 @@ export default function DropdownMenuItem({ id, label, Icon, children, isDisabled
             id={id}
             items={children}
             depth={depth + 1}
+            ref={menuRef}
             positionProps={{
               triggerRef: buttonRef,
+              contentRef: menuRef,
               anchorOrigin: {
                 horizontal: "right",
                 vertical: "top",

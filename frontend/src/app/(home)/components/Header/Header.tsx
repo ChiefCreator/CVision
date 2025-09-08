@@ -8,13 +8,13 @@ import { Settings2 } from "lucide-react";
 
 import type { BaseComponent } from "@/types/root";
 
-import styles from "./Header.module.scss";
 import clsx from "clsx";
+import styles from "./Header.module.scss";
 
 interface HeaderProps extends BaseComponent {};
 
 export default function Header({ className }: HeaderProps) {
-  const { isOpen, triggerRef, menuRef, menuId, toggle, close } = useDropdownMenu();
+  const { isOpen, triggerRef, menuRef, menuId, toggle, close } = useDropdownMenu({});
 
   return (
     <header className={clsx(styles.header, className)}>

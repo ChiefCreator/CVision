@@ -1,6 +1,6 @@
-import React, { ComponentType } from 'react';
 import Portal from '@/components/position/Portal/Portal';
 import Positioner, { PositionerProps } from '@/components/position/Positioner/Positioner';
+import React, { ComponentType } from 'react';
 import DropdownMenuItem from './DropdownMenuItem/DropdownMenuItem';
 
 import clsx from "clsx";
@@ -12,7 +12,7 @@ interface DropdownMenuProps {
   items: DropdownMenuItemType[];
   depth?: number;
 
-  positionProps?: PositionerProps;
+  positionProps: PositionerProps;
 
   onClose: () => void;
 }

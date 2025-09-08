@@ -43,7 +43,9 @@ export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { 
   
   const calculateStyles = (): React.CSSProperties => {
     const trigger = triggerRef?.current;
-    const content = contentRef.current;
+    const content = contentRef?.current;
+
+    console.log(content)
 
     if (!trigger || !content) return {};
   

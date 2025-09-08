@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { isValid, setMonth, setYear, getYear } from "date-fns";
 import { formatDate } from "@/utils/date/formatDate";
 import { parseFlexibleDate } from "@/utils/date/parseFlexibleDate";
+import { getYear, isValid, setMonth, setYear } from "date-fns";
 
 import Portal from "@/components/position/Portal/Portal";
 import Positioner, { type PositionerProps } from "@/components/position/Positioner/Positioner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import styles from "./MonthPicker.module.scss";
 import clsx from "clsx";
+import styles from "./MonthPicker.module.scss";
 
 const months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
 const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
@@ -17,7 +17,8 @@ const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
 interface MonthPickerProps {
   date?: string;
   isShow?: boolean;
-  positionerProps?: PositionerProps
+  positionerProps: PositionerProps;
+  ref: React.RefObject<HTMLDivElement | null>;
 
   changeIsShow?: (show: boolean) => void;
   onChange: (date: string) => void;
@@ -25,7 +26,7 @@ interface MonthPickerProps {
 
 type ActivePanel = "months" | "years";
 
-export default function MonthPicker({ date, isShow = true, positionerProps, changeIsShow, onChange }: MonthPickerProps) {
+export default function MonthPicker({ date, isShow = true, positionerProps, ref, changeIsShow, onChange }: MonthPickerProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>("months");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -93,7 +94,7 @@ export default function MonthPicker({ date, isShow = true, positionerProps, chan
   return (
     <Portal>
       <Positioner {...positionerProps}>
-        <div className={clsx(styles.calendar, { [styles.calendarOpen]: isShow })}>
+        <div className={clsx(styles.calendar, { [styles.calendarOpen]: isShow })} ref={ref}>
           {activePanel === "months" && (
             <div className={styles.monthsPanel}>
               <header className={styles.monthsPanelHeader}>

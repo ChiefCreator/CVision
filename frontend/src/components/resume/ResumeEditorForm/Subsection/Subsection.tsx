@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 
 import type { BaseComponent } from "@/types/root";
 
-import styles from "./Subsection.module.scss";
-import clsx from "clsx";
-import { ChevronDown, Ellipsis, Pencil, Trash2 } from "lucide-react";
-import DropdownMenu, { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 import { useDeleteSubsection } from "@/api/resumeSubsection/hooks";
+import DropdownMenu, { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
+import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
+import { useResume } from "@/hooks/resume/useResume";
 import { useResumeId } from "@/hooks/resume/useResumeId";
 import { ResumeListSectionName } from "@/types/resumeSection/sectionName";
-import { useResume } from "@/hooks/resume/useResume";
+import clsx from "clsx";
+import { ChevronDown, Ellipsis, Pencil, Trash2 } from "lucide-react";
+import styles from "./Subsection.module.scss";
 
 export interface SubsectionProps extends BaseComponent {
   id: string;
@@ -29,22 +30,11 @@ export interface SubsectionProps extends BaseComponent {
 export default function Subsection({ className, id, subsectionName, sectionId, sectionName, title, subtitle, defaultTitle = "Ничего не указано", children, checkIsOpen, onToggle, onClickChange }: SubsectionProps) {
   const isOpen = checkIsOpen(sectionId, id);
   const resumeId = useResumeId();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { changeIsAllUpdating } = useResume();
-
-  const dropdownMenuRef = useRef<HTMLDivElement>(null);
-  const dropdownMenuButtonRef = useRef<SVGSVGElement>(null);
+  const { isOpen: isDropdownOpen, triggerRef: dropdownMenuButtonRef, menuRef: dropdownMenuRef, toggle, close } = useDropdownMenu({});
 
   const { mutateAsync } = useDeleteSubsection(resumeId, sectionId, sectionName, subsectionName);
 
-  const toggleDropdown = (isOpen?: boolean) => {
-    if (isOpen !== undefined) {
-      setIsDropdownOpen(isOpen);
-      return;
-    }
-
-    setIsDropdownOpen(prev => !prev);
-  };
   const deleteSubsection = async (id: string) => {
     changeIsAllUpdating(true);
     await mutateAsync(id);
@@ -80,7 +70,7 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
       const target = e.target as HTMLElement;
 
       if (!dropdownMenuRef.current?.contains(target) && !dropdownMenuButtonRef.current?.contains(target)) {
-        toggleDropdown(false);
+        close();
       }
     };
 
@@ -100,7 +90,7 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
 
         <div className={styles.controls}>
           <div className={styles.tools}>
-            <Ellipsis className={styles.control} ref={dropdownMenuButtonRef} type="button" onClick={() => toggleDropdown()} />
+            <Ellipsis className={styles.control} ref={dropdownMenuButtonRef as any} type="button" onClick={() => toggle()} />
           </div>
 
           <ChevronDown className={clsx(styles.control, { [styles.arrowOpen]: isOpen })} />
@@ -109,9 +99,9 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
         {isDropdownOpen && <DropdownMenu
           ref={dropdownMenuRef}
           items={dropdownMenuItems}
-          positionProps={{ triggerRef: dropdownMenuButtonRef }}
+          positionProps={{ triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef }}
 
-          onClose={() => toggleDropdown(false)}
+          onClose={() => toggle()}
         />}
       </header>
 
