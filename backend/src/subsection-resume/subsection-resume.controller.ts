@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Authorization } from "src/auth/decorators/authentication.decorator";
 import { SubsectionNameValidationPipe } from './pipes/subsection-name-validation.pipe';
 import { SubsectionResumeService } from './subsection-resume.service';
@@ -14,7 +14,7 @@ export class SubsectionResumeController {
     return this.subsectionResumeService.createOne({ resumeId, subsectionId, subsectionName, sectionId, updates: dto });
   }
 
-  @Delete(":subsectionId")
+  @Post(":subsectionId/delete")
   async delete(@Param("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("resumeId") resumeId: string) {
     return this.subsectionResumeService.deleteOne({ resumeId, subsectionName, subsectionId });
   }

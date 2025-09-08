@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { Authorization } from "src/auth/decorators/authentication.decorator";
 import type { ResumeSectionNames } from 'src/section-resume/types/section-names.types';
 import { SectionNameValidationPipe } from './pipes/section-name-validation.pipe';
@@ -18,7 +18,7 @@ export class SectionResumeController {
     return this.sectionResumeService.createDefaultOnes({ resumeId });
   }
 
-  @Delete(":sectionId")
+  @Post(":sectionId/delete")
   async deleteOne(@Param("sectionId") sectionId: string, @Body("sectionName", SectionNameValidationPipe) sectionName: ResumeSectionNames) {
     return this.sectionResumeService.deleteOne({ sectionName, sectionId });
   }

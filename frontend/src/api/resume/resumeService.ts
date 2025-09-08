@@ -1,6 +1,6 @@
-import { apiClassic } from '@/api/api'
+import { apiClassic } from '@/api/api';
 
-import type { Resume, CreateResume, ResumeFieldUpdates } from "@/types/resume/resume";
+import type { CreateResume, Resume, ResumeFieldUpdates } from "@/types/resume/resume";
 import type { GeneralSection } from '@/types/resumeSection/generalSection';
 
 class ResumeService {
@@ -26,7 +26,7 @@ class ResumeService {
     return res.data;
   }
   async delete(id: Resume["id"]) {
-    const res = await this.api.post<Resume>(`${this.BASE_URL_SEGMENT}/${id}`);
+    const res = await this.api.delete<Resume>(`${this.BASE_URL_SEGMENT}/${id}`);
 
     return res.data;
   }
