@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 import type { BaseComponent } from "@/types/root";
 
 import { useDeleteSubsection } from "@/api/resumeSubsection/hooks";
-import DropdownMenu, { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
-import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
+import DropdownMenu from "@/components/menu/DropdownMenu/DropdownMenu";
+import { usePopover } from "@/hooks/position/usePopover";
 import { useResume } from "@/hooks/resume/useResume";
 import { useResumeId } from "@/hooks/resume/useResumeId";
+import { MenuItemData } from "@/types/menu/menu";
 import { ResumeListSectionName } from "@/types/resumeSection/sectionName";
 import clsx from "clsx";
 import { ChevronDown, Ellipsis, Pencil, Trash2 } from "lucide-react";
@@ -31,7 +32,7 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
   const isOpen = checkIsOpen(sectionId, id);
   const resumeId = useResumeId();
   const { changeIsAllUpdating } = useResume();
-  const { isOpen: isDropdownOpen, triggerRef: dropdownMenuButtonRef, menuRef: dropdownMenuRef, toggle, close } = useDropdownMenu({});
+  const { isOpen: isDropdownOpen, triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef, id: dropdownMenuId, toggle, close } = usePopover();
 
   const { mutateAsync } = useDeleteSubsection(resumeId, sectionId, sectionName, subsectionName);
 
@@ -50,16 +51,18 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
     onToggle(sectionId, id);
   }
 
-  const dropdownMenuItems: DropdownMenuItemType[] = [
+  const dropdownMenuItems: MenuItemData = [
     {
+      type: "control",
       id: "1",
-      label: "Изменить",
+      title: "Изменить",
       Icon: Pencil,
       onClick: onClickChange,
     },
     {
+      type: "control",
       id: "2",
-      label: "Удалить",
+      title: "Удалить",
       Icon: Trash2,
       onClick: () => deleteSubsection(id),
     },
@@ -97,11 +100,9 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
         </div>
 
         {isDropdownOpen && <DropdownMenu
-          ref={dropdownMenuRef}
-          items={dropdownMenuItems}
-          positionProps={{ triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef }}
-
-          onClose={() => toggle()}
+          id={dropdownMenuId}
+          data={dropdownMenuItems}
+          positioner={{ triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef }}
         />}
       </header>
 

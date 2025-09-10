@@ -5,9 +5,9 @@ interface DropdownMenuProps extends MenuProps, Omit<PopoverProps, "children"> {
   id: string;
 }
 
-export default function DropdownMenu({ id, positioner, close, ...menuProps }: DropdownMenuProps) {
+export default function DropdownMenu({ id, positioner, ...menuProps }: DropdownMenuProps) {
   return (
-    <Popover positioner={positioner} id={id} close={close} >
+    <Popover positioner={positioner} id={id} >
       <Menu {...menuProps} />
     </Popover>    
   );

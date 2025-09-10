@@ -1,18 +1,18 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react";
 import { ResponsiveTemplateProvider } from "@/components/document/hooks/useResponsiveTemplateContext";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 
 import TabButton from "./TabButton/TabButton";
 import TabPanel from "./TabPanel/TabPanel";
-import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 
 import type { DocumentTabType, DocumentTabsMap } from "./types/document";
 
-import styles from "./DocumentTabs.module.scss";
 import Button from "@/components/button/Button/Button";
-import { useSidebar } from "@/components/menu/Sidebar/hooks/useSidebar";
+import { useSidebar } from "@/hooks/menu/useSidebar";
+import { MenuItemData } from "@/types/menu/menu";
+import styles from "./DocumentTabs.module.scss";
 import DocumentTabsSkeleton from "./DocumentTabsSkeleton";
 import { useDocumentTabsContext } from "./hooks/useDocumentTabsContext";
 
@@ -54,15 +54,17 @@ export default function DocumentTabs() {
       data: undefined
     },
   }), [resumesDoc]);
-  const menuData = useMemo<DropdownMenuItemType[]>(() => ([
+  const menuData = useMemo<MenuItemData>(() => ([
     {
+      type: "control",
       id: "create-resume",
-      label: "Резюме",
+      title: "Резюме",
       onClick: () => createResume({}),
     },
     {
+      type: "control",
       id: "create-cover-letter",
-      label: "Сопроводительное письмо",
+      title: "Сопроводительное письмо",
       onClick: () => console.log("create-cover-letter"),
     },
   ]), []);

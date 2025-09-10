@@ -4,14 +4,14 @@ import React from "react";
 import MonthPicker from "@/components/calendar/MonthPicker/MonthPicker";
 import EditInput, { EditInputProps } from "../EditInput/EditInput";
 
-import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
+import { usePopover } from "@/hooks/position/usePopover";
 import { formatDate } from "@/utils/date/formatDate";
 import { parseFlexibleDate } from "@/utils/date/parseFlexibleDate";
 
 interface InputDateProps extends EditInputProps {};
 
 export default React.memo(function InputDate({ value = "", placeholder, inputRef, onChange }: InputDateProps) {
-  const { isOpen, triggerRef: editInputRef, menuRef: pickerRef, open, toggle } = useDropdownMenu({});
+  const { isOpen, triggerRef: editInputRef, contentRef: pickerRef, id, open, toggle } = usePopover();
     
   const positionerHandleRef = usePositionerHandleRef();
 
@@ -26,28 +26,28 @@ export default React.memo(function InputDate({ value = "", placeholder, inputRef
     }
   }
 
-  console.log(isOpen)
-
   return (
     <>
       <EditInput
         value={value}
         placeholder={placeholder}
-        ref={editInputRef as React.RefObject<HTMLDivElement> | undefined}
+        ref={editInputRef as React.RefObject<HTMLDivElement | null>}
         inputRef={inputRef}
         onFocus={focus}
         onBlur={blur}
         onChange={onChange}
       />
 
-      <MonthPicker
-        date={value}
-        isShow={isOpen}
-        positionerProps={{ positionerHandleRef, triggerRef: editInputRef, contentRef: pickerRef }}
-        ref={pickerRef}
-        changeIsShow={toggle}
-        onChange={onChange}
-      />
+      {isOpen && (
+        <MonthPicker
+          date={value}
+          isShow={isOpen}
+          positioner={{ positionerHandleRef, triggerRef: editInputRef, contentRef: pickerRef }}
+          ref={pickerRef}
+          changeIsShow={toggle}
+          onChange={onChange}
+        />
+      )}
     </>
   );
 })

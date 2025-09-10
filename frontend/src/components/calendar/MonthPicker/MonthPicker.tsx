@@ -17,7 +17,7 @@ const years = Array.from({ length: 2030 - 1980 + 1 }, (_, i) => 1980 + i);
 interface MonthPickerProps {
   date?: string;
   isShow?: boolean;
-  positionerProps: PositionerProps;
+  positioner: PositionerProps;
   ref: React.RefObject<HTMLDivElement | null>;
 
   changeIsShow?: (show: boolean) => void;
@@ -26,7 +26,7 @@ interface MonthPickerProps {
 
 type ActivePanel = "months" | "years";
 
-export default function MonthPicker({ date, isShow = true, positionerProps, ref, changeIsShow, onChange }: MonthPickerProps) {
+export default function MonthPicker({ date, isShow = true, positioner, ref, changeIsShow, onChange }: MonthPickerProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>("months");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -81,7 +81,7 @@ export default function MonthPicker({ date, isShow = true, positionerProps, ref,
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
 
-      if (!target.closest(`.${styles.calendar}`) && !positionerProps?.triggerRef?.current?.contains(target)) {
+      if (!target.closest(`.${styles.calendar}`) && !positioner?.triggerRef?.current?.contains(target)) {
         changeIsShow?.(false);
       }
     };
@@ -93,7 +93,7 @@ export default function MonthPicker({ date, isShow = true, positionerProps, ref,
 
   return (
     <Portal>
-      <Positioner {...positionerProps}>
+      <Positioner {...positioner}>
         <div className={clsx(styles.calendar, { [styles.calendarOpen]: isShow })} ref={ref}>
           {activePanel === "months" && (
             <div className={styles.monthsPanel}>

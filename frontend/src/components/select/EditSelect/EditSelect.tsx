@@ -7,7 +7,7 @@ import Portal from "@/components/position/Portal/Portal";
 import Positioner from "@/components/position/Positioner/Positioner";
 import { ChevronDown } from "lucide-react";
 
-import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
+import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./EditSelect.module.scss";
 
@@ -26,7 +26,7 @@ interface EditSelectProps {
 
 export default function EditSelect({ selectedValue: selectedValueProp, data, defaultLabel = "Выберите...", onChange }: EditSelectProps) {
   const [selectedValue, setSelectedValue] = useState(selectedValueProp || null);
-  const { isOpen, triggerRef: selectRef, menuRef: dropdownRef, menuId, toggle, close } = useDropdownMenu({});
+  const { isOpen, triggerRef: selectRef, contentRef: dropdownRef, id, toggle, close } = usePopover();
   
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -128,35 +128,37 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
         <input className={styles.selectInput} value={selectedValue || ""} aria-hidden readOnly></input>
       </button>
 
-      <Portal>
-        <Positioner positionerHandleRef={positionerHandleRef} triggerRef={selectRef} contentRef={dropdownRef} matchTriggerWidth={true}>
-          <div className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)} ref={dropdownRef}>
-            <div className={styles.dropdownContainer}>
-              <div className={styles.dropdownContentWrapper}>
-                <div className={styles.dropdownContent}>
-                  <ul className={styles.dropdownList}>
-                    {data.map(({ value, label }, i) => (
-                      <li key={value} role="option" aria-selected={isSelected(value)}>
-                        <button
-                          className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
-                          ref={el => {
-                            optionRefs.current[i] = el;
-                          }}
-                          type="button"
+      {isOpen && (
+        <Portal>
+          <Positioner positionerHandleRef={positionerHandleRef} triggerRef={selectRef} contentRef={dropdownRef} matchTriggerWidth={true}>
+            <div className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)} ref={dropdownRef}>
+              <div className={styles.dropdownContainer}>
+                <div className={styles.dropdownContentWrapper}>
+                  <div className={styles.dropdownContent}>
+                    <ul className={styles.dropdownList}>
+                      {data.map(({ value, label }, i) => (
+                        <li key={value} role="option" aria-selected={isSelected(value)}>
+                          <button
+                            className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
+                            ref={el => {
+                              optionRefs.current[i] = el;
+                            }}
+                            type="button"
 
-                          onClick={() => handleChange(value)}
-                        >
-                          {label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                            onClick={() => handleChange(value)}
+                          >
+                            {label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Positioner>
-      </Portal>
+          </Positioner>
+        </Portal>
+      )}
     </>
   );
 }

@@ -1,18 +1,18 @@
-import React, { useMemo } from "react";
 import { usePdfDownloader } from "@/api/document/hooks/usePdfDownloader";
 import { useResume } from "@/hooks/resume/useResume";
+import React, { useMemo } from "react";
 
+import Button from "@/components/button/Button/Button";
 import Document from "@/components/document/Document/Document";
 import DocumentButtons from "@/components/document/DocumentButtons/DocumentButtons";
 import LoadingStatus from "@/components/loading/LoadingStatus/LoadingStatus";
-import Button from "@/components/button/Button/Button";
 
-import type { BaseComponent } from "@/types/root";
 import type { ResumeTemplateRendererProps } from "@/components/document/TemplateRenderer/TemplateRenderer";
-import type { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
+import { MenuItemData } from "@/types/menu/menu";
+import type { BaseComponent } from "@/types/root";
 
-import styles from "./ResumePreview.module.scss";
 import clsx from "clsx";
+import styles from "./ResumePreview.module.scss";
 
 interface ResumePreviewProps extends BaseComponent {}
 
@@ -32,10 +32,11 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
 
   if (!resume) return;
 
-  const menuData: DropdownMenuItemType[] = [
+  const menuData: MenuItemData = [
     {
+      type: "control",
       id: "1",
-      label: "PDF",
+      title: "PDF",
       onClick: handleDownload,
     },
   ];

@@ -1,23 +1,23 @@
 "use client"
 
-import { Files, LayoutDashboard } from "lucide-react";
-import Menu from "./Menu/Menu";
 import AnimateHeightPresence from "@/components/utils/AnimatePresence/components/AnimateHeightPresence";
+import { Files, LayoutDashboard } from "lucide-react";
 
+import type { MenuItemData } from "@/types/menu/menu";
 import type { BaseComponent } from "@/types/root";
-import type { MenuItemData } from "./types/menuItemData";
 
-import styles from "./Sidebar.module.scss";
-import clsx from "clsx";
 import Logo from "@/components/Logo/Logo";
-import ButtonToggle from "./ButtonToggle/ButtonToggle";
-import { useSidebar } from "./hooks/useSidebar";
-import { useRef } from "react";
 import { ArrowNavigationProvider } from "@/hooks/root/useArrowNavigation";
+import clsx from "clsx";
+import { useRef } from "react";
+import { useSidebar } from "../../../hooks/menu/useSidebar";
+import ButtonToggle from "./ButtonToggle/ButtonToggle";
+import styles from "./Sidebar.module.scss";
+import SidebarMenu from "./SidebarMenu/SidebarMenu";
 
 interface SidebarProps extends BaseComponent {};
 
-const menuData: MenuItemData[] = [
+const menuData: MenuItemData = [
   {
     id: "dashboard",
     type: "link",
@@ -76,7 +76,7 @@ export default function Sidebar({ className }: SidebarProps) {
               </AnimateHeightPresence>
               
               <ArrowNavigationProvider>
-                <Menu data={menuData} /> 
+                <SidebarMenu data={menuData} /> 
               </ArrowNavigationProvider>
             </div>  
           </nav>

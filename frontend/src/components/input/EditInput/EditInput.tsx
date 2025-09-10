@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
 import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
+import React, { useEffect, useRef, useState } from "react";
 
 import InputLine from "../InputLine/InputLine";
 
-import styles from "./EditInput.module.scss"
-import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import styles from "./EditInput.module.scss";
 gsap.registerPlugin(useGSAP);
 
 export interface EditInputProps {
