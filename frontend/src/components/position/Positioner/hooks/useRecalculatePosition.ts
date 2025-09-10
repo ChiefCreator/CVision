@@ -45,8 +45,6 @@ export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { 
     const trigger = triggerRef?.current;
     const content = contentRef?.current;
 
-    console.log(content)
-
     if (!trigger || !content) return {};
   
     const triggerRect = trigger.getBoundingClientRect();

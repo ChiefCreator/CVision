@@ -4,12 +4,12 @@ import { ChevronDown } from "lucide-react";
 
 import type { ButtonMenuProps } from "./Button";
 
-import { useDropdownMenu } from "@/hooks/menu/useDropdownMenu";
+import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
 
 export default function ButtonMenu({ className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
-  const { isOpen, triggerRef, menuRef, menuId, toggle, close } = useDropdownMenu({});
+  const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
 
   return (
     <>
@@ -18,8 +18,9 @@ export default function ButtonMenu({ className, children, Icon, iconClassName, m
         type={actionType}
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        aria-controls={menuId}
-        onClick={toggle} ref={triggerRef}
+        aria-controls={id}
+        onClick={toggle}
+        ref={triggerRef}
       >
         {Icon && <Icon className={clsx(styles.icon, iconClassName)} aria-hidden="true" />}
   
@@ -30,16 +31,15 @@ export default function ButtonMenu({ className, children, Icon, iconClassName, m
 
       {isOpen && (
         <DropdownMenu
-          id={menuId}
-          ref={menuRef}
-          items={menuData}
-          positionProps={menuPositionerProps ?? {
+          id={id}
+          data={menuData}
+          positioner={menuPositionerProps ?? {
             matchTriggerWidth: true,
             offsetY: 3,
             triggerRef,
-            contentRef: menuRef
+            contentRef
           }}
-          onClose={close}
+          close={close}
         />
       )}
     </>

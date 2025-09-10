@@ -1,0 +1,35 @@
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--color-neutral-contrast);
+  font-size: 14px;
+  transition: background-color .2s var(--transition-primary);
+  transition: color .2s var(--transition-primary);
+
+  &__icon {
+    max-width: 14px;
+    max-height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    margin-right: 5px;
+  }
+
+  &__title {
+    display: block;
+    max-width: 100%;
+    text-wrap: pretty;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    text-align: start;
+  }
+
+  &:hover {
+    background-color: var(--color-neutral-primary--dark);
+  }
+}

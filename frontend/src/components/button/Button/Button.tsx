@@ -1,5 +1,5 @@
-import { DropdownMenuItemType } from "@/components/menu/DropdownMenu/DropdownMenu";
 import { PositionerProps } from "@/components/position/Positioner/Positioner";
+import { MenuItemData } from "@/types/menu/menu";
 import { LoadingStatus } from "@/types/root";
 import { LucideProps } from "lucide-react";
 import ButtonMenu from "./ButtonMenu";
@@ -15,7 +15,7 @@ export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBut
 
 export interface ButtonMenuProps extends BaseButtonProps {
   type: "buttonMenu";
-  menuData: DropdownMenuItemType[];
+  menuData: MenuItemData;
   menuPositionerProps?: PositionerProps;
 }
 
