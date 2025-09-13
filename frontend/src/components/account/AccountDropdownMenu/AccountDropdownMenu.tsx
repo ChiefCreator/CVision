@@ -5,9 +5,11 @@ import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import { MenuItemData } from "@/types/menu/menu";
 import { LogOut, Settings } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
+import { useLogoutMutation } from "@/api/auth/hooks";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import styles from "./AccountDropdownMenu.module.scss";
 
 interface AccountDropdownMenuProps {
@@ -16,6 +18,15 @@ interface AccountDropdownMenuProps {
 }
 
 export default function AccountDropdownMenu({ id, positioner }: AccountDropdownMenuProps) {
+	const { mutate } = useLogoutMutation();
+	const { replace } = useRouter();
+
+	const logout = useCallback(() => {
+		mutate();
+
+		replace("/auth/login");
+	}, [mutate, replace]);
+
 	const data = useMemo<MenuItemData>(() => ([
 		{
 			id: "account-settings",
@@ -29,9 +40,9 @@ export default function AccountDropdownMenu({ id, positioner }: AccountDropdownM
 			type: "control",
 			title: "Выйти",
 			Icon: LogOut,
-			onClick: () => console.log("logout")
+			onClick: logout,
 		},
-	]), []);
+	]), [logout]);
 
 	return (
 		<DropdownMenu className={clsx(styles.dropdown, !positioner.matchTriggerWidth && styles.dropdownArbitraryWidth)} positioner={positioner} data={data} subMenuDropdownType={DropdownTypeEnum.absolute} id={id} />
