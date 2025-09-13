@@ -1,6 +1,6 @@
 
 import { apiClassic } from '@/api/api';
-import type { User } from '@/types/auth/auth';
+import type { User } from '@/types/user/user';
 
 class UserService {
   constructor() {}

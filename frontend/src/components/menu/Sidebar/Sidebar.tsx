@@ -6,6 +6,7 @@ import { Files, LayoutDashboard } from "lucide-react";
 import type { MenuItemData } from "@/types/menu/menu";
 import type { BaseComponent } from "@/types/root";
 
+import { AccountBlock } from "@/components/account/AccountBlock/AccountBlock";
 import Logo from "@/components/Logo/Logo";
 import { ArrowNavigationProvider } from "@/hooks/root/useArrowNavigation";
 import clsx from "clsx";
@@ -71,6 +72,12 @@ export default function Sidebar({ className }: SidebarProps) {
 
           <nav className={styles.nav}>
             <div className={styles.navBlock}>
+              <AnimateHeightPresence isVisible={isOpen}>
+                <label className={styles.navBlockLabel}>Аккаунт</label>
+              </AnimateHeightPresence>
+              
+              <AccountBlock className={styles.accountBlock} hideInfo={!isOpen} />
+
               <AnimateHeightPresence isVisible={isOpen}>
                 <label className={styles.navBlockLabel}>Основное</label>
               </AnimateHeightPresence>

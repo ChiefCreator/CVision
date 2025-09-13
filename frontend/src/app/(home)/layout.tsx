@@ -1,15 +1,15 @@
 import Container from "@/components/utils/Container/Container";
 import Header from "./components/Header/Header";
 
-import "react-loading-skeleton/dist/skeleton.css";
-import "@/assets/styles/_vars.scss";
-import "@/assets/styles/_utils.scss";
-import "@/assets/styles/_reset.scss";
 import "@/assets/styles/_base.scss";
+import "@/assets/styles/_reset.scss";
+import "@/assets/styles/_utils.scss";
+import "@/assets/styles/_vars.scss";
+import "react-loading-skeleton/dist/skeleton.css";
 
-import styles from "./layout.module.scss";
 import Sidebar from "@/components/menu/Sidebar/Sidebar";
-import { SidebarProvider } from "@/components/menu/Sidebar/hooks/useSidebar";
+import { SidebarProvider } from "@/hooks/menu/useSidebar";
+import styles from "./layout.module.scss";
 
 export default function HomeLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

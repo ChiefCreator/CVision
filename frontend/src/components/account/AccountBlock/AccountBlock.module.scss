@@ -1,0 +1,32 @@
+.block {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	gap: 5px;
+	cursor: pointer;
+}
+
+.avatar {
+	flex: 0 0 35px;
+	height: 35px;
+}
+
+.info {
+	flex: 1 1 auto;
+	display: flex;
+	gap: 3px;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.name {
+	display: block;
+	font-size: 15px;
+	text-align: start;
+}
+.email {
+	display: block;
+	color: rgb(93, 93, 93);
+	font-size: 13px;
+	text-align: start;
+}

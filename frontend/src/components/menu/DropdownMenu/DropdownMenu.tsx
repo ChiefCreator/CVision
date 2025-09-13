@@ -1,13 +1,13 @@
 import Popover, { PopoverProps } from "@/components/position/Popover/Popover";
 import Menu, { MenuProps } from "../Menu/Menu";
 
-interface DropdownMenuProps extends MenuProps, Omit<PopoverProps, "children"> {
+export interface DropdownMenuProps extends MenuProps, Omit<PopoverProps, "children"> {
   id: string;
 }
 
-export default function DropdownMenu({ id, positioner, ...menuProps }: DropdownMenuProps) {
+export default function DropdownMenu({ className, id, positioner, ...menuProps }: DropdownMenuProps) {
   return (
-    <Popover positioner={positioner} id={id} >
+    <Popover className={className} positioner={positioner} id={id}>
       <Menu {...menuProps} />
     </Popover>    
   );
