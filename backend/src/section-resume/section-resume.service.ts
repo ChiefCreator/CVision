@@ -50,19 +50,26 @@ export class SectionResumeService {
     });
     if (!section) throw new NotFoundException(`Couldn't create ${sectionName} section`);
 
-    if (isSingleResumeSection(sectionName)) return { [sectionName]: { ...generalSection, ...section } };
+    if (isSingleResumeSection(sectionName)) {
+      await this.resumeService.setUpdatedAt({ resumeId, prisma });
+
+      return { [sectionName]: { ...generalSection, ...section } };
+    }
         
     const subsectionName = SECTION_MODEL_MAP[sectionName]?.subsectionName;
     if (!subsectionName) throw new NotFoundException(`Couldn't create ${subsectionName} subsection for ${sectionName} section`);
 
     const subsections = subsectionUpdates?.length ? await Promise.all(subsectionUpdates.map((updates: any) => {
       return this.subsectionResumeService.createOne({
+        resumeId,
         subsectionName,
         sectionId: section.id,
         updates,
         prisma
       });
     })) : [];
+
+    await this.resumeService.setUpdatedAt({ resumeId, prisma });
 
     return {
       [sectionName]: {
@@ -90,6 +97,8 @@ export class SectionResumeService {
       await (tx[sectionName] as any).delete({ where: { id: sectionId } });
 
       await this.reorderSectionsAfterDelete(tx, resumeId, section.order);
+
+      await this.resumeService.setUpdatedAt({ resumeId, prisma: tx });
 
       return section;
     });

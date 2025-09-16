@@ -1,0 +1,39 @@
+.card {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+}
+
+.preview-wrapper {
+  cursor: pointer;
+}
+.preview {
+  display: block;
+  border: 1px solid var(--color-neutral-primary--dark);
+}
+
+.info {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+
+  &__footer {
+    border-top: 1px solid rgb(214, 218, 227);
+    padding-top: 15px;
+  }
+}
+.header {
+  padding-bottom: 15px;
+}
+.title {
+  font-size: 18px;
+}
+.updated-at {
+  font-size: 12px;
+  color: var(--color-secondary--light);
+}
+
+.action-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

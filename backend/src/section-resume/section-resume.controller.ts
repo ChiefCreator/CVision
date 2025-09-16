@@ -1,8 +1,10 @@
-import { Controller, Post, Param, Body } from '@nestjs/common';
-import { SectionResumeService } from './section-resume.service';
-import { SectionNameValidationPipe } from './pipes/section-name-validation.pipe';
+import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Authorization } from "src/auth/decorators/authentication.decorator";
 import type { ResumeSectionNames } from 'src/section-resume/types/section-names.types';
+import { SectionNameValidationPipe } from './pipes/section-name-validation.pipe';
+import { SectionResumeService } from './section-resume.service';
 
+@Authorization()
 @Controller("resumes/:resumeId/sections")
 export class SectionResumeController {
   constructor(private readonly sectionResumeService: SectionResumeService) {}
@@ -16,7 +18,7 @@ export class SectionResumeController {
     return this.sectionResumeService.createDefaultOnes({ resumeId });
   }
 
-  @Post(":sectionId")
+  @Post(":sectionId/delete")
   async deleteOne(@Param("sectionId") sectionId: string, @Body("sectionName", SectionNameValidationPipe) sectionName: ResumeSectionNames) {
     return this.sectionResumeService.deleteOne({ sectionName, sectionId });
   }

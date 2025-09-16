@@ -1,26 +1,15 @@
-import { useId, useRef, useState } from "react";
-import { useClickOutside } from "@/hooks/root/useClickOutside";
 
 import DropdownMenu from "@/components/menu/DropdownMenu/DropdownMenu";
 import { ChevronDown } from "lucide-react";
 
 import type { ButtonMenuProps } from "./Button";
 
-import styles from "./Button.module.scss";
+import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
+import styles from "./Button.module.scss";
 
-export default function ButtonMenu({ className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const butonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const menuId = useId();
-
-  const toggle = () => setIsMenuOpen(prev => !prev);
-  const close = () => setIsMenuOpen(false);
-
-  useClickOutside({ mainComponentRef: menuRef, triggerRef: butonRef, onClickOutside: close });
+export default function ButtonMenu({ variant, className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
+  const { isOpen, triggerRef, contentRef, id, toggle } = usePopover();
 
   return (
     <>
@@ -28,28 +17,29 @@ export default function ButtonMenu({ className, children, Icon, iconClassName, m
         className={clsx(styles.button, className)}
         type={actionType}
         aria-haspopup="menu"
-        aria-expanded={isMenuOpen}
-        aria-controls={menuId}
-        onClick={toggle} ref={butonRef}
+        aria-expanded={isOpen}
+        aria-controls={id}
+        onClick={toggle}
+        ref={triggerRef}
+        data-variant={variant}
       >
         {Icon && <Icon className={clsx(styles.icon, iconClassName)} aria-hidden="true" />}
   
         {children}
 
-        <ChevronDown className={clsx(styles.arrow, isMenuOpen && styles.arrowActive)} aria-hidden="true" />
+        <ChevronDown className={clsx(styles.arrow, isOpen && styles.arrowActive)} aria-hidden="true" />
       </button>
 
-      {isMenuOpen && (
+      {isOpen && (
         <DropdownMenu
-          id={menuId}
-          ref={menuRef}
-          items={menuData}
-          positionProps={menuPositionerProps ?? {
+          id={id}
+          data={menuData}
+          positioner={menuPositionerProps ?? {
             matchTriggerWidth: true,
             offsetY: 3,
-            triggerRef: butonRef
+            triggerRef,
+            contentRef
           }}
-          onClose={close}
         />
       )}
     </>

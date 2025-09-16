@@ -1,0 +1,1 @@
+export type ChangeDocumentField = (path: string, value: any) => void;

@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  flex-shrink: 0;
+}
+
+.content {
+  width: 100%;
+}

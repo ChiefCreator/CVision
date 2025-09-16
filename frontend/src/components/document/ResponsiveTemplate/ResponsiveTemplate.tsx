@@ -5,12 +5,15 @@ import { useRef, useEffect, useState } from "react";
 import { DOCUMENT_SIZE } from "@/constants/root/documentSize";
 
 import styles from "./ResponsiveTemplate.module.scss";
+import { useResponsiveTemplateContext } from "../hooks/useResponsiveTemplateContext";
 
 interface ResponsiveTemplateProps {
   children: React.ReactNode;
 }
 
 export default function ResponsiveTemplate({ children }: ResponsiveTemplateProps) {
+  const { isRecalc } = useResponsiveTemplateContext();
+
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
@@ -44,6 +47,23 @@ export default function ResponsiveTemplate({ children }: ResponsiveTemplateProps
 
     return () => window.removeEventListener("resize", updateScale);
   }, []);
+
+  useEffect(() => {
+    if (!isRecalc) return;
+  
+    let frameId: number;
+  
+    const loop = () => {
+      updateScale();
+      frameId = requestAnimationFrame(loop);
+    };
+  
+    loop();
+  
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [isRecalc]);
 
   return (
     <div ref={containerRef} className={styles.responsiveTemplate}>

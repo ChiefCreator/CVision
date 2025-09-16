@@ -1,9 +1,10 @@
+import { LucideProps } from "lucide-react";
 import { GeneralSection } from "./resumeSection/generalSection";
 
 export interface BaseEntityFields {
   id: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface BaseSectionResume extends Omit<GeneralSection, "id" | "type"> {
@@ -19,3 +20,8 @@ export interface BaseSubsectionResume {
 export interface BaseComponent {
   className?: string;
 }
+
+export type LoadingStatus = "loading" | "success" | "error" | "idle";
+
+export type IconProps = React.RefAttributes<SVGSVGElement> & LucideProps;
+export type IconComponent = React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;

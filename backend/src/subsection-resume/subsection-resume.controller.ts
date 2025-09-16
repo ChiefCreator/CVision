@@ -1,20 +1,22 @@
-import { Controller, Post, Param, Body, Get } from '@nestjs/common';
-import { SubsectionResumeService } from './subsection-resume.service';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Authorization } from "src/auth/decorators/authentication.decorator";
 import { SubsectionNameValidationPipe } from './pipes/subsection-name-validation.pipe';
+import { SubsectionResumeService } from './subsection-resume.service';
 import type { ResumeSubsectionNames } from './types/subsection-names.types';
 
+@Authorization()
 @Controller("resumes/:resumeId/sections/:sectionId/subsections")
 export class SubsectionResumeController {
   constructor(private readonly subsectionResumeService: SubsectionResumeService) {}
 
   @Post()
-  async create(@Param("sectionId") sectionId: string, @Body("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("dto") dto: any) {
-    return this.subsectionResumeService.createOne({ subsectionId, subsectionName, sectionId, updates: dto });
+  async create(@Param("sectionId") sectionId: string, @Body("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("dto") dto: any, @Body("resumeId") resumeId: string) {
+    return this.subsectionResumeService.createOne({ resumeId, subsectionId, subsectionName, sectionId, updates: dto });
   }
 
-  @Post(":subsectionId")
-  async delete(@Param("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames) {
-    return this.subsectionResumeService.deleteOne({ subsectionName, subsectionId });
+  @Post(":subsectionId/delete")
+  async delete(@Param("subsectionId") subsectionId: string, @Body("subsectionName", SubsectionNameValidationPipe) subsectionName: ResumeSubsectionNames, @Body("resumeId") resumeId: string) {
+    return this.subsectionResumeService.deleteOne({ resumeId, subsectionName, subsectionId });
   }
 
   @Get("count")

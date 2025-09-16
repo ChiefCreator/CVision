@@ -6,10 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build:prod": "docker build -t pekarskidev/frontend:prod -f Dockerfile.prod .",
+    "docker:run:prod": "docker run -p 3000:3000 pekarskidev/frontend:prod",
+    "docker:push:prod": "docker push pekarskidev/frontend:prod",
+    "docker:build:dev": "docker build -t pekarskidev/frontend:dev -f Dockerfile.dev .",
+    "docker:run:dev": "docker run -p 3000:3000 pekarskidev/frontend:dev",
+    "docker:push:dev": "docker push pekarskidev/frontend:dev"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@hookform/resolvers": "^5.2.1",
     "@tanstack/react-query": "^5.81.2",
     "@tanstack/react-query-devtools": "^5.81.2",
     "@types/lodash.debounce": "^4.0.9",
@@ -24,8 +31,12 @@
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.62.0",
     "react-loading-skeleton": "^3.5.0",
-    "uuid": "^11.1.0"
+    "react-responsive": "^10.0.1",
+    "react-toastify": "^11.0.5",
+    "uuid": "^11.1.0",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

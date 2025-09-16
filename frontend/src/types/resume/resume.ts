@@ -21,7 +21,7 @@ export interface Resume extends BaseEntityFields {
   customSections?: CustomSection[];
 }
 
-export type CreateResume = Resume["title"];
+export type CreateResume = Partial<Resume>;
 
 export type UpdateResume = Partial<Omit<Resume, keyof BaseEntityFields>>;
 

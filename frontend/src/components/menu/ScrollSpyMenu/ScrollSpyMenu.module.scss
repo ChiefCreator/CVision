@@ -1,0 +1,24 @@
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.menu-item {
+	width: 100%;
+	text-align: start;
+	padding: 8px 12px;
+	border-radius: 8px;
+	color: rgb(76, 76, 76);
+
+	@media (hover: hover) and (pointer: fine) {
+		&:hover {
+			background-color: rgb(235, 235, 235);
+		}
+	}
+
+	&_active {
+		background-color: black !important;
+		color: white !important;
+	}
+}

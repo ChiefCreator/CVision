@@ -14,6 +14,7 @@ export interface PositionerHandle {
 
 export interface PositionerProps {
   positionerHandleRef?: React.RefObject<PositionerHandle | null>;
+  contentRef: React.RefObject<HTMLElement | null>;
   triggerRef?: React.RefObject<HTMLElement | SVGElement | null> | null;
   anchorOrigin?: Origin;
   transformOrigin?: Origin;
@@ -27,8 +28,7 @@ export interface PositionerProps {
   children?: React.ReactNode;
 }
 
-export default function Positioner({ positionerHandleRef, triggerRef, anchorOrigin = { vertical: "bottom", horizontal: "left" }, transformOrigin = { vertical: "top", horizontal: "left" }, offsetX = 0, offsetY = 0, matchTriggerWidth = false, position, children }: PositionerProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
+export default function Positioner({ positionerHandleRef, contentRef, triggerRef, anchorOrigin = { vertical: "bottom", horizontal: "left" }, transformOrigin = { vertical: "top", horizontal: "left" }, offsetX = 0, offsetY = 0, matchTriggerWidth = false, position, children }: PositionerProps) {
   const { styles, updateStyles } = useCalculatePosition({ contentRef, triggerRef, anchorOrigin, transformOrigin, offsetX, offsetY, matchTriggerWidth, position });
 
   useLayoutEffect(() => {
@@ -45,7 +45,7 @@ export default function Positioner({ positionerHandleRef, triggerRef, anchorOrig
   }))
 
   return (
-    <div className={stylesPositioner.positioner} ref={contentRef} style={styles}>
+    <div className={stylesPositioner.positioner} style={styles}>
       {children}
     </div>
   );

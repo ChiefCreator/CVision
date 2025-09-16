@@ -4,7 +4,7 @@ import type { Origin, PositionerProps } from "../Positioner";
 
 
 interface UseRecalculatePosition extends Omit<PositionerProps, "positionerHandleRef" | "children"> {
-  contentRef: React.RefObject<HTMLDivElement | null>;
+  contentRef: React.RefObject<HTMLElement | null>;
 }
 
 const getOffset = (origin: Origin, size: { width: number; height: number }): { top: number; left: number } => {
@@ -43,7 +43,7 @@ export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { 
   
   const calculateStyles = (): React.CSSProperties => {
     const trigger = triggerRef?.current;
-    const content = contentRef.current;
+    const content = contentRef?.current;
 
     if (!trigger || !content) return {};
   

@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
-import { useClickOutside } from "@/hooks/root/useClickOutside";
 import { usePositionerHandleRef } from "@/components/position/Positioner/hooks/usePositionerHandleRef";
+import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
+import { useEffect, useRef, useState } from "react";
 
 import InputLine from "@/components/input/InputLine/InputLine";
-import { ChevronDown } from "lucide-react";
 import Portal from "@/components/position/Portal/Portal";
 import Positioner from "@/components/position/Positioner/Positioner";
+import { ChevronDown } from "lucide-react";
 
-import styles from "./EditSelect.module.scss";
+import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
+import styles from "./EditSelect.module.scss";
 
 interface DataItem {
   value: string;
@@ -26,7 +26,8 @@ interface EditSelectProps {
 
 export default function EditSelect({ selectedValue: selectedValueProp, data, defaultLabel = "Выберите...", onChange }: EditSelectProps) {
   const [selectedValue, setSelectedValue] = useState(selectedValueProp || null);
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, triggerRef: selectRef, contentRef: dropdownRef, id, toggle, close } = usePopover();
+  
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -34,8 +35,6 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
   const label = data.find(item => item.value === selectedValue)?.label;
   const isSelectedValueDefault = selectedValue === null;
 
-  const selectRef = useRef<HTMLButtonElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const positionerHandleRef = usePositionerHandleRef();
@@ -46,13 +45,13 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
 
   const handleSelectClick = () => {
     positionerHandleRef.current?.recalcPosition();
-    setIsOpen(prev => !prev);
+    toggle();
   }
   const handleChange = (value: string) => {
     setSelectedValue(value);
     onChange(value);
 
-    setIsOpen(false);
+    close();
   }
   const handleFocus = () => {
     setIsFocused(true);
@@ -83,13 +82,12 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
       }
       case "Escape": {
         e.preventDefault();
-        setIsOpen(false);
+        close();
         break;
       }
     }
   };
 
-  useClickOutside({ mainComponentRef: dropdownRef, triggerRef: selectRef, onClickOutside: () => setIsOpen(false) });
   useAnimateInputLine({ isFocused, isHovered, lineRef });
 
   useEffect(() => {
@@ -130,35 +128,37 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
         <input className={styles.selectInput} value={selectedValue || ""} aria-hidden readOnly></input>
       </button>
 
-      <Portal>
-        <Positioner positionerHandleRef={positionerHandleRef} triggerRef={selectRef} matchTriggerWidth={true}>
-          <div className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)} ref={dropdownRef}>
-            <div className={styles.dropdownContainer}>
-              <div className={styles.dropdownContentWrapper}>
-                <div className={styles.dropdownContent}>
-                  <ul className={styles.dropdownList}>
-                    {data.map(({ value, label }, i) => (
-                      <li key={value} role="option" aria-selected={isSelected(value)}>
-                        <button
-                          className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
-                          ref={el => {
-                            optionRefs.current[i] = el;
-                          }}
-                          type="button"
+      {isOpen && (
+        <Portal>
+          <Positioner positionerHandleRef={positionerHandleRef} triggerRef={selectRef} contentRef={dropdownRef} matchTriggerWidth={true}>
+            <div className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)} ref={dropdownRef}>
+              <div className={styles.dropdownContainer}>
+                <div className={styles.dropdownContentWrapper}>
+                  <div className={styles.dropdownContent}>
+                    <ul className={styles.dropdownList}>
+                      {data.map(({ value, label }, i) => (
+                        <li key={value} role="option" aria-selected={isSelected(value)}>
+                          <button
+                            className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
+                            ref={el => {
+                              optionRefs.current[i] = el;
+                            }}
+                            type="button"
 
-                          onClick={() => handleChange(value)}
-                        >
-                          {label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                            onClick={() => handleChange(value)}
+                          >
+                            {label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Positioner>
-      </Portal>
+          </Positioner>
+        </Portal>
+      )}
     </>
   );
 }

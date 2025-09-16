@@ -2,12 +2,14 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { DocumentService } from './document.service';
 
 import type { Response } from 'express';
+import { Authorization } from "src/auth/decorators/authentication.decorator";
 import type { DocumentType } from './types/document.types';
 
 @Controller("documents/:type/:id")
 export class DocumentController {
   constructor(private readonly documentService: DocumentService) {}
 
+  @Authorization()
   @Get("pdf")
   async downloadPDF(@Param("type") type: DocumentType, @Param("id") id: string, @Res() res: Response) {
     const buffer = await this.documentService.generatePdf(type, id);

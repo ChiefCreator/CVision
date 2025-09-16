@@ -1,9 +1,9 @@
 import { Check } from "lucide-react";
 import Spinner from "../Spinner/Spinner";
 
-import styles from "./LoadingStatus.module.scss";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
+import styles from "./LoadingStatus.module.scss";
 
 interface LoadingStatusProps extends BaseComponent {
   loadingLabel?: string;

@@ -1,4 +1,4 @@
-import { apiClassic } from '@/api/api'
+import { apiClassic } from '@/api/api';
 
 import { CreateOne, DeleteOne } from './serviceTypes';
 
@@ -14,7 +14,7 @@ class ResumeSectionService {
     return res.data;
   }
   async deleteOne({ resumeId, sectionId, sectionName }: DeleteOne) {
-    const res = await this.api.post<any>(`${this.BASE_URL_SEGMENT(resumeId)}/${sectionId}`, { sectionName });
+    const res = await this.api.post<any>(`${this.BASE_URL_SEGMENT(resumeId)}/${sectionId}/delete`, { sectionName });
 
     return res.data;
   }

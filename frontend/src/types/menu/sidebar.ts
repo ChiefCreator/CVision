@@ -1,0 +1,1 @@
+export type SidebarPerformance = "static" | "absolute";

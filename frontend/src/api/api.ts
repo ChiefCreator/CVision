@@ -1,7 +1,7 @@
-import axios, { type CreateAxiosDefaults } from "axios"
+import axios, { type CreateAxiosDefaults } from "axios";
 
-import { getErrorMessage } from "./error";
 import { authTokenService } from "@/api/authToken/authTokenService";
+import { getErrorMessage } from "./error";
 
 const options: CreateAxiosDefaults = {
   baseURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/api`,
@@ -14,6 +14,18 @@ const options: CreateAxiosDefaults = {
 export const apiClassic = axios.create(options);
 export const apiWithAuth = axios.create(options);
 export const apiWithDelay = axios.create(options);
+
+apiClassic.interceptors.response.use((response) => response, (error) => {
+  if (error.response) {
+    console.error("Ошибка ответа:", error.response.data);
+  } else if (error.request) {
+    console.error("Нет ответа от сервера:", error.request);
+  } else {
+    console.error("Ошибка запроса:", error.message);
+  }
+
+  return Promise.reject(error);
+});
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 

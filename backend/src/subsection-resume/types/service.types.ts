@@ -7,11 +7,13 @@ interface BaseMethod {
 }
 
 export interface CreateOne extends BaseMethod {
+  resumeId: string;
   subsectionId?: string;
   sectionId: string;
   updates?: any;
 }
 export interface DeleteOne extends BaseMethod {
+  resumeId: string;
   subsectionId: string;
 }
 

@@ -1,0 +1,28 @@
+.input {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	border: 1px solid rgb(160, 160, 160);
+	background-color: white;
+	padding: 10px 12px;
+	border-radius: 10px;
+}
+
+.item {
+	width: 100%;
+	font-size: 14px;
+
+	&::placeholder {
+		color: rgb(100, 100, 100);
+	}
+}
+
+.button {
+	display: flex;
+	&__icon {
+		width: 15px;
+		height: 15px;
+	}
+}
