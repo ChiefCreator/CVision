@@ -4,24 +4,51 @@
   gap: 5px;
   padding: 8px 12px;
   border-radius: 8px;
-  background-color: var(--color-primary);
-  color: white;
+  
+  color: var(--color);
+  background-color: var(--bg-color);
+
   cursor: pointer;
+
+  &[data-variant="primary"] {
+    --bg-color: var(--color-primary);
+    --color: white;
+  }
+
+  &[data-variant="secondary"] {
+    --bg-color: var(--color-secondary);
+    --color: white;
+  }
+
+  &[data-variant="neutral"] {
+    --bg-color: var(--color-neutral);
+    --color: black;
+  }
 }
 
 .icon {
   width: 16px;
   height: 16px;
-  color: white;
+  color: var(--color);
 }
 
 .arrow {
   width: 16px;
   height: 16px;
-  color: white;
+  color: var(--color);
   transition: transform .2s var(--transition-primary);
 
   &_active {
     transform: rotate(180deg);
   }
 }
+
+.state {
+  margin-left: auto;
+}
+
+.spinner {
+  --color: var(--color);
+  --diameter: 16px;
+}
+

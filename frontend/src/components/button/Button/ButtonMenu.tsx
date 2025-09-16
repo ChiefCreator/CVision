@@ -8,8 +8,8 @@ import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
 
-export default function ButtonMenu({ className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
-  const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
+export default function ButtonMenu({ variant, className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
+  const { isOpen, triggerRef, contentRef, id, toggle } = usePopover();
 
   return (
     <>
@@ -21,6 +21,7 @@ export default function ButtonMenu({ className, children, Icon, iconClassName, m
         aria-controls={id}
         onClick={toggle}
         ref={triggerRef}
+        data-variant={variant}
       >
         {Icon && <Icon className={clsx(styles.icon, iconClassName)} aria-hidden="true" />}
   
@@ -39,7 +40,6 @@ export default function ButtonMenu({ className, children, Icon, iconClassName, m
             triggerRef,
             contentRef
           }}
-          close={close}
         />
       )}
     </>

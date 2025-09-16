@@ -4,11 +4,11 @@ import Spinner from "@/components/loading/Spinner/Spinner";
 import clsx from "clsx";
 import { Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { SubmitButtonProps } from "../Button";
-import styles from "./SubmitButton.module.scss";
+import { SubmitButtonProps } from "./Button";
+import styles from "./Button.module.scss";
 
 export function SubmitButton({
-	className, children, Icon, iconClassName, status,
+	variant, className, children, Icon, iconClassName, status,
 	titleVariants = { loading: "Отправка", error: "Ошибка", success: "Успешно" },
 	onClick, setStatus
 }: SubmitButtonProps) {
@@ -26,7 +26,7 @@ export function SubmitButton({
   }, [status, setTitle, setStatus]);
 
 	return (
-		<button className={clsx(styles.button, className)} type="submit" onClick={onClick} disabled={!isIdle}>
+		<button className={clsx(styles.button, className)} type="submit" onClick={onClick} disabled={!isIdle} data-variant={variant}>
       {Icon && <Icon className={clsx(styles.icon, iconClassName)} aria-hidden="true" />}
 
       {title}

@@ -4,9 +4,10 @@ import { LoadingStatus } from "@/types/root";
 import { LucideProps } from "lucide-react";
 import ButtonMenu from "./ButtonMenu";
 import SimpleButton from "./SimpleButton";
-import { SubmitButton } from "./SubmitButton/SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 
 export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  variant?: "primary" | "secondary" | "neutral";
   Icon?: React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
   iconClassName?: string;
   children: string;
