@@ -3,8 +3,8 @@
   z-index: 5;
   min-width: 250px;
   height: 260px;
-  background-color: var(--color-neutral-primary);
-  box-shadow: 0 0 4px var(--color-neutral-primary--dark);
+  background-color: var(--color-neutral);
+  box-shadow: 0 0 4px var(--color-neutral-darken);
   padding: 15px;
   border-radius: 8px;
   transform: scale(0);
@@ -30,6 +30,7 @@
     flex: 1 1 auto;
   }
   &__year {
+    color: var(--color-text);
     cursor: pointer;
   }
   &__cells {
@@ -43,14 +44,17 @@
   cursor: pointer;
   font-size: 16px;
   padding: 8px 5px;
+  color: var(--color-text);
   transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
   border-radius: 8px;
+
   &:hover {
-    background-color: var(--color-neutral-primary--dark);
+    background-color: var(--color-neutral--dark);
   }
+
   &_selected {
     background-color: var(--color-primary) !important;
-    color: white !important;
+    color: var(--color-text-inverse) !important;
   }
 }
 
@@ -58,7 +62,7 @@
   &__icon {
     width: 20px;
     aspect-ratio: 1;
-    color: var(--color-secondary--light);
+    color: var(--color-primary);
     transition: color .2s var(--transition-primary);
   }
 
@@ -88,15 +92,16 @@
   cursor: pointer;
   font-size: 16px;
   padding: 8px 5px;
+  color: var(--color-text);
   transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
   border-radius: 8px;
 
   &:hover {
-    background-color: var(--color-neutral-primary--dark);
+    background-color: var(--color-neutral--dark);
   }
 
   &_selected {
     background-color: var(--color-primary) !important;
-    color: white !important;
+    color: var(--color-text-inverse) !important;
   }
 }

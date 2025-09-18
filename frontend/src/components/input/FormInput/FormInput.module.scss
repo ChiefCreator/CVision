@@ -21,7 +21,9 @@
 
 .button {
 	display: flex;
+
 	&__icon {
+		stroke: var(--color-neutral--ultra-darken);
 		width: 15px;
 		height: 15px;
 	}

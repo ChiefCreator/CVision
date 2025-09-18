@@ -13,15 +13,23 @@
   &__icon {
     flex: 0 0 calc(1.5 * var(--font-size));
     height: calc(1.5 * var(--font-size));
-    color: var(--color-primary--light);
+    stroke: var(--color-primary--light);
+  }
+
+  &:hover {
+    color: var(--color-text);
+
+    .button__icon {
+      stroke: var(--color-text);
+    }
   }
 
   &:disabled {
     color: var(--color-text--lighten);
-    cursor: initial;
+    cursor: not-allowed;
 
     .button__icon {
-      color: var(--color-text--lighten);
+      stroke: var(--color-text--lighten);
     }
   }
 }

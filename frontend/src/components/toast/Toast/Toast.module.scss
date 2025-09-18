@@ -20,13 +20,13 @@
 
 .title {
 	font-size: 16px;
-	color: black;
+	color: var(--color-text);
 	font-weight: 500;
 }
 .description {
 	margin-top: 5px;
 	font-size: 14px;
-	color: rgb(72, 72, 72);
+	color: var(--color-text--lighten);
 }
 
 .icon-wrapper {
@@ -35,13 +35,13 @@
 	justify-content: center;
 	flex: 0 0 16px;
 	aspect-ratio: 1;
-	background-color: black;
+	background-color: var(--color-text);
 	border-radius: 50%;
 }
 .icon {
 	width: 14px;
 	height: 14px;
-	color: white;
+	stroke: var(--color-text-inverse);
 }
 
 .action {
@@ -51,5 +51,5 @@
 
 .action-button {
 	padding: 4px 8px !important;
-	background-color: black !important;
+	background-color: var(--color-text) !important;
 }

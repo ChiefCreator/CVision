@@ -4,6 +4,7 @@
   position: relative;
   border-radius: 5px;
   overflow: hidden;
+
   &__container {
     padding: 10px;
   }
@@ -11,6 +12,7 @@
     width: 100%;
     font-size: inherit;
     height: auto;
+    color: var(--color-text);
     background-color: transparent;
     caret-color: var(--color-secondary);
     &::placeholder {
