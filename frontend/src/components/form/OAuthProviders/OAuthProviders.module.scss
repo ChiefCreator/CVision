@@ -11,12 +11,12 @@
 	&__line {
 		flex: 1 1 auto;
 		height: 1px;
-		background-color: rgb(160, 160, 160);
+		background-color: var(--color-neutral--ultra-darken);
 	}
 
 	&__text {
 		flex: 0 0 auto;
-		color: gray;
+		color: var(--color-text--lighten);
 	}
 }
 
@@ -37,8 +37,8 @@
 	justify-content: center;
 	gap: 10px;
 
-	border: 1px solid rgb(160, 160, 160);
-	background-color: white;
+	border: 1px solid var(--color-neutral--ultra-darken);
+	background-color: var(--color-neutral);
 	padding: 10px 12px;
 	border-radius: 10px;
 	transition: background-color .2s var(--transition-primary);
@@ -53,6 +53,6 @@
 	}
 
 	&:hover {
-		background-color: rgb(245, 245, 245);
+		background-color: var(--color-neutral--soft-dark);
 	}
 }

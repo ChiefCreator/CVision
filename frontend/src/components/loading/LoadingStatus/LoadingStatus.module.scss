@@ -5,16 +5,16 @@
 }
 
 .spinner {
-  --color: var(--color-neutral-contrast--lighten);
+  --color: var(--color-text-inverse);
   --diameter: 20px;
 }
 .icon {
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-text-inverse);
   width: 20px;
   height: 20px;
 }
 
 .label {
   font-size: 14px;
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-text-inverse);
 }

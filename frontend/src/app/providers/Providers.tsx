@@ -14,8 +14,8 @@ export default function Providers({ children }: ProvidersProps) {
 	return (
 		<QueryClientProvider>
 			<SkeletonTheme
-				baseColor="var(--color-neutral-secondary)"
-				highlightColor="var(--color-neutral-secondary--light)"
+				baseColor="var(--color-neutral--dark)"
+				highlightColor="var(--color-neutral--soft-dark)"
 			>
 				<ToastProvider>
 					{children}

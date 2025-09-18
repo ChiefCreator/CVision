@@ -1,4 +1,7 @@
 .form {
+  display: flex;
+  flex-direction: column;
+  
   &__sections {
     margin: var(--section-gap) 0;
   }

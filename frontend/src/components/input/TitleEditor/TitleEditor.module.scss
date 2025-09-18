@@ -1,7 +1,5 @@
 .editor {
   position: relative;
-  // display: inline-flex;
-  // max-width: 100%;
   width: 100%;
   overflow: hidden;
 
@@ -36,12 +34,12 @@
   font-weight: inherit;
   letter-spacing: inherit;
   white-space: inherit;
-  color: var(--color-neutral-contrast);
+  color: var(--color-text);
   caret-color: var(--color-primary);
   background-color: transparent;
 
   &::placeholder {
-    color: var(--color-neutral-contrast--light);
+    color: var(--color-text--lighten);
   }
 }
 

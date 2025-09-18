@@ -5,11 +5,11 @@
 	min-height: 100vh;
 	padding: 20px;
 
-	background-color: white;
+	background-color: var(--color-neutral);
 }
 
 .page {
-	background-color: rgb(245, 245, 248);
+	background-color: var(--color-neutral--dark);
 	height: 100%;
 	min-width: 420px;
 	padding: 30px;

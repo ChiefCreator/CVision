@@ -1,6 +1,6 @@
 .subsection {
   border-radius: var(--subsection-border-radius);
-  border: 1px solid var(--color-neutral-secondary);
+  border: 1px solid var(--color-neutral--darken);
 }
 
 .head {
@@ -14,11 +14,12 @@
 .title {
   font-weight: 500;
   font-size: 14px;
+  color: var(--color-text);
 }
 .subtitle {
   margin-top: 5px;
   font-size: 14px;
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-text--light);
 }
 
 .controls, .tools {
@@ -28,7 +29,7 @@
 .control {
   height: 18px;
   min-width: 18px;
-  color: var(--color-neutral-secondary--dark);
+  color: var(--color-text--lighten);
   transition: transform .2s var(--transition-primary);
 }
 .arrow {
@@ -58,7 +59,7 @@
 }
 
 .description {
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-text--lighten);
   font-size: 13px;
   margin-bottom: 15px;
   line-height: 130%;

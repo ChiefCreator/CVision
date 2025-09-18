@@ -1,6 +1,6 @@
 .input {
   width: 100%;
-  background-color: var(--color-neutral-secondary);
+  background-color: var(--color-neutral--dark);
   position: relative;
   border-radius: 5px;
   overflow: hidden;
@@ -12,14 +12,14 @@
     font-size: inherit;
     height: auto;
     background-color: transparent;
-    caret-color: var(--color-primary);
+    caret-color: var(--color-secondary);
     &::placeholder {
-      color: var(--color-secondary--light);
+      color: var(--color-text--lighten);
     }
 
     &:-webkit-autofill {
       background-color: transparent !important;
-      box-shadow: 0 0 0px 1000px var(--color-secondary--lighten) inset !important;
+      box-shadow: 0 0 0px 1000px var(--color-neutral--darken) inset !important;
     }
   }
 }

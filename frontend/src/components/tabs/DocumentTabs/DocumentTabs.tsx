@@ -93,6 +93,7 @@ export default function DocumentTabs() {
           <div className={styles.controlsList}>
             <Button
               type="buttonMenu"
+              variant={"secondary"}
               menuData={menuData}
             >Создать новый документ</Button>
           </div>

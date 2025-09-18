@@ -7,21 +7,21 @@
   gap: 5px;
 
   font-size: var(--font-size);
-  color: var(--color-neutral-contrast--light);
+  color: var(--color-text--light);
   font-weight: 500;
 
   &__icon {
     flex: 0 0 calc(1.5 * var(--font-size));
     height: calc(1.5 * var(--font-size));
-    color: var(--color-primary);
+    color: var(--color-primary--light);
   }
 
   &:disabled {
-    color: var(--color-neutral-contrast--lighten);
+    color: var(--color-text--lighten);
     cursor: initial;
 
     .button__icon {
-      color: var(--color-neutral-contrast--lighten);
+      color: var(--color-text--lighten);
     }
   }
 }

@@ -4,8 +4,8 @@
 	align-items: center;
 	gap: 5px;
 
-	border: 1px solid rgb(160, 160, 160);
-	background-color: white;
+	border: 1px solid var(--color-neutral--ultra-darken);
+	background-color: var(--color-neutral);
 	padding: 10px 12px;
 	border-radius: 10px;
 }
@@ -15,7 +15,7 @@
 	font-size: 14px;
 
 	&::placeholder {
-		color: rgb(100, 100, 100);
+		color: var(--color-text--lighten);
 	}
 }
 
