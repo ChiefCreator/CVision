@@ -1,3 +1,5 @@
+"use client";
+
 import { ResolvedTheme, Theme } from "@/types/theme/theme";
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useSystemTheme } from './useSystemTheme';
@@ -16,9 +18,8 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-	const savedTheme = localStorage.getItem("theme") as Theme ?? "system";
   const systemTheme = useSystemTheme();
-  const [theme, setTheme] = useState<Theme>(savedTheme);
+  const [theme, setTheme] = useState<Theme>("system");
 
   const resolvedTheme = (theme === "system" ? systemTheme : theme) as ResolvedTheme;
 
@@ -27,6 +28,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
 		localStorage.setItem("theme", theme);
 	}
+
+  useEffect(() => {
+    const savedTheme = (localStorage.getItem("theme") as Theme) ?? "system";
+    
+    setTheme(savedTheme);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;

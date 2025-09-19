@@ -1,22 +1,30 @@
+"use client"
+
 import { SystemTheme } from "@/types/theme/theme";
 import { useEffect, useState } from "react";
 
 export function useSystemTheme() {
 	const getSystemTheme = () => {
-		return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-	}
+    if (typeof window === "undefined") return "light";
 
-	const [systemTheme, setSystemTheme] = useState<SystemTheme>(getSystemTheme);
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
+
+	const [systemTheme, setSystemTheme] = useState<SystemTheme>("light");
 
 	useEffect(() => {
-		const media = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemTheme(getSystemTheme());
 
-		const handler = () => setSystemTheme(getSystemTheme());
+    if (typeof window !== "undefined") {
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-		media.addEventListener("change", handler);
+      const listener = () => setSystemTheme(getSystemTheme());
 
-		return () => media.removeEventListener("change", handler);
-	}, []);
+      media.addEventListener("change", listener);
+
+      return () => media.removeEventListener("change", listener);
+    }
+  }, []);
 
 	return systemTheme;
 }
