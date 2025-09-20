@@ -2,6 +2,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from "@nestjs/config";
 import { render } from "@react-email/components";
+import { ChangeEmailTemplate } from "./templates/change-email.template";
 import { ConfirmationTemplate } from "./templates/confirmation.template";
 import { ResetPasswordTemplate } from "./templates/reset-password.template";
 
@@ -25,6 +26,13 @@ export class MailService {
 		const html = await render(ConfirmationTemplate({ domain, token }));
 
 		return this.sendMail(email, "Подтверждение почты", html);
+	}
+
+  async sendChangeEmail(email: string, token: string) {
+		const domain = this.configService.getOrThrow<string>("app.clientUrl");
+		const html = await render(ChangeEmailTemplate({ domain, token }));
+
+		return this.sendMail(email, "Изменение почты", html);
 	}
 
   async sendPasswordResetEmail(email: string, token: string) {

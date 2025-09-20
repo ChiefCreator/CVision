@@ -17,6 +17,7 @@ import providerConfig from "./config/provider.config";
 import redisConfig from './config/redis.config';
 import sessionConfig from './config/session.config';
 
+import { EmailChangeModule } from "./auth/email-change/email-change.module";
 import mailConfig from "./config/mail.config";
 import { MailModule } from './mail/mail.module';
 import { isProd } from './utils/env.utils';
@@ -31,6 +32,7 @@ import { isProd } from './utils/env.utils';
     AuthModule,
     MailModule,
     EmailConfirmationModule,
+    EmailChangeModule,
     PasswordRecoveryModule,
     ConfigModule.forRoot({
       isGlobal: true,

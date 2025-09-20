@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
@@ -10,6 +10,7 @@ import { RegisterDto } from "./dto/register.dto";
 
 import { ConfigService } from "@nestjs/config";
 import * as argon2 from "argon2";
+import { EmailChangeService } from "./email-change/email-change.service";
 import { EmailConfirmationService } from "./email-confirmation/email-confirmation.service";
 import { ProviderService } from "./provider/provider.service";
 
@@ -17,10 +18,12 @@ import { ProviderService } from "./provider/provider.service";
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly emailConfirmationService: EmailConfirmationService,
+    private readonly emailChangeService: EmailChangeService,
   ) {};
 
   async register(dto: RegisterDto) {
@@ -139,5 +142,19 @@ export class AuthService {
         resolve({});
       })
     })
+  }
+
+  async updateUserEmail(id: string, newEmail: string) {
+    const user = await this.userService.findById(id);
+
+    const isNewEmailBusy = await this.userService.findByEmail(newEmail);
+
+		if (isNewEmailBusy) {
+			throw new NotFoundException("Пользователь с таким email уже существует. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.");
+		}
+
+    await this.emailChangeService.sendEmailChangeToken(user.email, newEmail);
+
+    return user;
   }
 }

@@ -1,15 +1,14 @@
 import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Request } from "express";
-import { TokenType } from "prisma/generated/client";
 import { MailService } from "src/mail/mail.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
 import { v4 as uuidv4 } from "uuid";
 import { AuthService } from "../auth.service";
-import { ConfirmationDto } from "./dto/confirmation.dto";
+import { ChangeEmailDto } from "./dto/change-email.dto";
 
 @Injectable()
-export class EmailConfirmationService {
+export class EmailChangeService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly mailService: MailService,
@@ -19,12 +18,9 @@ export class EmailConfirmationService {
     private readonly authService: AuthService,
   ) {};
 
-	async newVerification(req: Request, dto: ConfirmationDto) {
-		const existingToken = await this.prismaService.token.findUnique({
-			where: {
-				token: dto.token,
-				type: TokenType.verification
-			}
+	async newEmail(req: Request, dto: ChangeEmailDto) {
+		const existingToken = await this.prismaService.emailChangeToken.findUnique({
+			where: { token: dto.token }
 		})
 
 		if (!existingToken) {
@@ -37,61 +33,64 @@ export class EmailConfirmationService {
 			throw new BadRequestException("Токен подтверждения истек. Пожалуйста, запросите новый токен для подтверждения.");
 		}
 
-		const existingUser = await this.userService.findByEmail(existingToken.email);
+		const existingUser = await this.userService.findByEmail(existingToken.currentEmail);
 
 		if (!existingUser) {
 			throw new NotFoundException("Пользователь не найден. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.");
 		}
 
+		const isNewEmailBusy = await this.userService.findByEmail(existingToken.newEmail);
+
+		if (isNewEmailBusy) {
+			throw new NotFoundException("Пользователь с таким email уже существует. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.");
+		}
+
 		await this.prismaService.user.update({
 			where: { id: existingUser.id },
-			data: { isVerified: true }
+			data: { email: existingToken.newEmail, isVerified: true }
 		})
 
-		await this.prismaService.token.delete({
-			where: {
-				id: existingToken.id,
-				type: TokenType.verification
-			}
+		await this.prismaService.emailChangeToken.delete({
+			where: { id: existingToken.id }
 		})
 
 		return this.authService.saveSession(req, existingUser);
 	}
 
-  async sendVerificationToken(email: string) {
-    const verificationToken = await this.generateVerificationToken(email);
+  async sendEmailChangeToken(currentEmail: string, newEmail: string) {
+    const emailChangeToken = await this.generateEmailChangeToken(currentEmail, newEmail);
 
-		await this.mailService.sendConfirmationEmail(
-			verificationToken.email,
-			verificationToken.token
+		await this.mailService.sendChangeEmail(
+			emailChangeToken.newEmail,
+			emailChangeToken.token
 		)
 
 		return true;
   }
 
-  private async generateVerificationToken(email: string) {
+  private async generateEmailChangeToken(currentEmail: string, newEmail: string) {
     const token = uuidv4();
     const expiresIn = new Date(new Date().getTime() + 3600 * 1000);
 
-    const existingToken = await this.prismaService.token.findFirst({
-      where: { email, type: TokenType.verification }
+    const existingToken = await this.prismaService.emailChangeToken.findFirst({
+      where: { currentEmail, newEmail }
     });
 
     if (existingToken) {
-      await this.prismaService.token.delete({
-        where: { id: existingToken.id, type: TokenType.verification },
+      await this.prismaService.emailChangeToken.delete({
+        where: { id: existingToken.id },
       })
     }
 
-    const verificationToken = await this.prismaService.token.create({
+    const emailChangeToken = await this.prismaService.emailChangeToken.create({
       data: {
         token,
-        email,
+        currentEmail,
+				newEmail,
         expiresIn,
-        type: TokenType.verification,
       }
     });
 
-    return verificationToken;
+    return emailChangeToken;
   }
 }

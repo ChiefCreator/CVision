@@ -3,14 +3,15 @@ import { MailModule } from "src/mail/mail.module";
 import { MailService } from "src/mail/mail.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserModule } from "src/user/user.module";
+import { UserService } from "src/user/user.service";
 import { AuthModule } from "../auth.module";
-import { EmailConfirmationController } from './email-confirmation.controller';
-import { EmailConfirmationService } from './email-confirmation.service';
+import { EmailChangeController } from './email-change.controller';
+import { EmailChangeService } from './email-change.service';
 
 @Module({
   imports: [MailModule, forwardRef(() => AuthModule), forwardRef(() => UserModule)],
-  controllers: [EmailConfirmationController],
-  providers: [EmailConfirmationService, PrismaService, MailService],
-  exports: [EmailConfirmationService]
+  controllers: [EmailChangeController],
+  providers: [EmailChangeService, PrismaService, MailService, UserService],
+  exports: [EmailChangeService]
 })
-export class EmailConfirmationModule {}
+export class EmailChangeModule {}

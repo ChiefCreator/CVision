@@ -1,15 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as argon2 from "argon2";
 
+import { AuthService } from "src/auth/auth.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { filterUpdateUserDto } from "./utils/filter-update-user-dto.util";
+import { isFilteredDataEmpty } from "./utils/is-filtered-data-empty.util";
 
 
 @Injectable()
 export class UserService {
   private readonly include: any;
 
-  constructor(private readonly prismaService: PrismaService) {
+  constructor(
+    private readonly prismaService: PrismaService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService
+  ) {
     this.include = { accounts: true };
   }
 
@@ -58,5 +66,51 @@ export class UserService {
     })
 
     return deletedUser;
+  }
+
+  async updateUser(id: string, dto: UpdateUserDto) {
+    const user = await this.findById(id);
+
+    const { email, ...data } = dto ?? {};
+
+    const filteredData = filterUpdateUserDto(data, user);
+
+    let isEmailChangeMessageSent = false;
+    let isDataUpdated = false;
+
+    if (email && email !== user.email) {
+      await this.authService.updateUserEmail(id, email);
+
+      isEmailChangeMessageSent = true;
+    }
+
+    if (!isFilteredDataEmpty(filteredData)) {
+      await this.prismaService.user.update({
+        where: { id },
+        data: filteredData,
+      })
+
+      isDataUpdated = true;
+    }
+
+    if (isEmailChangeMessageSent && isDataUpdated) {
+      return {
+        message: "Данные пользователя успешно изменены. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на новый почтовый адрес."
+      }
+    }
+
+    if (isEmailChangeMessageSent) {
+      return {
+        message: "Пожалуйста, подтвердите ваш email. Сообщение было отправлено на новый почтовый адрес."
+      }
+    }
+
+    if (isDataUpdated) {
+      return {
+        message: "Данные пользователя успешно изменены."
+      }
+    }
+    
+    return { message: "Изменений не найдено. Данные остались без изменений." };
   }
 }
