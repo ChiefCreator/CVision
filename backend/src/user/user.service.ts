@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import * as argon2 from "argon2";
 
 import { AuthService } from "src/auth/auth.service";
@@ -110,7 +110,7 @@ export class UserService {
         message: "Данные пользователя успешно изменены."
       }
     }
-    
-    return { message: "Изменений не найдено. Данные остались без изменений." };
+
+    throw new BadRequestException("Изменений не найдено. Данные остались без изменений.");
   }
 }
