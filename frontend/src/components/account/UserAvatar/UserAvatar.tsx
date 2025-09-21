@@ -7,7 +7,7 @@ import { NotFoundUserAvatar } from "../NotFoundUserAvatar/NotFoundUserAvatar";
 import styles from "./UserAvatar.module.scss";
 
 interface UserAvatarProps extends BaseComponent {
-	picture?: string;
+	picture?: string | "none";
 	name?: string;
 }
 
@@ -19,8 +19,12 @@ export default function UserAvatar({ className, picture, name }: UserAvatarProps
 					className={styles.picture}
 					src={picture}
 					alt="Аватарка пользователя"
+					priority={true}
+					width={250}
+					height={250}
 				/>
 			)}
+			
 			{!picture && name && (
 				<NotFoundUserAvatar className={styles.picture} name={name} />
 			)}

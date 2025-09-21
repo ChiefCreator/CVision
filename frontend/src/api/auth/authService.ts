@@ -35,6 +35,12 @@ class AuthService {
 
     return res.data;
   }
+
+  async changeEmail(token: string | null) {
+    const res = await this.api.post<User>(`${this.BASE_URL_SEGMENT}/email-change`, { token });
+
+    return res.data;
+  }
 }
 
 export const authService = new AuthService()

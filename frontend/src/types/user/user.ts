@@ -22,3 +22,12 @@ export interface Account extends BaseEntityFields {
   accessToken: string;
   expiresAt: number;
 }
+
+export interface UpdateUser extends Partial<Pick<User, "email" | "name" | "isVerified" | "isTwoFactorEnabled" | "updatedAt" | "authMethod">> {
+  picture?: File | null;
+  isResetPicture?: boolean;
+};
+
+export interface UploadAvatar {
+  picture: string;
+}

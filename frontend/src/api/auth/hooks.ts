@@ -55,3 +55,15 @@ export const useLogoutMutation = () => {
     }
   });
 };
+
+export const useChangeEmailMutation = () => {
+  return useMutation({
+    mutationFn: (token: string | null) => authService.changeEmail(token),
+    onSuccess() {
+      toastMessageHandler({ message: "Вы изменили почту" });
+    },
+    onError(error) {
+      toastMessageHandler(error);
+    }
+  });
+};

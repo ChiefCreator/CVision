@@ -7,7 +7,7 @@ import SimpleButton from "./SimpleButton";
 import { SubmitButton } from "./SubmitButton";
 
 export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
-  variant?: "primary" | "secondary" | "neutral";
+  variant?: "primary" | "secondary" | "neutral" | "danger";
   Icon?: React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
   iconClassName?: string;
   children: string;

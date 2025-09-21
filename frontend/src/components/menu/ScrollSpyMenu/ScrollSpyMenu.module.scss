@@ -9,16 +9,16 @@
 	text-align: start;
 	padding: 8px 12px;
 	border-radius: 8px;
-	color: rgb(76, 76, 76);
+	color: var(--color-text--lighten);
 
 	@media (hover: hover) and (pointer: fine) {
 		&:hover {
-			background-color: rgb(235, 235, 235);
+			background-color: var(--color-neutral--dark);
 		}
 	}
 
 	&_active {
-		background-color: black !important;
-		color: white !important;
+		background-color: var(--color-primary) !important;
+		color: var(--color-text-inverse) !important;
 	}
 }
