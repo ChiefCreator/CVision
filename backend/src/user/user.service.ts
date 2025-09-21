@@ -3,6 +3,7 @@ import * as argon2 from "argon2";
 
 import { AuthService } from "src/auth/auth.service";
 import { PrismaService } from "src/prisma/prisma.service";
+import { StorageService } from "src/storage/storage.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { filterUpdateUserDto } from "./utils/filter-update-user-dto.util";
@@ -16,7 +17,8 @@ export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly storageService: StorageService,
   ) {
     this.include = { accounts: true };
   }
@@ -68,49 +70,58 @@ export class UserService {
     return deletedUser;
   }
 
-  async updateUser(id: string, dto: UpdateUserDto) {
+  async updateUser(id: string, dto: UpdateUserDto, picture: Express.Multer.File | undefined) {
     const user = await this.findById(id);
 
-    const { email, ...data } = dto ?? {};
-
+    const { isResetPicture, email, ...data } = dto;
     const filteredData = filterUpdateUserDto(data, user);
-
-    let isEmailChangeMessageSent = false;
-    let isDataUpdated = false;
+    const messages: string[] = [];
 
     if (email && email !== user.email) {
       await this.authService.updateUserEmail(id, email);
 
-      isEmailChangeMessageSent = true;
+      messages.push("Пожалуйста, подтвердите ваш email. Сообщение было отправлено на новый почтовый адрес.");
+    }
+
+    if (picture) {
+      await this.uploadAvatar(id, picture);
+
+      messages.push("Аватарка пользователя успешно изменена.");
+    } else if (isResetPicture) {
+      await this.prismaService.user.update({
+        where: { id },
+        data: { picture: null },
+      });
+
+      messages.push("Аватарка пользователя успешно удалена.");
     }
 
     if (!isFilteredDataEmpty(filteredData)) {
       await this.prismaService.user.update({
         where: { id },
         data: filteredData,
-      })
+      });
 
-      isDataUpdated = true;
+      messages.push("Данные пользователя успешно изменены.");
     }
 
-    if (isEmailChangeMessageSent && isDataUpdated) {
-      return {
-        message: "Данные пользователя успешно изменены. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на новый почтовый адрес."
-      }
+    if (messages.length === 0) {
+      throw new BadRequestException("Изменений не найдено. Данные остались без изменений.");
     }
 
-    if (isEmailChangeMessageSent) {
-      return {
-        message: "Пожалуйста, подтвердите ваш email. Сообщение было отправлено на новый почтовый адрес."
-      }
-    }
+    return { message: messages.join(" ") };
+  }
 
-    if (isDataUpdated) {
-      return {
-        message: "Данные пользователя успешно изменены."
-      }
-    }
+  async uploadAvatar(id: string, picture: Express.Multer.File) {
+    const user = await this.findById(id);
 
-    throw new BadRequestException("Изменений не найдено. Данные остались без изменений.");
+    const { url } = await this.storageService.uploadFile({ file: picture, key: `avatars/${id}.jpg` });
+
+    await this.prismaService.user.update({
+      where: { id },
+      data: { picture: url },
+    });
+
+    return { avatarUrl: url };
   }
 }

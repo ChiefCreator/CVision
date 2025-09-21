@@ -11,14 +11,13 @@ export class UpdateUserDto {
 	email?: string;
 
 	@IsOptional()
-	@IsString({ message: "Фото профиля должно быть строкой." })
-	picture?: string;
-
-	@IsOptional()
 	@IsEnum(AuthMethod, { message: "Неверный метод аутентификации." })
   authMethod?: AuthMethod;
 
 	@IsOptional()
   @IsBoolean({ message: "isVerified должно быть boolean." })
   isVerified?: boolean;
+
+	@IsOptional()
+  isResetPicture?: boolean;
 }
