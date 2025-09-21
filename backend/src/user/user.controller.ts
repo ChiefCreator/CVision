@@ -36,6 +36,13 @@ export class UserController {
 
   @Authorization()
   @HttpCode(HttpStatus.OK)
+  @Delete("me")
+  async deleteCurrentUser(@User("id") id: string) {
+    return this.userService.delete(id);
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
   @Get("profile")
   async getProfile(@User("id") id: string) {
     return this.userService.findById(id);
@@ -57,12 +64,6 @@ export class UserController {
   @Post()
   async create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
-  }
-
-  @Authorization()
-  @Delete("me")
-  async deleteCurrentUser(@User("id") id: string) {
-    return this.userService.delete(id);
   }
 
   @Authorization("admin")

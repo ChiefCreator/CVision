@@ -1,0 +1,24 @@
+.modal {
+	width: 100%;
+	max-width: 600px;
+}
+
+.title {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.description {
+	font-size: 14px;
+	line-height: 130%;
+	color: var(--color-text--lighten);
+	margin-top: 10px;
+}
+
+.form {
+	margin-top: 20px;
+}
+
+.button {
+	margin-top: 20px;
+}

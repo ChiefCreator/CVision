@@ -64,10 +64,10 @@ export class UserService {
   async delete(id: string) {
     const deletedUser = await this.prismaService.user.delete({
       where: { id },
-      include: this.include
+      include: this.include,
     })
 
-    return deletedUser;
+    return { message: "Аккаунт успешно удален", user: deletedUser };
   }
 
   async updateUser(id: string, dto: UpdateUserDto, picture: Express.Multer.File | undefined) {

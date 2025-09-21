@@ -33,6 +33,12 @@ class UserService {
 
 		return res.data;
 	}
+
+	async deleteUser() {
+		const res = await this.api.delete<{ message: string, user: User }>(`${this.BASE_URL_SEGMENT}/me`);
+
+		return res.data;
+	}
 }
 
 export const userService = new UserService()

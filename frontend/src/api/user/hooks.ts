@@ -1,6 +1,7 @@
 import { UpdateUser, UploadAvatar } from "@/types/user/user";
 import { toastMessageHandler } from "@/utils/toast/toastResponseHandler";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { userKeys } from "./queryKeys";
 import { userService } from "./userService";
 
@@ -39,6 +40,26 @@ export const useUploadAvatarMutation = () => {
       toastMessageHandler(res);
 
       queryClient.invalidateQueries({ queryKey: userKeys.current() });
+    },
+    onError(error) {
+      toastMessageHandler(error);
+    }
+  });
+};
+
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+  const { replace } = useRouter();
+
+  return useMutation({
+    mutationFn: () => userService.deleteUser(),
+		mutationKey: userKeys.current(),
+    onSuccess(res) {
+      toastMessageHandler(res);
+
+      queryClient.invalidateQueries({ queryKey: userKeys.current() });
+
+      replace("/auth/login");
     },
     onError(error) {
       toastMessageHandler(error);

@@ -28,12 +28,9 @@ export default function ProfileSection({ id, label }: ProfileSectionProps) {
   const { field: isResetPictureField } = useController({ name: "isResetPicture", control });
 	
 	const onSubmit = (data: UpdateProfileFormData) => {
-		console.log(data);
-
 		mutate(data);
 	}
 
-	console.log(errors)
 	useEffect(() => {
   	if (!user) return;
 
