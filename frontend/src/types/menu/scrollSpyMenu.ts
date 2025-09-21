@@ -3,4 +3,4 @@ export interface Section {
 	label: string;
 }
 
-export type SectionId = "subscription" | "profile" | "oauthProviders" | "dangerousZone";
+export type SectionId = "subscription" | "profile" | "userSettingsSection" | "oauthProviders" | "dangerousZone";

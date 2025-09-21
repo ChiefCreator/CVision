@@ -15,8 +15,7 @@ interface DangerousZoneSectionProps extends SectionType {
 
 export default function DangerousZoneSection({ id, label }: DangerousZoneSectionProps) {
 	const { isOpen, id: modalId, close, open } = useModal();
-	console.log(isOpen)
-	
+
 	return (
 		<>
 			<Section id={id} label={label}>
