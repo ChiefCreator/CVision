@@ -18,9 +18,13 @@ export default function SettingField({ className, title, description, Icon, icon
 	return (
 		<div className={clsx(styles.field, className)}>
 			<div className={styles.content}>
-				{Icon && <Icon className={clsx(styles.icon, iconClassName)} />}
-
-				{title && <span className={styles.title}>{title}</span>} 
+				{(Icon || title) && (
+					<div className={styles.titleWrapper}>
+						{Icon && <Icon className={clsx(styles.icon, iconClassName)} />}
+					
+						{title && <span className={styles.title}>{title}</span>} 
+					</div>
+				)}
 
 				{description && <p className={styles.description}>{description}</p>}
 			</div>

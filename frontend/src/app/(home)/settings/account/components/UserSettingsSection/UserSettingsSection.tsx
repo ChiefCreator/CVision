@@ -9,7 +9,7 @@ import { useTheme } from "@/hooks/theme/useTheme"
 import styles from "./UserSettingsSection.module.scss"
 
 export default function UserSettingsSection({ id, label }: SectionType) {
-	const { theme, changeTheme } = useTheme();
+	const { changeTheme } = useTheme();
 	
 	return (
 		<Section id={id} label={label}>

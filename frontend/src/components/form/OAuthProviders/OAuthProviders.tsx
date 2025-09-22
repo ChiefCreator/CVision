@@ -4,8 +4,8 @@ import { useConnectByProviderMutation } from "@/api/auth/hooks";
 import { OAuthProvider } from "@/types/auth/oauthProviders";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
+import { oAuthProvidersMap } from "../../../constants/auth/oAuthProvidersMap";
 import styles from "./OAuthProviders.module.scss";
-import { oAuthProvidersMap } from "./oAuthProvidersMap";
 
 interface OAuthProvidersProps extends BaseComponent {
 	providers: OAuthProvider[];
@@ -15,7 +15,7 @@ export function OAuthProviders({ className, providers }: OAuthProvidersProps) {
 	const { mutate } = useConnectByProviderMutation();
 
 	const connectProvider = (provider: OAuthProvider) => {
-		mutate(provider);
+		mutate({ provider, mode: "login" });
 	}
 
 	return (

@@ -3,6 +3,7 @@ import { LoginFormData } from "@/app/auth/login/components/LoginForm/loginSchema
 import { RegisterFormData } from "@/app/auth/register/components/RegisterForm/registerSchema";
 import { MessageResponse } from "@/types/api/response";
 import { User } from "@/types/auth/auth";
+import { ConnectMode } from "@/types/auth/connectMode";
 import { OAuthProvider } from "@/types/auth/oauthProviders";
 
 
@@ -24,8 +25,14 @@ class AuthService {
     return res.data;
   }
 
-  async connectByProvider(provider: OAuthProvider) {
-		const res = await this.api.get<{ url: string }>(`${this.BASE_URL_SEGMENT}/oauth/connect/${provider}`)
+  async connectByProvider(provider: OAuthProvider, mode: ConnectMode = "login") {
+		const res = await this.api.get<{ url: string }>(`${this.BASE_URL_SEGMENT}/oauth/connect/${provider}?mode=${mode}`)
+
+		return res.data;
+	}
+
+  async disconnectProvider(provider: OAuthProvider) {
+		const res = await this.api.delete<{ message: string }>(`${this.BASE_URL_SEGMENT}/oauth/disconnect/${provider}`)
 
 		return res.data;
 	}

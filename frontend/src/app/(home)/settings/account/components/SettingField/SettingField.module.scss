@@ -34,10 +34,16 @@
 	flex-grow: 1;
 }
 
+.titleWrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 5px;
+}
+
 .icon {
 	width: 20px;
 	height: 20px;
-	margin-bottom: 5px;
 }
 
 .title {
@@ -45,7 +51,6 @@
 	font-size: 16px;
 	font-weight: 500;
 	color: var(--color-text);
-	margin-bottom: 5px;
 }
 
 .description {
