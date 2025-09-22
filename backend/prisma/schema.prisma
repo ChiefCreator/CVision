@@ -37,6 +37,7 @@ model Account {
   refreshToken String? @map("refresh_token")
   accessToken  String  @map("access_token")
   expiresAt    Int     @map("expires_at")
+  email        String? 
 
   userId String @map("user_id")
 
