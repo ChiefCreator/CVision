@@ -1,0 +1,14 @@
+@use "./breakpoints" as *;
+@use "sass:map";
+
+@mixin respond-to($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media (max-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Нет такого брейкпоинта: #{$breakpoint}";
+  }
+}

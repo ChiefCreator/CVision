@@ -1,10 +1,7 @@
 import { montserrat } from "@/assets/fonts/montserrat";
 import Providers from "./providers/Providers";
 
-import "@/assets/styles/_base.scss";
-import "@/assets/styles/_reset.scss";
-import "@/assets/styles/_utils.scss";
-import "@/assets/styles/_vars.scss";
+import "@/assets/styles/index.scss";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
