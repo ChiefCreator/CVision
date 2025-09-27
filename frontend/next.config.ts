@@ -3,6 +3,9 @@ import path from 'path';
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  images: {
+    domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
+  },
   webpack(config) {
     const oneOfRule = config.module?.rules.find((rule: any) => Array.isArray(rule.oneOf));
 

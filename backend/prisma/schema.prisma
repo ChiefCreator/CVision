@@ -22,8 +22,8 @@ model User {
   isTwoFactorEnabled Boolean    @default(false) @map("is_two_factor_enabled")
   authMethod         AuthMethod @default(credentials) @map("auth_method")
 
-  accounts Account[]
-  resumes  Resume[]
+  accounts          Account[]
+  resumes           Resume[]
 }
 
 model Account {
@@ -37,6 +37,7 @@ model Account {
   refreshToken String? @map("refresh_token")
   accessToken  String  @map("access_token")
   expiresAt    Int     @map("expires_at")
+  email        String? 
 
   userId String @map("user_id")
 
@@ -44,13 +45,23 @@ model Account {
 }
 
 model Token {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
 
   email     String
   token     String    @unique
   type      TokenType
   expiresIn DateTime  @map("expires_in")
+}
+
+model EmailChangeToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  currentEmail String   @map("current_email")
+  newEmail     String   @map("new_email")
+  token        String   @unique
+  expiresIn    DateTime @map("expires_in")
 }
 
 enum TokenType {

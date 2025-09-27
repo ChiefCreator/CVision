@@ -1,23 +1,111 @@
 :root {
-  --color-primary: rgb(26, 145, 240);
-  --color-primary--dark: rgb(14, 105, 181);
-  --color-primary--light: rgb(237, 247, 255);
+	// Color
+	--color-primary: black;
+	--color-primary--light: rgb(38, 39, 42);
 
-  --color-secondary: rgb(48, 56, 72);
-  --color-secondary--light: rgb(64, 73, 91);
+	--color-secondary: rgb(26, 145, 240);
+	--color-secondary--dark: rgb(14, 105, 181);
+	--color-secondary--light: rgb(79, 166, 238);
 
-  --color-neutral-primary: #ffffff;
-  --color-neutral-primary--light: #f0f0f0;
-  --color-neutral-primary--dark: rgb(236, 238, 239);
-  --color-neutral-primary--darken: #c2beba;
+	--color-tertiary: rgb(48, 56, 72);
+	--color-tertiary--light: rgb(64, 73, 91);
 
-  --color-neutral-secondary: rgb(220, 223, 232);
-  --color-neutral-secondary--light: rgb(235, 238, 246);
-  --color-neutral-secondary--dark: rgb(202, 204, 212);
+	--color-neutral: white;
+	--color-neutral--soft-dark: rgb(248, 248, 248);
+	--color-neutral--dark: rgb(241, 241, 241);
+	--color-neutral--darken: rgb(212, 212, 212);
+  --color-neutral--more-darken: rgb(199, 199, 199);
+  --color-neutral--ultra-darken: rgb(161, 161, 161);
 
-  --color-neutral-contrast: rgb(15, 20, 30);
-  --color-neutral-contrast--light: #22394B;
-  --color-neutral-contrast--lighten: rgb(130, 139, 162);
+	--color-text: black;
+	--color-text--light: rgb(72, 72, 72);
+	--color-text--lighten: rgb(110, 110, 110);
+
+	--color-text-inverse: white;
+	--color-text-inverse--dark: rgb(207, 207, 207);
+	--color-text-inverse--darken: rgb(125, 125, 125);
+
+	// Transition
+	--transition-primary: ease-out;
+
+	// Other
+	--document-width: 794px;
+	--document-height: 1123px;
+	--document-aspect-ratio: 1 / 1.4142;
+
+	--section-border-radius: 10px;
+	--section-padding: 20px;
+	--section-gap: 4px;
+
+	--subsection-border-radius: 8px;
+	--subsection-padding: 15px;
+}
+
+:root[data-theme="light"] {
+  --color-primary: black;
+  --color-primary--light: rgb(38, 39, 42);
+
+  --color-secondary: rgb(26, 145, 240);
+  --color-secondary--dark: rgb(14, 105, 181);
+  --color-secondary--light: rgb(79, 166, 238);
+
+  --color-tertiary: rgb(48, 56, 72);
+  --color-tertiary--light: rgb(64, 73, 91);
+
+  --color-neutral: white;
+  --color-neutral--soft-dark: rgb(248, 248, 248);
+  --color-neutral--dark: rgb(241, 241, 241);
+  --color-neutral--darken: rgb(212, 212, 212);
+  --color-neutral--more-darken: rgb(199, 199, 199);
+  --color-neutral--ultra-darken: rgb(161, 161, 161);
+
+  --color-text: black;
+  --color-text--light: rgb(72, 72, 72);
+  --color-text--lighten: rgb(110, 110, 110);
+
+  --color-text-inverse: white;
+  --color-text-inverse--dark: rgb(207, 207, 207);
+  --color-text-inverse--darken: rgb(125, 125, 125);
+
+  --transition-primary: ease-out;
+
+  --document-width: 794px;
+  --document-height: 1123px;
+  --document-aspect-ratio: 1 / 1.4142;
+
+  --section-border-radius: 10px;
+  --section-padding: 20px;
+  --section-gap: 4px;
+
+  --subsection-border-radius: 8px;
+  --subsection-padding: 15px;
+}
+
+:root[data-theme="dark"] {
+  --color-primary: rgb(105, 106, 117);
+  --color-primary--light: rgb(86, 87, 97);
+
+  --color-secondary: rgb(26, 145, 240);
+  --color-secondary--dark: rgb(14, 105, 181);
+  --color-secondary--light: rgb(79, 166, 238);
+
+  --color-tertiary: var(--color-primary);
+  --color-tertiary--light: var(--color-primary--light);
+
+  --color-neutral: rgb(22, 22, 25);
+  --color-neutral--soft-dark: rgb(32, 32, 36);
+  --color-neutral--dark: rgb(39, 39, 44);
+  --color-neutral--darken: rgb(54, 54, 61);
+  --color-neutral--more-darken: rgb(69, 69, 78);
+  --color-neutral--ultra-darken: rgb(86, 86, 98);
+
+  --color-text: rgb(236, 236, 236);
+  --color-text--light: rgb(162, 162, 162);
+  --color-text--lighten: rgb(102, 102, 102);
+
+  --color-text-inverse: black;
+  --color-text-inverse--dark: rgb(41, 41, 41);
+  --color-text-inverse--darken: rgb(125, 125, 125);
 
   --transition-primary: ease-out;
 

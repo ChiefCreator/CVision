@@ -1,6 +1,6 @@
 
 import { apiClassic } from '@/api/api';
-import type { User } from '@/types/user/user';
+import type { UpdateUser, UploadAvatar, User } from '@/types/user/user';
 
 class UserService {
   constructor() {}
@@ -10,6 +10,32 @@ class UserService {
 
   async getCurrentUser() {
 		const res = await this.api.get<User>(`${this.BASE_URL_SEGMENT}/me`);
+
+		return res.data;
+	}
+
+  async updateCurrentUser(dto: UpdateUser) {
+		const res = await this.api.patch<{ message: string }>(`${this.BASE_URL_SEGMENT}/me`, dto, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			}
+		});
+
+		return res.data;
+	}
+
+	async uploadAvatar(dto: UploadAvatar) {
+		const res = await this.api.post<{ message: string }>(`${this.BASE_URL_SEGMENT}/me/avatar`, dto, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			}
+		});
+
+		return res.data;
+	}
+
+	async deleteUser() {
+		const res = await this.api.delete<{ message: string, user: User }>(`${this.BASE_URL_SEGMENT}/me`);
 
 		return res.data;
 	}

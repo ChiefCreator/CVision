@@ -8,7 +8,7 @@
 }
 .preview {
   display: block;
-  border: 1px solid var(--color-neutral-primary--dark);
+  border: 1px solid var(--color-neutral--dark);
 }
 
 .info {
@@ -17,7 +17,7 @@
   flex-direction: column;
 
   &__footer {
-    border-top: 1px solid rgb(214, 218, 227);
+    border-top: 1px solid var(--color-neutral--dark);
     padding-top: 15px;
   }
 }
@@ -29,7 +29,7 @@
 }
 .updated-at {
   font-size: 12px;
-  color: var(--color-secondary--light);
+  color: var(--color-text--lighten);
 }
 
 .action-buttons-list {

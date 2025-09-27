@@ -8,7 +8,7 @@ export const useConfirmEmail = () => {
 	const requestState = useRequestState({ isPending, isSuccess, isError });
 
 	useEffect(() => {
-		if (!isSuccess && !isError) return;
+		if (!isSuccess || !isError) return;
 
 		const path = isSuccess ? "/" : "/auth/login";
 		const timeoutId = setTimeout(() => redirect(path), requestState.resetDelay);

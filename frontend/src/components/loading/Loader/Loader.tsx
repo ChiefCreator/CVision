@@ -10,7 +10,6 @@ interface LoaderProps extends BaseComponent {
 }
 
 export default function Loader({ className, label = "Загрузка...", isLoading }: LoaderProps) {
-  console.log(isLoading);
 	if (!isLoading) return;
 	
   return (

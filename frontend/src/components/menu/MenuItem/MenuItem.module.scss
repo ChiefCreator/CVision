@@ -5,10 +5,9 @@
   padding: 8px 12px;
   border-radius: 5px;
   cursor: pointer;
-  color: var(--color-neutral-contrast);
+  color: var(--color-text);
   font-size: 14px;
-  transition: background-color .2s var(--transition-primary);
-  transition: color .2s var(--transition-primary);
+  transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
 
   &__icon {
     max-width: 14px;
@@ -30,6 +29,6 @@
   }
 
   &:hover {
-    background-color: var(--color-neutral-primary--dark);
+    background-color: var(--color-neutral--dark);
   }
 }

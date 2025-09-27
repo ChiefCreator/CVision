@@ -1,4 +1,6 @@
 export interface Section {
-	id: string;
+	id: SectionId;
 	label: string;
 }
+
+export type SectionId = "subscription" | "profile" | "userSettingsSection" | "oauthProviders" | "dangerousZone";

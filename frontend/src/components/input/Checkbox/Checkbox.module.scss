@@ -7,25 +7,26 @@
 	flex: 0 0 auto;
 	width: 22px;
 	height: 22px;
-	border: 1px solid rgb(160, 160, 160);
-	background-color: white;
+	border: 1px solid var(--color-neutral--ultra-darken);
+	background-color: var(--color-neutral);
 	border-radius: 6px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	&__check {
+		color: var(--color-text);
 		width: 18px;
 		object-fit: 1;
 	}
 }
 
 .label-wrapper {
-	color: rgb(90, 90, 90);
+	color: var(--color-text--lighten);
 	font-size: 14px;
 	line-height: 130%;
 
 	&:hover {
-		color: black;
+		color: var(--color-text);
 	}
 }

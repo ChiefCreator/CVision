@@ -1,18 +1,18 @@
 .button {
   &:hover {
     .icon {
-      color: var(--color-primary);
+      color: var(--color-secondary);
     }
   }
 
   &__active {
     .icon {
-      color: var(--color-primary);
+      color: var(--color-secondary);
     }
   }
 }
 
 .icon {
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-neutral--ultra-darken);
   transition: color .2s var(--transition-primary);
 }

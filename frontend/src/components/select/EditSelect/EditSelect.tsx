@@ -3,10 +3,9 @@ import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
 import { useEffect, useRef, useState } from "react";
 
 import InputLine from "@/components/input/InputLine/InputLine";
-import Portal from "@/components/position/Portal/Portal";
-import Positioner from "@/components/position/Positioner/Positioner";
 import { ChevronDown } from "lucide-react";
 
+import Popover from "@/components/position/Popover/Popover";
 import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./EditSelect.module.scss";
@@ -129,35 +128,36 @@ export default function EditSelect({ selectedValue: selectedValueProp, data, def
       </button>
 
       {isOpen && (
-        <Portal>
-          <Positioner positionerHandleRef={positionerHandleRef} triggerRef={selectRef} contentRef={dropdownRef} matchTriggerWidth={true}>
-            <div className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)} ref={dropdownRef}>
-              <div className={styles.dropdownContainer}>
-                <div className={styles.dropdownContentWrapper}>
-                  <div className={styles.dropdownContent}>
-                    <ul className={styles.dropdownList}>
-                      {data.map(({ value, label }, i) => (
-                        <li key={value} role="option" aria-selected={isSelected(value)}>
-                          <button
-                            className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
-                            ref={el => {
-                              optionRefs.current[i] = el;
-                            }}
-                            type="button"
-
-                            onClick={() => handleChange(value)}
-                          >
-                            {label}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        <Popover
+          className={clsx(styles.dropdown, isOpen && styles.dropdownOpen)}
+          positioner={{
+            positionerHandleRef,
+            triggerRef: selectRef,
+            contentRef: dropdownRef,
+            matchTriggerWidth: true,
+          }}
+        >
+            <div className={styles.dropdownContainer}>
+              <div className={styles.dropdownContentWrapper}>
+                <div className={styles.dropdownContent}>
+                  <ul className={styles.dropdownList}>
+                    {data.map(({ value, label }, i) => (
+                      <li key={value} role="option" aria-selected={isSelected(value)}>
+                        <button
+                          className={clsx(styles.option, isSelected(value) && styles.optionActive, i === activeIndex && styles.optionFocused)}
+                          ref={el => { optionRefs.current[i] = el }}
+                          type="button"
+                          onClick={() => handleChange(value)}
+                        >
+                          {label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
-          </Positioner>
-        </Portal>
+        </Popover>
       )}
     </>
   );

@@ -13,6 +13,7 @@ export class EmailConfirmationService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly mailService: MailService,
+		@Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,

@@ -22,8 +22,11 @@
   }
 
   &_disabled {
+    background-color: var(--color-neutral--dark);
+
     .tracker__block, .dash {
       cursor: initial;
+      background-color: var(--color-neutral--darken);
     }
     .cell {
       cursor: initial;

@@ -5,37 +5,67 @@
   padding: 8px 12px;
   border-radius: 8px;
   
-  color: var(--color);
+  color: var(--text-color);
   background-color: var(--bg-color);
+  transition: background-color .2s var(--transition-primary), color .2s var(--transition-primary);
 
   cursor: pointer;
 
   &[data-variant="primary"] {
     --bg-color: var(--color-primary);
-    --color: white;
+    --text-color: white;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        --bg-color: var(--color-primary--light);
+      }
+    }
   }
 
   &[data-variant="secondary"] {
     --bg-color: var(--color-secondary);
-    --color: white;
+    --text-color: white;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        --bg-color: var(--color-secondary--light);
+      }
+    }
   }
 
   &[data-variant="neutral"] {
-    --bg-color: var(--color-neutral);
-    --color: black;
+    --bg-color: var(--color-neutral--darken);
+    --text-color: black;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        --bg-color: var(--color-neutral--more-darken);
+      }
+    }
+  }
+
+  &[data-variant="danger"] {
+    --bg-color: rgb(255, 49, 49);
+    --text-color: white;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        --bg-color: red;
+      }
+    }
   }
 }
 
 .icon {
   width: 16px;
   height: 16px;
-  color: var(--color);
+  color: var(--text-color);
 }
 
 .arrow {
   width: 16px;
   height: 16px;
-  color: var(--color);
+  color: var(--text-color);
   transition: transform .2s var(--transition-primary);
 
   &_active {
@@ -48,7 +78,7 @@
 }
 
 .spinner {
-  --color: var(--color);
+  --color: var(--text-color) !important;
   --diameter: 16px;
 }
 

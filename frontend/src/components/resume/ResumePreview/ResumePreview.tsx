@@ -47,6 +47,7 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
         <header className={styles.previewHead}>
           <Button
             type="buttonMenu"
+            variant="secondary"
             menuData={menuData}
             onClick={handleDownload}
           >Скачать</Button>

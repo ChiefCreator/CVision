@@ -1,0 +1,1 @@
+export type ConnectMode = "login" | "connect";

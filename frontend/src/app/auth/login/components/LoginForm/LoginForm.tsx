@@ -68,6 +68,7 @@ export default function LoginForm() {
 				<Button
 					className={styles.submitButton}
 					type="submit"
+					variant="primary"
 					status={state}
 					setStatus={setState}
 				>

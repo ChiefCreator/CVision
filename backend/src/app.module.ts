@@ -13,11 +13,13 @@ import { UserModule } from './user/user.module';
 import appConfig from './config/app.config';
 import cookieConfig from './config/cookie.config';
 import databaseConfig from './config/database.config';
+import mailConfig from "./config/mail.config";
 import providerConfig from "./config/provider.config";
 import redisConfig from './config/redis.config';
 import sessionConfig from './config/session.config';
+import storageConfig from "./config/storage.config";
 
-import mailConfig from "./config/mail.config";
+import { EmailChangeModule } from "./auth/email-change/email-change.module";
 import { MailModule } from './mail/mail.module';
 import { isProd } from './utils/env.utils';
 
@@ -31,13 +33,14 @@ import { isProd } from './utils/env.utils';
     AuthModule,
     MailModule,
     EmailConfirmationModule,
+    EmailChangeModule,
     PasswordRecoveryModule,
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: isProd(),
       envFilePath: ".env",
       cache: true,
-      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig, providerConfig, mailConfig]
+      load: [appConfig, databaseConfig, cookieConfig, sessionConfig, redisConfig, providerConfig, mailConfig, storageConfig]
     }),
   ],
 })

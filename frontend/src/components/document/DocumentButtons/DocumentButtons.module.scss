@@ -6,7 +6,7 @@
 
 .pages-count {
   font-size: 14px;
-  color: var(--color-neutral-contrast--lighten);
+  color: var(--color-text-inverse);
   font-variant-numeric: tabular-nums;
 }
 
@@ -15,6 +15,8 @@
 
   width: var(--icon-size);
   height: var(--icon-size);
+
+  color: var(--color-text-inverse);
 
   &:disabled {
     cursor: not-allowed;
@@ -25,15 +27,16 @@
     color: inherit;
   }
   &:disabled:hover .icon {
-    color: rgb(165, 172, 191);
+    color: var(--color-text-inverse--dark);
   }
 }
 
 .icon {
   width: var(--icon-size);
   height: var(--icon-size);
+  color: var(--color-text-inverse);
 
   &_disabled {
-    color: rgb(165, 172, 191);
+    color: var(--color-text-inverse--dark);
   }
 }

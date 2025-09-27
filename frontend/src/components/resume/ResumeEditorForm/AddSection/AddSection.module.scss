@@ -1,12 +1,15 @@
 .section {
-  background-color: var(--color-neutral-primary);
+  flex-grow: 1;
+  background-color: var(--color-neutral);
   border-top-left-radius: var(--section-border-radius);
   border-top-right-radius: var(--section-border-radius);
   padding: var(--section-padding);
 }
 
 .title {
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text);
 }
 
 .list {

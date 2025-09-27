@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
@@ -10,6 +10,7 @@ import { RegisterDto } from "./dto/register.dto";
 
 import { ConfigService } from "@nestjs/config";
 import * as argon2 from "argon2";
+import { EmailChangeService } from "./email-change/email-change.service";
 import { EmailConfirmationService } from "./email-confirmation/email-confirmation.service";
 import { ProviderService } from "./provider/provider.service";
 
@@ -17,10 +18,12 @@ import { ProviderService } from "./provider/provider.service";
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly emailConfirmationService: EmailConfirmationService,
+    private readonly emailChangeService: EmailChangeService,
   ) {};
 
   async register(dto: RegisterDto) {
@@ -74,8 +77,8 @@ export class AuthService {
 		const account = await this.prismaService.account.findFirst({
 			where: {
 				id: profile.id,
-				provider: profile.provider
-			}
+				provider: profile.provider,
+			},
 		});
 
 		let user = account?.userId ? await this.userService.findById(account.userId) : null;
@@ -101,13 +104,81 @@ export class AuthService {
 					provider: profile.provider,
 					accessToken: profile.access_token,
 					refreshToken: profile.refresh_token,
-					expiresAt: profile.expires_at
+					expiresAt: profile.expires_at,
+          email: profile.email,
 				}
 			})
 		}
 
-		return this.saveSession(req, user)
+		return this.saveSession(req, user);
 	}
+
+  async connectAccount(user: User, provider: string, code: string) {
+		const providerInstance = this.providerService.findByService(provider);
+
+    if (!providerInstance) {
+      throw new BadRequestException(`${provider} не существует`);
+    }
+
+		const profile = await providerInstance.findUserByCode(code);
+
+		const account = await this.prismaService.account.findFirst({
+			where: {
+				id: profile.id,
+				provider: profile.provider,
+			},
+      include: { user: true },
+		});
+
+    const userId = user.id;
+
+    if (account && account.userId !== userId) {
+      throw new BadRequestException(`Этот ${provider}-аккаунт уже привязан к другому пользователю`);
+    }
+
+    if (!account) {
+      await this.prismaService.account.create({
+        data: {
+          userId,
+          provider,
+          type: "oauth",
+          accessToken: profile.access_token,
+          refreshToken: profile.refresh_token,
+          expiresAt: profile.expires_at,
+          email: profile.email,
+        },
+      });
+    }
+
+    return { message: `Успешная привязка ${provider}-аккаунта к вашему аккаунту` };
+  }
+
+  async disconnect(user: User, provider: string) {
+    const userId = user.id;
+
+    const account = await this.prismaService.account.findFirst({
+      where: {
+        userId,
+        provider,
+      },
+    });
+
+    if (!account) {
+      throw new BadRequestException(`У вас нет подключённого ${provider}-аккаунта`);
+    }
+
+    const accountsCount = await this.prismaService.account.count({
+      where: { userId },
+    });
+
+    if (accountsCount <= 1 && !user.password) {
+      throw new BadRequestException(`Невозможно отключить ${provider}. Это ваш единственный способ входа`);
+    }
+
+    await this.prismaService.account.delete({ where: { id: account.id } });
+
+    return { message: `${provider} успешно отключен` };
+  }
 
   async logout(req: Request, res: Response) {
     return this.deleteSession(req, res);
@@ -139,5 +210,19 @@ export class AuthService {
         resolve({});
       })
     })
+  }
+
+  async updateUserEmail(id: string, newEmail: string) {
+    const user = await this.userService.findById(id);
+
+    const isNewEmailBusy = await this.userService.findByEmail(newEmail);
+
+		if (isNewEmailBusy) {
+			throw new NotFoundException("Пользователь с таким email уже существует. Пожалуйста, проверьте введенный адрес электронной почты и попробуйте снова.");
+		}
+
+    await this.emailChangeService.sendEmailChangeToken(user.email, newEmail);
+
+    return user;
   }
 }
