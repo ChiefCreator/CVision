@@ -1,7 +1,6 @@
 "use client"
 
 import FormFieldFormInput from "@/components/form/FormField/FormFieldFormInput/FormFieldFormInput";
-import { Section as SectionType } from "@/types/menu/scrollSpyMenu";
 import Section from "../Section/Section";
 
 import { useCurrentUserQuery } from "@/api/user/hooks";
@@ -16,9 +15,7 @@ import UserAvatarPanel from "./components/UserAvatarPanel/UserAvatarPanel";
 import styles from "./ProfileSection.module.scss";
 import { UpdateProfileFormData, updateProfileSchema } from "./updateProfileSchema";
 
-interface ProfileSectionProps extends SectionType {}
-
-export default function ProfileSection({ id, label }: ProfileSectionProps) {
+export default function ProfileSection() {
 	const { data: user } = useCurrentUserQuery();
 	const { mutate, state, setState } = useUpdateCurrentUser();
 	const { handleSubmit, reset, control, formState: { errors } } = useForm<UpdateProfileFormData>({
@@ -41,7 +38,7 @@ export default function ProfileSection({ id, label }: ProfileSectionProps) {
 	}, [user, reset]);
 
 	return (
-		<Section id={id} label={label}>
+		<Section id="profile" label="Профиль">
 			<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 				<FormGroup className={styles.inputs}>
 					<FormGroupCell>

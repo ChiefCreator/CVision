@@ -1,18 +1,12 @@
 "use client"
 
-import ScrollSpyMenu from "@/components/menu/ScrollSpyMenu/ScrollSpyMenu";
-import { sectionComponentsMap } from "@/constants/menu/scrollSpyMenuSectionComponentsMap";
-import { sections } from "@/constants/menu/scrollSpyMenuSections";
-import { useScrollSpyMenu } from "@/hooks/menu/useScrollSpyMenu";
-import { SectionId } from "@/types/menu/scrollSpyMenu";
+import DangerousZoneSection from "./components/DangerousZoneSection/DangerousZoneSection";
+import OAuthProvidersSection from "./components/OAuthProvidersSection/OAuthProvidersSection";
+import ProfileSection from "./components/ProfileSection/ProfileSection";
+import UserSettingsSection from "./components/UserSettingsSection/UserSettingsSection";
 import styles from "./page.module.scss";
 
 export default function AccountPage() {
-	const { activeId, handleClick } = useScrollSpyMenu(sections);
-
-	const getSection = (id: SectionId, label: string) => {
-		return sectionComponentsMap[id]?.({ id, label });
-	}
 
 	return (
 		<div className={styles.page}>
@@ -21,13 +15,12 @@ export default function AccountPage() {
 					<h1 className={styles.title}>Настройки аккаунта</h1>
 
 					<ul className={styles.sectionsList}>
-						{sections.map(({ id, label }) => <li key={id}>{getSection(id, label)}</li>)}
+						<ProfileSection />
+						<UserSettingsSection />
+						<OAuthProvidersSection />
+						<DangerousZoneSection />
 					</ul>
 				</div>
-
-				<aside className={styles.aside}>
-					<ScrollSpyMenu className={styles.menu} sections={sections} activeId={activeId} onItemClick={handleClick} />
-				</aside>
 			</div>
 		</div>
 	)

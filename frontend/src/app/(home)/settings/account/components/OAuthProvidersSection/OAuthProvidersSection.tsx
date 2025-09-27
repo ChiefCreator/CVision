@@ -2,15 +2,12 @@
 
 import { oAuthProvidersMap } from "@/constants/auth/oAuthProvidersMap"
 import { OAuthProvider } from "@/types/auth/oauthProviders"
-import { Section as SectionType } from "@/types/menu/scrollSpyMenu"
 import Section from "../Section/Section"
 import ProviderControl from "./ProviderControl"
 
-interface OAuthProvidersSectionProps extends SectionType {};
-
-export default function OAuthProvidersSection({ id, label }: OAuthProvidersSectionProps) {
+export default function OAuthProvidersSection() {
 	return (
-		<Section id={id} label={label}>
+		<Section id="oauthProviders" label="Социальные сети">
 			{Object.entries(oAuthProvidersMap).map(([provider, providerProps]) => (
 				<ProviderControl
 					key={provider}
