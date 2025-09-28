@@ -1,5 +1,5 @@
 .button {
-  &:hover {
+  @include hover-supported {
     .icon {
       color: var(--color-secondary);
     }

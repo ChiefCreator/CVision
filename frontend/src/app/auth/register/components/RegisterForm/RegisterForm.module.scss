@@ -33,7 +33,11 @@
 	color: var(--color-text--lighten);
 	text-decoration: underline;
 
-	&:hover {
+	@include hover-supported {
+    color: var(--color-text);
+  }
+
+	&:active {
 		color: var(--color-text);
 	}
 }

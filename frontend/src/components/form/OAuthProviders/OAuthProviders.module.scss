@@ -38,7 +38,7 @@
 	background-color: var(--color-neutral);
 	padding: 10px 12px;
 	border-radius: 10px;
-	transition: background-color .2s var(--transition-primary);
+	transition: background-color .2s var(--transition-primary), scale .2s var(--transition-primary);
 
 	&__icon {
 		fill: var(--color-text);
@@ -50,7 +50,11 @@
 		font-size: 15px;
 	}
 
-	&:hover {
+	@include hover-supported {
 		background-color: var(--color-neutral--soft-dark);
 	}
+
+	&:active:not(:disabled) {
+    @include pressed;
+  }
 }

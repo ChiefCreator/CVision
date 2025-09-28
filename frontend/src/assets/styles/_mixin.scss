@@ -1,23 +1,4 @@
-@use "./breakpoints" as *;
-@use "sass:map";
-@use "sass:meta";
-
-@mixin respond-to($breakpoint) {
-  $value: null;
-
-  @if meta.type-of($breakpoint) == "string" or meta.type-of($breakpoint) == "identifier" {
-    $value: map.get($breakpoints, $breakpoint);
-  }
-
-  @else if meta.type-of($breakpoint) == "number" {
-    $value: $breakpoint;
-  }
-
-  @if $value {
-    @media (max-width: $value) {
-      @content;
-    }
-  } @else {
-    @warn "❌ Некорректный breakpoint: `#{$breakpoint}`. Допустимы ключи из \$breakpoints или числовое значение с единицами.";
-  }
-}
+@forward "./mixins/hover-supported";
+@forward "./mixins/respond-max";
+@forward "./mixins/respond-min";
+@forward "./mixins/pressed.scss";

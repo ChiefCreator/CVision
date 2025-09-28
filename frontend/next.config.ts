@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
   },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "src")],
+  },
   webpack(config) {
     const oneOfRule = config.module?.rules.find((rule: any) => Array.isArray(rule.oneOf));
 

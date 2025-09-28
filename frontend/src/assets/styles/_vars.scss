@@ -22,6 +22,7 @@
 	--color-text--lighten: rgb(110, 110, 110);
 
 	--color-text-inverse: white;
+  --color-text-inverse--soft-dark: rgb(233, 233, 233);
 	--color-text-inverse--dark: rgb(207, 207, 207);
 	--color-text-inverse--darken: rgb(125, 125, 125);
 
@@ -43,7 +44,7 @@
 
 :root[data-theme="light"] {
   --color-primary: black;
-  --color-primary--light: rgb(38, 39, 42);
+  --color-primary--light: rgb(23, 23, 23);
 
   --color-secondary: rgb(26, 145, 240);
   --color-secondary--dark: rgb(14, 105, 181);
@@ -64,6 +65,7 @@
   --color-text--lighten: rgb(110, 110, 110);
 
   --color-text-inverse: white;
+  --color-text-inverse--soft-dark: rgb(233, 233, 233);
   --color-text-inverse--dark: rgb(207, 207, 207);
   --color-text-inverse--darken: rgb(125, 125, 125);
 
@@ -104,6 +106,7 @@
   --color-text--lighten: rgb(102, 102, 102);
 
   --color-text-inverse: black;
+  --color-text-inverse--soft-dark: rgb(26, 26, 26);
   --color-text-inverse--dark: rgb(41, 41, 41);
   --color-text-inverse--darken: rgb(125, 125, 125);
 
