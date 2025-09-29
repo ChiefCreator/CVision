@@ -35,7 +35,10 @@ const nextConfig: NextConfig = {
           }
 
           if (loader.loader.includes("sass-loader") && !loader.options?.additionalData) {
-            loader.options.additionalData = `@use "@/assets/styles/mixin" as *;`;
+            loader.options.additionalData = `
+              @use "@/assets/styles/mixin" as *;
+              @use "@/assets/styles/breakpoints" as *;
+            `;
             loader.options.sassOptions = {
               ...(loader.options.sassOptions || {}),
               includePaths: [path.resolve(__dirname, "src")],

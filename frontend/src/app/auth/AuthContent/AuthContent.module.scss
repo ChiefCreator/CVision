@@ -75,7 +75,7 @@
 }
 }
 
-@include respond-max(1200px) {
+@include max(1200px) {
 	.info {
 		display: flex;
 		flex-direction: column;
@@ -113,14 +113,14 @@
 	}
 }
 
-@include respond-max(tablet-l) {
+@include max($tablet-l) {
 	.content {
 		aspect-ratio: 1 / 1.2;
 		height: auto;
 	}
 }
 
-@include respond-max(tablet-s) {
+@include max($tablet-s) {
 	.content {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;

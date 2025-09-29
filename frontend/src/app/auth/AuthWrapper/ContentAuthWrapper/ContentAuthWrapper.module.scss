@@ -21,7 +21,7 @@
 	width: 100%;
 }
 
-@include respond-max(tablet-l) {
+@include max($tablet-l) {
 	.layout {
 		grid-template-columns: 1fr;
 		justify-items: center;
@@ -33,7 +33,7 @@
 	}
 }
 
-@include respond-max(tablet-s) {
+@include max($tablet-s) {
 	.layout {
 		padding: 0;
 		gap: clamp(0.625rem, -0.417rem + 4.44vw, 1.25rem);

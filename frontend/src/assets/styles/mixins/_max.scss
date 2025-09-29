@@ -1,0 +1,11 @@
+@mixin max($size) {
+  @if (unit($size) == "px") {
+    @media (max-width: ($size - .5px)) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $size) {
+      @content;
+    }
+  }
+}

@@ -7,3 +7,20 @@
 .button-menu {
   margin-left: auto;
 }
+
+.logo {
+  max-width: 100px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+@include min($tablet-l) {
+  .logo, .burgerMenu {
+    display: none;
+  }
+}
