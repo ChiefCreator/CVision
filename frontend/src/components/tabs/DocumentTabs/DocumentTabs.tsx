@@ -10,14 +10,14 @@ import TabPanel from "./TabPanel/TabPanel";
 import type { DocumentTabType, DocumentTabsMap } from "./types/document";
 
 import Button from "@/components/button/Button/Button";
-import { useSidebar } from "@/hooks/menu/useSidebar";
+import { useStaticSidebarContext } from "@/hooks/menu/useStaticSidebarContext";
 import { MenuItemData } from "@/types/menu/menu";
 import styles from "./DocumentTabs.module.scss";
 import DocumentTabsSkeleton from "./DocumentTabsSkeleton";
 import { useDocumentTabsContext } from "./hooks/useDocumentTabsContext";
 
 export default function DocumentTabs() {
-  const { isAnimating } = useSidebar();
+  const { isAnimating } = useStaticSidebarContext();
   const { resumesDoc, isLoading, createResume, changeTab, activeTab } = useDocumentTabsContext();
   
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });

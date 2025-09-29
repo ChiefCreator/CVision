@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import InputLine from "@/components/input/InputLine/InputLine";
 import { ChevronDown } from "lucide-react";
 
-import Popover from "@/components/position/Popover/Popover";
+import Popover from "@/components/position/AdaptivePopover/AdaptivePopover";
 import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./EditSelect.module.scss";

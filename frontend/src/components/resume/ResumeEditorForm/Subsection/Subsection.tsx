@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import type { BaseComponent } from "@/types/root";
 
 import { useDeleteSubsection } from "@/api/resumeSubsection/hooks";
-import DropdownMenu from "@/components/menu/DropdownMenu/DropdownMenu";
+import DropdownMenu from "@/components/menu/PopoverMenu/PopoverMenu";
 import { usePopover } from "@/hooks/position/usePopover";
 import { useResume } from "@/hooks/resume/useResume";
 import { useResumeId } from "@/hooks/resume/useResumeId";

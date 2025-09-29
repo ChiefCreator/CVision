@@ -2,6 +2,8 @@
 
 import { useMediaQuery } from "react-responsive";
 
+import { breakpoints } from "@/constants/breakpoints/breakpoints";
+import { maxWidth } from "@/utils/media/maxWidth";
 import Drawer, { DrawerProps } from "../Drawer/Drawer";
 import Popover, { PopoverProps } from "../Popover/Popover";
 
@@ -21,7 +23,7 @@ export default function AdaptivePopover({
 	onClose,
 	onBack,
 }: AdaptivePopoverProps) {
-	const isMobile = useMediaQuery({ maxWidth: 768 });
+	const isMobile = useMediaQuery(maxWidth(breakpoints.tabletM));
 
 	if (isMobile)
 		return (

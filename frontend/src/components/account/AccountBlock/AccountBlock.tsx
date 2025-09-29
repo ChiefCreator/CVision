@@ -16,7 +16,7 @@ interface AccountBlockProps extends BaseComponent {
 
 export function AccountBlock({ className, hideInfo = false }: AccountBlockProps) {
 	const { data: user, isPending } = useCurrentUserQuery();
-	const { isOpen, triggerRef, contentRef, id, toggle } = usePopover();
+	const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
 	
 	const { name, email, picture } = user ?? {};
 
@@ -35,17 +35,17 @@ export function AccountBlock({ className, hideInfo = false }: AccountBlockProps)
 				</AnimateHeightPresence>
 			</button>
 
-			{isOpen && (
-				<AccountDropdownMenu
-					id={id}
-					positioner={{
-						contentRef,
-						triggerRef,
-						offsetY: 3,
-						matchTriggerWidth: !hideInfo,
-					}}
-				/>
-			)}
+			<AccountDropdownMenu
+				id={id}
+				isOpen={isOpen}
+				positioner={{
+					contentRef,
+					triggerRef,
+					offsetY: 3,
+					matchTriggerWidth: !hideInfo,
+				}}
+				onClose={close}
+			/>
 		</>
 	)
 }

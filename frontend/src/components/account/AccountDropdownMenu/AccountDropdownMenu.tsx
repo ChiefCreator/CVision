@@ -1,6 +1,5 @@
 "use client"
 
-import DropdownMenu from "@/components/menu/DropdownMenu/DropdownMenu";
 import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import { MenuItemData } from "@/types/menu/menu";
@@ -8,18 +7,24 @@ import { LogOut, Settings } from "lucide-react";
 import { useCallback, useMemo } from "react";
 
 import { useLogoutMutation } from "@/api/auth/hooks";
+import PopoverMenu from "@/components/menu/PopoverMenu/PopoverMenu";
+import { useMenuState } from "@/hooks/menu/useMenuState";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import styles from "./AccountDropdownMenu.module.scss";
 
 interface AccountDropdownMenuProps {
 	id: string;
+	isOpen: boolean;
 	positioner: PositionerProps;
+
+	onClose?: () => void;
 }
 
-export default function AccountDropdownMenu({ id, positioner }: AccountDropdownMenuProps) {
+export default function AccountDropdownMenu({ id, isOpen, positioner, onClose }: AccountDropdownMenuProps) {
 	const { mutate } = useLogoutMutation();
 	const { replace } = useRouter();
+	const menuProps = useMenuState();
 
 	const logout = useCallback(() => {
 		mutate();
@@ -45,6 +50,14 @@ export default function AccountDropdownMenu({ id, positioner }: AccountDropdownM
 	]), [logout]);
 
 	return (
-		<DropdownMenu className={clsx(styles.dropdown, !positioner.matchTriggerWidth && styles.dropdownArbitraryWidth)} positioner={positioner} data={data} subMenuDropdownType={DropdownTypeEnum.absolute} id={id} />
+		<PopoverMenu
+			className={clsx(styles.dropdown, !positioner.matchTriggerWidth && styles.dropdownArbitraryWidth)}
+			isOpen={isOpen}
+			positioner={positioner}
+			data={data}
+			subMenuDropdownType={DropdownTypeEnum.absolute} id={id}
+			onClickLinkAndControl={onClose}
+			{...menuProps}
+		/>
 	);
 }
