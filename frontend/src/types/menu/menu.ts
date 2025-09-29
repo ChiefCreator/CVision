@@ -25,3 +25,5 @@ export interface ControlMenuItem extends BaseMenuItem {
 export type MenuItem = LinkMenuItem | ButtonMenuItem | ControlMenuItem;
 
 export type MenuItemData = MenuItem[];
+
+export type MenuItemType = MenuItem["type"];

@@ -1,19 +1,18 @@
 import { usePositionerHandleRef } from "@/components/position/Positioner/hooks/usePositionerHandleRef";
-import { useEffect } from "react";
-import { useSidebar } from "../../../../../hooks/menu/useSidebar";
 
-import Menu from "../../../Menu/Menu";
 
 import type { AbsoluteDropdownProps } from "./Dropdown";
 
-import Popover from "@/components/position/Popover/Popover";
-import { useClickOutside } from "@/hooks/root/useClickOutside";
+import Menu from "@/components/menu/Menu/Menu";
+import AdaptivePopover from "@/components/position/AdaptivePopover/AdaptivePopover";
+import { useMenuContext } from "@/hooks/menu/useMenuContext";
+import { useMenuState } from "@/hooks/menu/useMenuState";
+import { useEffect } from "react";
 
 export default function AbsoluteDropdown({ id, data, level, isOpen, triggerRef, contentRef, closeSubMenu }: AbsoluteDropdownProps) {
-  const { isAnimating } = useSidebar();
+  const { isRecalcSubmenu } = useMenuContext();
   const positionerHandleRef = usePositionerHandleRef();
-  
-  useClickOutside({ mainComponentRef: contentRef, triggerRef, onClickOutside: closeSubMenu });
+  const menuProps = useMenuState();
 
   useEffect(() => {
     let frameId: number;
@@ -25,16 +24,15 @@ export default function AbsoluteDropdown({ id, data, level, isOpen, triggerRef, 
 
     frameId = requestAnimationFrame(loop);
 
-    if (!isAnimating) cancelAnimationFrame(frameId);
+    if (!isRecalcSubmenu) cancelAnimationFrame(frameId);
     return () => cancelAnimationFrame(frameId);
-  }, [isAnimating]);
-
-  if (!isOpen) return null;
+  }, [isRecalcSubmenu]);
 
   return (
-    <Popover
+    <AdaptivePopover
       id={id}
-      close={close}
+      isOpen={isOpen}
+
       positioner={{
         matchTriggerWidth: false,
         triggerRef: triggerRef,
@@ -43,8 +41,10 @@ export default function AbsoluteDropdown({ id, data, level, isOpen, triggerRef, 
         transformOrigin: { vertical: "top", horizontal: "left" },
         positionerHandleRef: positionerHandleRef,
       }}
+
+      onClose={closeSubMenu}
     >
-      <Menu data={data} level={level} />
-    </Popover>
+      <Menu data={data} level={level} {...menuProps} onClickLinkAndControl={closeSubMenu} />
+    </AdaptivePopover>
   );
 }

@@ -28,7 +28,7 @@
     --text-color: white;
 
     @include hover-supported {
-      --bg-color: var(--color-primary--dark);
+      --bg-color: var(--color-secondary--dark);
     }
   }
 

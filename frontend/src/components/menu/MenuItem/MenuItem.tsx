@@ -12,14 +12,18 @@ interface BaseMenuItemProps {
   level: number;
   index: number;
   isHideElements?: boolean;
-  isRepeatRegisterArrowNavigation?: boolean
+  isRepeatRegisterArrowNavigation?: boolean;
+
+  onClick?: () => void;
 }
 
-export interface LinkMenuItemProps extends LinkMenuItemType, BaseMenuItemProps {}
+export type LinkMenuItemProps = LinkMenuItemType & BaseMenuItemProps;
+
 export interface ButtonMenuItemProps extends ButtonMenuItemType, BaseMenuItemProps {
   dropdownType: DropdownTypeEnum;
 }
-export interface ControlMenuItemProps extends ControlMenuItemType, BaseMenuItemProps {}
+
+export type ControlMenuItemProps = ControlMenuItemType & BaseMenuItemProps;
 
 type MenuItemProps = LinkMenuItemProps | ButtonMenuItemProps | ControlMenuItemProps;
 

@@ -1,15 +1,17 @@
 
-import DropdownMenu from "@/components/menu/DropdownMenu/DropdownMenu";
 import { ChevronDown } from "lucide-react";
 
 import type { ButtonMenuProps } from "./Button";
 
+import ResponsiveDropdownMenu from "@/components/menu/ResponsiveDropdownMenu/ResponsiveDropdownMenu";
+import { useMenuState } from "@/hooks/menu/useMenuState";
 import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
 
-export default function ButtonMenu({ variant, className, children, Icon, iconClassName, menuData, menuPositionerProps, actionType }: ButtonMenuProps) {
-  const { isOpen, triggerRef, contentRef, id, toggle } = usePopover();
+export default function ButtonMenu({ variant, className, children, Icon, iconClassName, menuData, menuPositionerProps, menuTitle, actionType }: ButtonMenuProps) {
+  const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
+  const menuState = useMenuState();
 
   return (
     <>
@@ -30,18 +32,21 @@ export default function ButtonMenu({ variant, className, children, Icon, iconCla
         <ChevronDown className={clsx(styles.arrow, isOpen && styles.arrowActive)} aria-hidden="true" />
       </button>
 
-      {isOpen && (
-        <DropdownMenu
-          id={id}
-          data={menuData}
-          positioner={menuPositionerProps ?? {
-            matchTriggerWidth: true,
-            offsetY: 3,
-            triggerRef,
-            contentRef
-          }}
-        />
-      )}
+      <ResponsiveDropdownMenu
+        isOpen={isOpen}
+        id={id}
+        data={menuData}
+        title={menuTitle}
+        positioner={menuPositionerProps ?? {
+          matchTriggerWidth: true,
+          offsetY: 3,
+          triggerRef,
+          contentRef
+        }}
+        {...menuState}
+        onClickLinkAndControl={close}
+        onClose={close}
+      />
     </>
   );
 }

@@ -1,22 +1,27 @@
-"use client";
-
-import { useMediaQuery } from "react-responsive";
+"use client"
 
 import { BaseComponent } from "@/types/root";
-import { PositionerProps } from "../Positioner/Positioner";
-import { DesktopPopover } from "./DesktopPopover/DesktopPopover";
-import { MobilePopover } from "./MobilePopover/MobilePopover";
+import Portal from "../Portal/Portal";
+import Positioner, { PositionerProps } from "../Positioner/Positioner";
+
+import clsx from "clsx";
+import styles from "./Popover.module.scss";
 
 export interface PopoverProps extends BaseComponent {
 	id?: string;
+	isOpen: boolean;
 	children: React.ReactNode;
-	positioner?: PositionerProps;
+	positioner: PositionerProps;
 }
 
-export default function Popover({ className, id, children, positioner }: PopoverProps) {
-	const isMobile = useMediaQuery({ maxWidth: 768 });
+export default function Popover({ id, isOpen, className, children, positioner }: PopoverProps) {
+	if (!isOpen) return;
 
-	if (isMobile) return <MobilePopover id={id} className={className}>{children}</MobilePopover>
-
-	return <DesktopPopover id={id} className={className} positioner={positioner as any}>{children}</DesktopPopover>
+	return (
+		<Portal>
+			<Positioner {...positioner}>
+				<div className={clsx(styles.popover, className)} id={id} ref={positioner.contentRef as any}>{children}</div>
+			</Positioner>
+		</Portal>
+	)
 }

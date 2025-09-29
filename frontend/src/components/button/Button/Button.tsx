@@ -18,6 +18,7 @@ export interface ButtonMenuProps extends BaseButtonProps {
   type: "buttonMenu";
   menuData: MenuItemData;
   menuPositionerProps?: PositionerProps;
+  menuTitle?: string;
 }
 
 export interface SimpleButtonProps extends BaseButtonProps {

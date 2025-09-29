@@ -1,6 +1,7 @@
 "use client";
 
-import { useMenu } from "@/hooks/menu/useMenu";
+import { useMenuContext } from "@/hooks/menu/useMenuContext";
+import { MenuItem as MenuItemType } from "@/types/menu/menu";
 import MenuItem from "../../MenuItem/MenuItem";
 import { MenuProps } from "../Menu";
 import styles from "./MenuList.module.scss";
@@ -8,7 +9,37 @@ import styles from "./MenuList.module.scss";
 interface MenuListProps extends Pick<MenuProps, "data" | "level"> {};
 
 export function MenuList({ data, level }: MenuListProps) {
-	const { isHideElements, isRepeatRegisterArrowNavigation, subMenuDropdownType } = useMenu();
+	const { isHideElements, isRepeatRegisterArrowNavigation, subMenuDropdownType, onClickButton, onClickControl, onClickLink, onClickLinkAndControl } = useMenuContext();
+
+	const getOnClick = (data: MenuItemType) => {
+		const type = data.type;
+
+		const controlOnClick = () => {
+			if (type === "control") data.onClick();
+		}
+		
+		if (onClickLinkAndControl && (type === "link" || type === "control")) {
+				onClickLinkAndControl();
+				controlOnClick();
+
+				return;
+		}
+
+		switch(type) {
+			case "link":
+				onClickLink?.();
+				break;
+			case "control": {
+				onClickControl?.();
+				controlOnClick();
+
+				break;
+			}
+			case "button":
+				onClickButton?.();
+				break;
+		}
+	}
 
 	return (
 		<ul className={styles.list}>
@@ -20,6 +51,9 @@ export function MenuList({ data, level }: MenuListProps) {
 						index={index}
 						isHideElements={isHideElements}
 						isRepeatRegisterArrowNavigation={isRepeatRegisterArrowNavigation}
+
+						onClick={() => getOnClick(data)}
+						
 						{...(data.type === "button" ? { dropdownType: subMenuDropdownType } : {}) as any}
 					/>
 				</li>
