@@ -4,11 +4,10 @@
 }
 
 .container {
-	width: 100%;
 	max-width: 900px;
-	margin: 0 auto;
 	display: flex;
 	gap: 20px;
+	padding: 0 var(--container-padding);
 }
 
 .content {
@@ -19,7 +18,7 @@
 .title {
 	font-size: 24px;
 	font-weight: 700;
-	padding-left: 20px;
+	padding-left: var(--container-padding);;
 }
 
 .sections-list {
@@ -38,4 +37,23 @@
 .menu {
 	min-width: 180px;
 	padding-top: 20px;
+}
+
+@include max($mobile-l) {
+	.container {
+		padding: 0 !important;
+	}
+
+	.content {
+		padding: 0;
+	}
+
+	.title {
+		padding: var(--container-padding--mobile);;
+	}
+
+	.sections-list {
+		margin-top: 10px;
+		gap: 20px;
+	}
 }
