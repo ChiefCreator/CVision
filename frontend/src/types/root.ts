@@ -1,4 +1,5 @@
 import { LucideProps } from "lucide-react";
+import { CSSProperties } from "react";
 import { GeneralSection } from "./resumeSection/generalSection";
 
 export interface BaseEntityFields {
@@ -19,6 +20,7 @@ export interface BaseSubsectionResume {
 
 export interface BaseComponent {
   className?: string;
+  style?: CSSProperties;
 }
 
 export type LoadingStatus = "loading" | "success" | "error" | "idle";
