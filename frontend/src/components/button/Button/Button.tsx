@@ -17,7 +17,7 @@ export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBut
 export interface ButtonMenuProps extends BaseButtonProps {
   type: "buttonMenu";
   menuData: MenuItemData;
-  menuPositionerProps?: PositionerProps;
+  menuPositionerProps?: Partial<PositionerProps>;
   menuTitle?: string;
 }
 

@@ -27,7 +27,16 @@ export default function HomeLayout({ children }: Readonly<{ children: React.Reac
       <AbsoluteSidebarProvider>
         <div className={styles.layout}>
           <Container className={styles.container}>
-            <Sidebar type={isMobile ? "absolute" : "static"} className={styles.sidebar} />
+            <Sidebar
+              type={isMobile ? "absolute" : "static"}
+              className={styles.sidebar}
+              positioner={{
+			        	offsetY: 3,
+			        	anchorOrigin: { horizontal: "right", vertical: "bottom" },
+			        	transformOrigin: { horizontal: "right", vertical: "top" },
+                isFixed: true,
+			        }}
+            />
 
             <div className={styles.content}>
               <Header className={styles.header} />

@@ -24,12 +24,10 @@ export default function AbsoluteSidebar({ className, popoverClassName, positione
 		<Popover
 			className={clsx(popoverClassName, styles.sidebarPopover)}
 			isOpen={isOpen}
-			positioner={positioner ?? {
+			positioner={{
 				contentRef,
 				triggerRef,
-				offsetY: 3,
-				anchorOrigin: { horizontal: "right", vertical: "bottom" },
-				transformOrigin: { horizontal: "right", vertical: "top" },
+				...positioner,
 			}}
 		>
 			<aside
@@ -45,6 +43,7 @@ export default function AbsoluteSidebar({ className, popoverClassName, positione
 								<AccountBlock
 									className={styles.accountBlock}
 									hideInfo={!isOpen}
+									accountDropdownPositionerProps={{ isFixed: true }}
 								/>
 
 								<label className={styles.navBlockLabel}>Основное</label>

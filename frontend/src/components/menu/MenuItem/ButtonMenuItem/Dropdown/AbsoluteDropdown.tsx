@@ -9,7 +9,7 @@ import { useMenuContext } from "@/hooks/menu/useMenuContext";
 import { useMenuState } from "@/hooks/menu/useMenuState";
 import { useEffect } from "react";
 
-export default function AbsoluteDropdown({ id, data, level, isOpen, triggerRef, contentRef, closeSubMenu }: AbsoluteDropdownProps) {
+export default function AbsoluteDropdown({ id, data, level, isOpen, positionerProps,  closeSubMenu }: AbsoluteDropdownProps) {
   const { isRecalcSubmenu } = useMenuContext();
   const positionerHandleRef = usePositionerHandleRef();
   const menuProps = useMenuState();
@@ -35,11 +35,10 @@ export default function AbsoluteDropdown({ id, data, level, isOpen, triggerRef, 
 
       positioner={{
         matchTriggerWidth: false,
-        triggerRef: triggerRef,
-        contentRef: contentRef,
         anchorOrigin: { vertical: "top", horizontal: "right" },
         transformOrigin: { vertical: "top", horizontal: "left" },
         positionerHandleRef: positionerHandleRef,
+        ...positionerProps,
       }}
 
       onClose={closeSubMenu}

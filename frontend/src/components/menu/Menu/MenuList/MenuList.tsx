@@ -9,7 +9,7 @@ import styles from "./MenuList.module.scss";
 interface MenuListProps extends Pick<MenuProps, "data" | "level"> {};
 
 export function MenuList({ data, level }: MenuListProps) {
-	const { isHideElements, isRepeatRegisterArrowNavigation, subMenuDropdownType, onClickButton, onClickControl, onClickLink, onClickLinkAndControl } = useMenuContext();
+	const { isHideElements, isRepeatRegisterArrowNavigation, subMenuDropdownType, subMenuDropdownProps, onClickButton, onClickControl, onClickLink, onClickLinkAndControl } = useMenuContext();
 
 	const getOnClick = (data: MenuItemType) => {
 		const type = data.type;
@@ -54,7 +54,7 @@ export function MenuList({ data, level }: MenuListProps) {
 
 						onClick={() => getOnClick(data)}
 						
-						{...(data.type === "button" ? { dropdownType: subMenuDropdownType } : {}) as any}
+						{...(data.type === "button" ? { dropdownType: subMenuDropdownType, dropdownPositionerProps: subMenuDropdownProps } : {}) as any}
 					/>
 				</li>
 			))}

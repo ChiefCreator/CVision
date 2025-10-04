@@ -6,6 +6,7 @@ import { MenuProvider } from "@/hooks/menu/useMenuContext";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import { BaseComponent } from "@/types/root";
 
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { ArrowNavigationProvider } from "@/hooks/root/useArrowNavigation";
 import clsx from "clsx";
 import styles from "./Menu.module.scss";
@@ -19,6 +20,7 @@ export interface MenuProps extends BaseComponent {
   isHideElements?: boolean;
   isRepeatRegisterArrowNavigation?: boolean;
   subMenuDropdownType?: DropdownTypeEnum;
+  subMenuDropdownProps?: Partial<PositionerProps>;
   isRecalcSubmenu?: boolean;
 
   setOpenMenuPath: (path: string[]) => void;
@@ -33,13 +35,21 @@ export interface MenuProps extends BaseComponent {
 }
 
 export default React.memo(function Menu({
-  className, isHideElements = false,
-  subMenuDropdownType = DropdownTypeEnum.absolute, ...props
+  className,
+  isHideElements = false,
+  subMenuDropdownType = DropdownTypeEnum.absolute,
+  subMenuDropdownProps = {},
+  ...props
 }: MenuProps) {
   const { data, level } = props;
 
   return (
-    <MenuProvider {...props} isHideElements={isHideElements} subMenuDropdownType={subMenuDropdownType}>
+    <MenuProvider
+      {...props}
+      isHideElements={isHideElements}
+      subMenuDropdownType={subMenuDropdownType}
+      subMenuDropdownProps={subMenuDropdownProps}
+    >
       <ArrowNavigationProvider>
         <div className={clsx(styles.menu, className)} role="menu">
           <MenuList data={data} level={level} />

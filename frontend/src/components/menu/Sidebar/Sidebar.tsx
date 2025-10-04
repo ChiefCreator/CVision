@@ -15,7 +15,7 @@ export interface StaticSidebarProps extends BaseSidebarProps {
 export interface AbsoluteSidebarProps extends BaseSidebarProps {
   type: "absolute";
   popoverClassName?: string;
-  positioner?: PositionerProps;
+  positioner?: Partial<PositionerProps>;
 }
 
 type SidebarContentProps = StaticSidebarProps | AbsoluteSidebarProps;

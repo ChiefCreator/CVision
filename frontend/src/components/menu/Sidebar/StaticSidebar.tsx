@@ -62,6 +62,7 @@ export default function StaticSidebar({ className }: StaticSidebarProps) {
 							<AccountBlock
 								className={styles.accountBlock}
 								hideInfo={!isOpen}
+								accountDropdownPositionerProps={{ isFixed: true }}
 							/>
 
 							<AnimateHeightPresence isVisible={isOpen}>
@@ -76,6 +77,7 @@ export default function StaticSidebar({ className }: StaticSidebarProps) {
 									isHideElements={!isOpen} 
 									isRepeatRegisterArrowNavigation={isOpen}
 									subMenuDropdownType={isOpen ? DropdownTypeEnum.static : DropdownTypeEnum.absolute}
+									subMenuDropdownProps={{ isFixed: true }}
 									isRecalcSubmenu={isAnimating}
 									{...menuState}
 								/>

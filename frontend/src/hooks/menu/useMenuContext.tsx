@@ -1,10 +1,13 @@
 "use client"
 
 import { MenuProps } from "@/components/menu/Menu/Menu";
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { createContext, useContext } from 'react';
 
 // Context
-type MenuContextType = Omit<MenuProps, "data" | "level">;
+interface MenuContextType extends Omit<MenuProps, "data" | "level"> { 
+	subMenuDropdownProps?: Partial<PositionerProps>;
+};
 
 export const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
@@ -27,7 +30,7 @@ export function useMenuContext() {
 	const context = useContext(MenuContext);
 
 	if (!context) {
-		throw new Error('useMenu must be used within a provider');
+		throw new Error('useMenuContext must be used within a provider');
 	}
 
 	return context;

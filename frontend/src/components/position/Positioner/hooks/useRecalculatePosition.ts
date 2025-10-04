@@ -38,7 +38,17 @@ const getOffset = (origin: Origin, size: { width: number; height: number }): { t
   return { top, left };
 };
 
-export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { vertical: "bottom", horizontal: "left" }, transformOrigin = { vertical: "top", horizontal: "left" }, offsetX = 0, offsetY = 0, matchTriggerWidth = false, position }: UseRecalculatePosition) {
+export function useCalculatePosition({
+  contentRef,
+  triggerRef,
+  anchorOrigin = { vertical: "bottom", horizontal: "left" },
+  transformOrigin = { vertical: "top", horizontal: "left" },
+  offsetX = 0,
+  offsetY = 0,
+  matchTriggerWidth = false,
+  position,
+  isFixed,
+}: UseRecalculatePosition) {
   const [styles, setStyles] = useState<React.CSSProperties>({});
   
   const calculateStyles = (): React.CSSProperties => {
@@ -52,7 +62,7 @@ export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { 
 
     if (position) {
       return {
-        position: "absolute",
+        position: isFixed ? "fixed" : "absolute",
         top: position.top,
         left: position.left,
         width: matchTriggerWidth ? triggerRect.width : undefined,
@@ -70,11 +80,14 @@ export function useCalculatePosition({ contentRef, triggerRef, anchorOrigin = { 
       height: contentRect.height,
     });
 
-    const top = triggerRect.top + anchorOffset.top - transformOffset.top + offsetY + window.scrollY;
-    const left = triggerRect.left + anchorOffset.left - transformOffset.left + offsetX + window.scrollX;
+    const scrollY = isFixed ? 0 : window.scrollY;
+    const scrollX = isFixed ? 0 : window.scrollX;
+
+    const top = triggerRect.top + anchorOffset.top - transformOffset.top + offsetY + scrollY;
+    const left = triggerRect.left + anchorOffset.left - transformOffset.left + offsetX + scrollX;
 
     return {
-      position: "absolute",
+      position: isFixed ? "fixed" : "absolute",
       top,
       left,
       width: matchTriggerWidth ? triggerRect.width : undefined,

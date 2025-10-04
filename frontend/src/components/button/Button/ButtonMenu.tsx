@@ -9,7 +9,17 @@ import { usePopover } from "@/hooks/position/usePopover";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
 
-export default function ButtonMenu({ variant, className, children, Icon, iconClassName, menuData, menuPositionerProps, menuTitle, actionType }: ButtonMenuProps) {
+export default function ButtonMenu({
+  variant,
+  className,
+  children,
+  Icon,
+  iconClassName,
+  menuData,
+  menuPositionerProps = {},
+  menuTitle,
+  actionType
+}: ButtonMenuProps) {
   const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
   const menuState = useMenuState();
 
@@ -37,11 +47,12 @@ export default function ButtonMenu({ variant, className, children, Icon, iconCla
         id={id}
         data={menuData}
         title={menuTitle}
-        positioner={menuPositionerProps ?? {
+        positioner={{
           matchTriggerWidth: true,
           offsetY: 3,
           triggerRef,
-          contentRef
+          contentRef,
+          ...menuPositionerProps,
         }}
         {...menuState}
         onClickLinkAndControl={close}

@@ -38,11 +38,10 @@ export default function ResumeEditor({ resumeId }: ResumeEditorProps) {
             type="absolute"
             popoverClassName={styles.sidebarPopover}
             positioner={{
-              contentRef,
-				      triggerRef,
 				      offsetY: 3,
 				      anchorOrigin: { horizontal: "left", vertical: "bottom" },
 				      transformOrigin: { horizontal: "left", vertical: "top" },
+              isFixed: true,
             }}
           />
         </DocumentPageProvider>

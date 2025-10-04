@@ -1,7 +1,11 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   padding: 20px 0;
+  background-color: var(--color-neutral);
 }
 
 .button-menu {
@@ -20,6 +24,10 @@
 }
 
 @include min($tablet-l) {
+  .header {
+    position: static;
+  }
+  
   .logo, .burgerMenu {
     display: none;
   }

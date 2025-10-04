@@ -27,7 +27,18 @@ const isChildrenHaveActiveItem = (children: MenuItemData, activePathname: string
   })
 }
 
-export default function ButtonMenuItem({ id, title, Icon, children, isHideElements, level, isRepeatRegisterArrowNavigation, dropdownType, onClick }: ButtonMenuItemProps) {
+export default function ButtonMenuItem({
+  id,
+  title,
+  Icon,
+  children,
+  isHideElements,
+  level,
+  isRepeatRegisterArrowNavigation,
+  dropdownType,
+  dropdownPositionerProps = {},
+  onClick,
+}: ButtonMenuItemProps) {
   const { register, focusNext, focusPrev, focusSubmenu, focusParent, setSubmenuTrigger } = useArrowNavigation();
   const { openMenuPath, toggleSubMenu, openSubMenu, closeSubMenu } = useMenuContext();
   const activePathname = usePathname();
@@ -107,7 +118,14 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
         data={children}
         level={level + 1}
         isOpen={isSubMenuOpen}
-        {...(dropdownType === DropdownTypeEnum.absolute ? { triggerRef, contentRef, closeSubMenu } : {} as any)}
+        {...(dropdownType === DropdownTypeEnum.absolute ? {
+          closeSubMenu,
+          positionerProps: {
+            triggerRef,
+            contentRef,
+            ...dropdownPositionerProps,
+          }
+        } : {} as any)}
       />
     </>
   );

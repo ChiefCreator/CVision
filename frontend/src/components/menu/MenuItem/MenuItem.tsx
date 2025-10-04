@@ -1,3 +1,4 @@
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import type {
   ButtonMenuItem as ButtonMenuItemType,
@@ -21,6 +22,7 @@ export type LinkMenuItemProps = LinkMenuItemType & BaseMenuItemProps;
 
 export interface ButtonMenuItemProps extends ButtonMenuItemType, BaseMenuItemProps {
   dropdownType: DropdownTypeEnum;
+  dropdownPositionerProps?: Partial<PositionerProps>;
 }
 
 export type ControlMenuItemProps = ControlMenuItemType & BaseMenuItemProps;

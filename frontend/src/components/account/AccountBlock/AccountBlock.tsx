@@ -1,6 +1,7 @@
 "use client"
 
 import { useCurrentUserQuery } from "@/api/user/hooks";
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import AnimateHeightPresence from "@/components/utils/AnimatePresence/components/AnimateHeightPresence";
 import { usePopover } from "@/hooks/position/usePopover";
 import { BaseComponent } from "@/types/root";
@@ -12,9 +13,10 @@ import AccountBlockSkeleton from "./AccountBlockSkeleton";
 
 interface AccountBlockProps extends BaseComponent {
 	hideInfo?: boolean;
+	accountDropdownPositionerProps?: Partial<PositionerProps>;
 }
 
-export function AccountBlock({ className, hideInfo = false }: AccountBlockProps) {
+export function AccountBlock({ className, hideInfo = false, accountDropdownPositionerProps = {} }: AccountBlockProps) {
 	const { data: user, isPending } = useCurrentUserQuery();
 	const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
 	
@@ -43,6 +45,7 @@ export function AccountBlock({ className, hideInfo = false }: AccountBlockProps)
 					triggerRef,
 					offsetY: 3,
 					matchTriggerWidth: !hideInfo,
+					...accountDropdownPositionerProps,
 				}}
 				onClose={close}
 			/>
