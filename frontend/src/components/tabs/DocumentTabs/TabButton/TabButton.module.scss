@@ -1,4 +1,6 @@
 .button {
+  white-space: nowrap;
+  text-wrap: nowrap;
   text-align: left;
   font-size: 18px;
   color: var(--color-text--light);
@@ -8,7 +10,7 @@
     color: var(--color-text) !important;
   }
 
-  &:hover {
+  @include hover-supported {
     color: var(--color-primary);
   }
 }

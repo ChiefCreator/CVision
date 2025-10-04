@@ -22,6 +22,7 @@ export default function DocumentTabs() {
   
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });
   const tabButtonsRef = useRef<HTMLButtonElement[]>([]);
+  const buttonsListRef = useRef<HTMLDivElement | null>(null);
 
   const calcIndicatorSize = (activeTab: DocumentTabType) => {
     const tabButtonActive = tabButtonsRef.current.find(button => button.id === `tab-${activeTab}`);
@@ -33,12 +34,6 @@ export default function DocumentTabs() {
 
     return { width, left };
   }
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    setIndicatorSize(calcIndicatorSize(activeTab));
-  }, [activeTab, isLoading])
 
   const tabs = useMemo<DocumentTabsMap>(() => ({
     all: {
@@ -69,13 +64,34 @@ export default function DocumentTabs() {
     },
   ]), []);
 
-  if (isLoading) return <DocumentTabsSkeleton />
+  useEffect(() => {
+    if (isLoading) return;
+
+    setIndicatorSize(calcIndicatorSize(activeTab));
+  }, [activeTab, isLoading])
+
+  useEffect(() => {
+    const buttonsListEl = buttonsListRef.current;
+    const activeButton = tabButtonsRef.current.find(el => el.id === `tab-${activeTab}`);
+
+    if (buttonsListEl && activeButton) {
+      const buttonsListRect = buttonsListEl.getBoundingClientRect();
+      const activeButtonRect = activeButton.getBoundingClientRect();
+    
+      buttonsListEl.scrollTo({
+        left: buttonsListEl.scrollLeft + (activeButtonRect.left - buttonsListRect.left),
+        behavior: "smooth",
+      });
+    }
+  }, [activeTab])
+
+  if (isLoading) return <DocumentTabsSkeleton />;
 
   return (
     <div className={styles.tabs}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <div className={styles.buttonsList} role="tablist">
+          <div className={styles.buttonsList} role="tablist" ref={buttonsListRef}>
             {Object.entries(tabs).map(([type, { title }], i) => (
               <TabButton
                 key={type}
@@ -92,6 +108,7 @@ export default function DocumentTabs() {
 
           <div className={styles.controlsList}>
             <Button
+              className={styles.control}
               type="buttonMenu"
               variant={"secondary"}
               menuData={menuData}

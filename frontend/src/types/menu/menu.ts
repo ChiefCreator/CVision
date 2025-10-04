@@ -1,6 +1,6 @@
-import type { IconComponent } from "@/types/root";
+import type { BaseComponent, IconComponent } from "@/types/root";
 
-export interface BaseMenuItem {
+export interface BaseMenuItem extends BaseComponent {
 	id: string;
 	title: string;
 	Icon?: IconComponent

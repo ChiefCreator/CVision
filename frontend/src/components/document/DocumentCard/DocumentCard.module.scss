@@ -1,39 +1,77 @@
 .card {
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
+	display: grid;
+	grid-template-columns: repeat(2, 50%);
 }
 
 .preview-wrapper {
-  cursor: pointer;
+	cursor: pointer;
 }
 .preview {
-  display: block;
-  border: 1px solid var(--color-neutral--dark);
+	display: block;
+	border: 1px solid var(--color-neutral--dark);
 }
 
 .info {
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
+	margin-left: 20px;
+	display: flex;
+	flex-direction: column;
 
-  &__footer {
-    border-top: 1px solid var(--color-neutral--dark);
-    padding-top: 15px;
-  }
+	&__footer {
+		border-top: 1px solid var(--color-neutral--dark);
+		padding-top: 15px;
+	}
 }
 .header {
-  padding-bottom: 15px;
+	padding-bottom: 15px;
 }
+.header-mobile {
+	display: none;
+}
+
 .title {
-  font-size: 18px;
+	font-size: 18px;
 }
 .updated-at {
-  font-size: 12px;
-  color: var(--color-text--lighten);
+	font-size: 12px;
+	color: var(--color-text--lighten);
 }
 
 .action-buttons-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.mobile-actions-menu {
+	display: none;
+}
+
+@include max($mobile-l) {
+	.card {
+		grid-template-columns: 1fr;
+	}
+
+	.info {
+		display: none;
+	}
+
+	.header-mobile {
+		display: flex;
+		align-items: start;
+		justify-content: space-between;
+		gap: 5px;
+		margin-bottom: 10px;
+	}
+	
+	.button-actions-menu {
+		display: flex;
+
+		&__icon {
+			width: 14px;
+		}
+	}
+
+	.mobile-actions-menu {
+		display: block;
+	}
 }

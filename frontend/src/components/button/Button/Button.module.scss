@@ -59,6 +59,7 @@
   width: 16px;
   height: 16px;
   color: var(--text-color);
+  margin-left: auto;
 }
 
 .arrow {
@@ -66,6 +67,7 @@
   height: 16px;
   color: var(--text-color);
   transition: transform .2s var(--transition-primary);
+    margin-left: auto;
 
   &_active {
     transform: rotate(180deg);

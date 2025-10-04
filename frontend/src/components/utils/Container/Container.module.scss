@@ -1,6 +1,12 @@
 .container {
-  max-width: 1590px;
-  height: 100%;
-  padding: 0 20px;
-  margin: 0 auto;
+	max-width: 1590px;
+	height: 100%;
+	padding: 0 20px;
+	margin: 0 auto;
+}
+
+@include max($mobile-l) {
+	.container {
+		padding: 0 10px;
+	}
 }
