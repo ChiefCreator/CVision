@@ -1,3 +1,4 @@
+import { PortalProps } from "@/components/position/Portal/Portal";
 import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { MenuItemData } from "@/types/menu/menu";
 import { LoadingStatus } from "@/types/root";
@@ -18,6 +19,7 @@ export interface ButtonMenuProps extends BaseButtonProps {
   type: "buttonMenu";
   menuData: MenuItemData;
   menuPositionerProps?: Partial<PositionerProps>;
+  menuPortalProps?: Partial<Omit<PortalProps, "children">>;
   menuTitle?: string;
 }
 

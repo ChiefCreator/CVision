@@ -41,6 +41,7 @@ const getOffset = (origin: Origin, size: { width: number; height: number }): { t
 export function useCalculatePosition({
   contentRef,
   triggerRef,
+  containerRef,
   anchorOrigin = { vertical: "bottom", horizontal: "left" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   offsetX = 0,
@@ -54,11 +55,13 @@ export function useCalculatePosition({
   const calculateStyles = (): React.CSSProperties => {
     const trigger = triggerRef?.current;
     const content = contentRef?.current;
+    const container = containerRef?.current;
 
     if (!trigger || !content) return {};
   
     const triggerRect = trigger.getBoundingClientRect();
     const contentRect = content.getBoundingClientRect();
+    const containerRect = container?.getBoundingClientRect();
 
     if (position) {
       return {
@@ -80,11 +83,18 @@ export function useCalculatePosition({
       height: contentRect.height,
     });
 
-    const scrollY = isFixed ? 0 : window.scrollY;
-    const scrollX = isFixed ? 0 : window.scrollX;
+    let top = triggerRect.top + anchorOffset.top - transformOffset.top + offsetY;
+    let left = triggerRect.left + anchorOffset.left - transformOffset.left + offsetX;
 
-    const top = triggerRect.top + anchorOffset.top - transformOffset.top + offsetY + scrollY;
-    const left = triggerRect.left + anchorOffset.left - transformOffset.left + offsetX + scrollX;
+    if (containerRect) {
+      top -= containerRect.top;
+      left -= containerRect.left;
+    } else {
+      if (!isFixed) {
+        top += window.scrollY;
+        left += window.scrollX;
+      }
+    }
 
     return {
       position: isFixed ? "fixed" : "absolute",
@@ -94,6 +104,7 @@ export function useCalculatePosition({
       zIndex: 1000,
     };
   }
+
   const updateStyles = useCallback(() => {
     setStyles(calculateStyles());
   }, [setStyles]);

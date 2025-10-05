@@ -1,7 +1,7 @@
 "use client"
 
 import { BaseComponent } from "@/types/root";
-import Portal from "../Portal/Portal";
+import Portal, { PortalProps } from "../Portal/Portal";
 import Positioner, { PositionerProps } from "../Positioner/Positioner";
 
 import clsx from "clsx";
@@ -12,13 +12,14 @@ export interface PopoverProps extends BaseComponent {
 	isOpen: boolean;
 	children: React.ReactNode;
 	positioner: PositionerProps;
+	portal?: Omit<PortalProps, "children">;
 }
 
-export default function Popover({ id, isOpen, className, children, positioner }: PopoverProps) {
+export default function Popover({ id, isOpen, className, children, positioner, portal }: PopoverProps) {
 	if (!isOpen) return;
 
 	return (
-		<Portal>
+		<Portal {...portal}>
 			<Positioner {...positioner}>
 				<div className={clsx(styles.popover, className)} id={id} ref={positioner.contentRef as any}>{children}</div>
 			</Positioner>

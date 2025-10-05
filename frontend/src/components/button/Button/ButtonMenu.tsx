@@ -17,6 +17,7 @@ export default function ButtonMenu({
   iconClassName,
   menuData,
   menuPositionerProps = {},
+  menuPortalProps = {},
   menuTitle,
   actionType
 }: ButtonMenuProps) {
@@ -54,6 +55,7 @@ export default function ButtonMenu({
           contentRef,
           ...menuPositionerProps,
         }}
+        portal={menuPortalProps}
         {...menuState}
         onClickLinkAndControl={close}
         onClose={close}

@@ -15,6 +15,7 @@ export interface PositionerHandle {
 export interface PositionerProps {
   contentRef: React.RefObject<HTMLElement | null>;
   triggerRef?: React.RefObject<HTMLElement | SVGElement | null> | null;
+  containerRef?: React.RefObject<HTMLElement | null>;
   anchorOrigin?: Origin;
   transformOrigin?: Origin;
   offsetX?: number;
@@ -34,6 +35,7 @@ export interface PositionerProps {
 export default function Positioner({
   contentRef,
   triggerRef,
+  containerRef,
   anchorOrigin = { vertical: "bottom", horizontal: "left" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   offsetX = 0,
@@ -45,7 +47,7 @@ export default function Positioner({
   positionerHandleRef,
 }: PositionerProps) {
   const { styles, updateStyles } = useCalculatePosition({
-    contentRef, triggerRef,
+    contentRef, triggerRef, containerRef,
     anchorOrigin, transformOrigin,
     offsetX, offsetY,
     matchTriggerWidth, position, isFixed,
