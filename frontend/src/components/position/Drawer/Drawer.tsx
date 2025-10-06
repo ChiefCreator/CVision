@@ -48,7 +48,7 @@ export default function Drawer({ isOpen, className, id, title, children, hasBack
 		
 						{title && <span className={styles.title}>{title}</span>}
 		
-						{hasCloseButton && <IconButton Icon={X} onClick={onClose} />}
+						{hasCloseButton && <IconButton className={styles.closeButton} Icon={X} onClick={onClose} />}
 					</header>
 				</div>
 		
