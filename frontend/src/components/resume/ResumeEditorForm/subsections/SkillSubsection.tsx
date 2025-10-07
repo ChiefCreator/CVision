@@ -1,13 +1,13 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 import { useChange } from "../Subsection/hooks/useChange";
 
-import Subsection from "../Subsection/Subsection";
-import FormGroup from "@/components/form/FormGroup/FormGroup";
-import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormFieldSliderSelect from "@/components/form/FormField/FormFieldSliderSelect/FormFieldSliderSelect";
+import FormGroup from "@/components/form/FormGroup/FormGroup";
+import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import SliderSelectSkill from "@/components/select/SliderSelect/SliderSelectSkill/SliderSelectSkill";
+import Subsection from "../Subsection/Subsection";
 
 import { skills } from "@/constants/root/skills";
 
@@ -47,7 +47,7 @@ export default React.memo(function SkillSubsection({ id, subsectionName, section
       onToggle={onToggle}
       onClickChange={changeOnClick}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldEditInput
             label="Навык"

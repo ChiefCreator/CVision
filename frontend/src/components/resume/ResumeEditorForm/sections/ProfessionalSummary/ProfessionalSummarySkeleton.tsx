@@ -1,16 +1,15 @@
-import React from "react";
 
+import FormFieldTextEditorSkeleton from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditorSkeleton";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
 import SectionSkeleton from "../../Section/SectionSkeleton";
-import FormFieldTextEditorSkeleton from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditorSkeleton";
 
-import styles from "./ProfessionalSummary.module.scss";
+import styles from "./../../Section/Section.module.scss";
 
 export default function ProfessionalSummarySkeleton() {
   return (
     <SectionSkeleton>
-      <FormGroup className={styles.formGroup} gridTemplateColumns="12fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldTextEditorSkeleton className={styles.textEditor} />
         </FormGroupCell>

@@ -1,15 +1,15 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 
 import { transformStringDatesToRangeFormat } from "@/utils/date/transformStringDatesToRangeFormat";
 import { transformStringsToSlashFormat } from "@/utils/string/transformStringsToSlashFormat";
 import { useChange } from "../Subsection/hooks/useChange";
 
-import Subsection from "../Subsection/Subsection";
+import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
+import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
-import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
-import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
+import Subsection from "../Subsection/Subsection";
 
 import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { Course } from "@/types/resumeSubsection/subsections";
@@ -44,7 +44,7 @@ export default React.memo(function CourseSubsection({ id, subsectionName, sectio
       onToggle={onToggle}
       onClickChange={changeOnClick}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldEditInput
             label="Название курса"
@@ -67,6 +67,7 @@ export default React.memo(function CourseSubsection({ id, subsectionName, sectio
         </FormGroupCell>
         <FormGroupCell>
           <FormFieldDateRange
+            className={styles.formGroupDateRange}
             startDate={startDate}
             endDate={endDate}
             onChangeStartDate={changeObj.startDate}

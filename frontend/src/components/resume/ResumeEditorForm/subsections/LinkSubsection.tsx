@@ -1,11 +1,11 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 import { useChange } from "../Subsection/hooks/useChange";
 
-import Subsection from "../Subsection/Subsection";
+import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
-import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
+import Subsection from "../Subsection/Subsection";
 
 import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { Link } from "@/types/resumeSubsection/subsections";
@@ -38,7 +38,7 @@ export default React.memo(function LinkSubsection({ id, subsectionName, sectionI
       onToggle={onToggle}
       onClickChange={changeOnClick}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldEditInput
             label="Заголовок"

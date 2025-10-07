@@ -1,39 +1,39 @@
 .button {
-  --font-size: 18px;
+	--font-size: 18px;
 
-  display: flex;
-  align-items: center;
-  text-align: start;
-  gap: 5px;
+	display: flex;
+	align-items: center;
+	text-align: start;
+	gap: 5px;
 
-  font-size: var(--font-size);
-  color: var(--color-text--light);
-  font-weight: 500;
+	font-size: var(--font-size);
+	color: var(--color-text--light);
+	font-weight: 500;
 
-  &__icon {
-    flex: 0 0 calc(1.5 * var(--font-size));
-    height: calc(1.5 * var(--font-size));
-    stroke: var(--color-primary--light);
-  }
+	&__icon {
+		flex: 0 0 calc(1.5 * var(--font-size));
+		height: calc(1.5 * var(--font-size));
+		stroke: var(--color-primary--light);
+	}
 
-  &:hover {
-    color: var(--color-text);
+	@include hover-supported {
+		color: var(--color-text);
 
-    .button__icon {
-      stroke: var(--color-text);
-    }
-  }
+		.button__icon {
+			stroke: var(--color-text);
+		}
+	}
 
-  &:disabled {
-    color: var(--color-text--lighten);
-    cursor: not-allowed;
+	&:disabled {
+		color: var(--color-text--lighten);
+		cursor: not-allowed;
 
-    .button__icon {
-      stroke: var(--color-text--lighten);
-    }
-  }
+		.button__icon {
+			stroke: var(--color-text--lighten);
+		}
+	}
 }
 
 .skeleton-container {
-  width: 100%;
+	width: 100%;
 }

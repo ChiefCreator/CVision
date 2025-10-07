@@ -1,6 +1,6 @@
 import { usePdfDownloader } from "@/api/document/hooks/usePdfDownloader";
 import { useResume } from "@/hooks/resume/useResume";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 
 import Button from "@/components/button/Button/Button";
 import Document from "@/components/document/Document/Document";
@@ -11,6 +11,7 @@ import type { ResumeTemplateRendererProps } from "@/components/document/Template
 import { MenuItemData } from "@/types/menu/menu";
 import type { BaseComponent } from "@/types/root";
 
+import Container from "@/components/utils/Container/Container";
 import clsx from "clsx";
 import styles from "./ResumePreview.module.scss";
 
@@ -19,6 +20,9 @@ interface ResumePreviewProps extends BaseComponent {}
 export default React.memo(function ResumePreview({ className }: ResumePreviewProps) {
   const { resumeDelayed: resume, isAllUpdating } = useResume();
   const { downloadPdf } = usePdfDownloader();
+
+  const resumePreviewId = "resume-preview";
+  const resumePreviewRef = useRef<HTMLDivElement | null>(null);
 
   const handleDownload = () => {
     downloadPdf("resume", resume!.id);
@@ -42,14 +46,15 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
   ];
 
   return (
-    <div className={clsx(styles.preview, className)}>
-      <div className={styles.previewContainer}>
+    <div className={clsx(styles.preview, className)} id={resumePreviewId} ref={resumePreviewRef}>
+      <Container className={styles.previewContainer}>
         <header className={styles.previewHead}>
           <Button
             type="buttonMenu"
             variant="secondary"
             menuData={menuData}
-            menuPositionerProps={{ isFixed: true }}
+            menuPositionerProps={{ containerRef: resumePreviewRef }}
+            menuPortalProps={{ containerId: resumePreviewId }}
             onClick={handleDownload}
           >Скачать</Button>
         </header>
@@ -70,7 +75,7 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
   
           <DocumentButtons className={styles.buttons} />
         </footer>
-      </div>
+      </Container>
     </div>
   );
 })

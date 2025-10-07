@@ -55,7 +55,7 @@
   color: var(--color-secondary--light);
   cursor: pointer;
 
-  &:hover {
+  @include hover-supported {
     color: var(--color-secondary--dark);
   }
 }

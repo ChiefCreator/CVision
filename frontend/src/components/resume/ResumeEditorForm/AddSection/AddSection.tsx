@@ -1,6 +1,5 @@
+import { useGeneralSectionsQuery } from "@/api/resume/hooks";
 import React from "react";
-import { useGeneralSectionsQuery, useResumeAutoUpdate } from "@/api/resume/hooks";
-import { useAddSection } from "@/api/resumeSection/hooks";
 
 import { Award, Briefcase, Languages, LucideProps } from "lucide-react";
 import AddSectionItem from "./AddSectionItem/AddSectionItem";
@@ -11,10 +10,10 @@ import { SECTION_ADDITIONAL_NAMES } from "@/constants/resumeSection/sectionNames
 import { v4 } from "uuid";
 
 import type { Resume } from "@/types/resume/resume";
-import type { ResumeSectionName, ResumeAdditionalSectionName } from "@/types/resumeSection/sectionName";
+import type { ResumeAdditionalSectionName, ResumeSectionName } from "@/types/resumeSection/sectionName";
 
-import styles from "./AddSection.module.scss";
 import { useResume } from "@/hooks/resume/useResume";
+import styles from "./AddSection.module.scss";
 
 interface AddSectionProps {
   resume: Resume;

@@ -28,7 +28,11 @@
     text-align: start;
   }
 
-  &:hover {
+  @include hover-supported {
     background-color: var(--color-neutral--dark);
+  }
+
+  &:focus-visible {
+    background-color: var(--color-neutral--dark) !important;
   }
 }

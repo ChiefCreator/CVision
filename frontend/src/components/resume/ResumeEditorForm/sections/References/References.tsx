@@ -1,12 +1,11 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 
 import Section from "../../Section/Section";
 import ReferenceSubsection from "../../subsections/ReferenceSubsection";
 
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { ReferenceSection } from "@/types/resumeSection/sections";
-import type { ChangeResumeField } from "@/types/resume/resumeUpdateFunctions";
-import type { ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import { sortByOrder } from "@/utils/subsection/sortByOrder";
 
 interface ReferencesProps {

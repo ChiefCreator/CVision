@@ -1,6 +1,4 @@
 .preview {
-  padding: 20px;
-
   &__container {
     display: flex;
     flex-direction: column;
@@ -8,6 +6,7 @@
     max-width: 450px;
     height: 100%;
     margin: 0 auto;
+    padding: var(--container-padding);
   }
 
   &__body {

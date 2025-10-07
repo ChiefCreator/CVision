@@ -5,7 +5,7 @@ import type { ButtonMenuProps } from "./Button";
 
 import ResponsiveDropdownMenu from "@/components/menu/ResponsiveDropdownMenu/ResponsiveDropdownMenu";
 import { useMenuState } from "@/hooks/menu/useMenuState";
-import { usePopover } from "@/hooks/position/usePopover";
+import { useAdaptivePopover } from "@/hooks/position/useAdaptivePopover";
 import clsx from "clsx";
 import styles from "./Button.module.scss";
 
@@ -21,7 +21,7 @@ export default function ButtonMenu({
   menuTitle,
   actionType
 }: ButtonMenuProps) {
-  const { isOpen, triggerRef, contentRef, id, toggle, close } = usePopover();
+  const { isOpen, triggerRef, contentRef, id, toggle, close } = useAdaptivePopover();
   const menuState = useMenuState();
 
   return (
@@ -44,10 +44,13 @@ export default function ButtonMenu({
       </button>
 
       <ResponsiveDropdownMenu
+        data={menuData}
+        {...menuState}
+        onClickLinkAndControl={close}
+
         isOpen={isOpen}
         id={id}
-        data={menuData}
-        title={menuTitle}
+
         positioner={{
           matchTriggerWidth: true,
           offsetY: 3,
@@ -56,8 +59,8 @@ export default function ButtonMenu({
           ...menuPositionerProps,
         }}
         portal={menuPortalProps}
-        {...menuState}
-        onClickLinkAndControl={close}
+
+        title={menuTitle}
         onClose={close}
       />
     </>

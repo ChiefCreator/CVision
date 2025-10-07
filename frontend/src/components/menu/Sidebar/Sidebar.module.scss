@@ -75,11 +75,3 @@
 .account-block {
   margin-bottom: 5px;
 }
-
-@include max($mobile-l) {
-	.sidebar {
-		&[data-performance="static"] {
-			padding: var(--container-padding--mobile);
-		}
-	}
-}

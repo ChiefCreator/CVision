@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import type { BaseComponent } from "@/types/root";
 
 import { useDeleteSubsection } from "@/api/resumeSubsection/hooks";
-import DropdownMenu from "@/components/menu/PopoverMenu/PopoverMenu";
-import { usePopover } from "@/hooks/position/usePopover";
+import ResponsiveDropdownMenu from "@/components/menu/ResponsiveDropdownMenu/ResponsiveDropdownMenu";
+import { useMenuState } from "@/hooks/menu/useMenuState";
+import { useAdaptivePopover } from "@/hooks/position/useAdaptivePopover";
 import { useResume } from "@/hooks/resume/useResume";
 import { useResumeId } from "@/hooks/resume/useResumeId";
 import { MenuItemData } from "@/types/menu/menu";
@@ -32,7 +33,15 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
   const isOpen = checkIsOpen(sectionId, id);
   const resumeId = useResumeId();
   const { changeIsAllUpdating } = useResume();
-  const { isOpen: isDropdownOpen, triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef, id: dropdownMenuId, toggle, close } = usePopover();
+  const {
+    isOpen: isDropdownOpen,
+    triggerRef: dropdownMenuButtonRef,
+    contentRef: dropdownMenuRef,
+    id: dropdownMenuId,
+    toggle,
+    close
+  } = useAdaptivePopover();
+  const menuActions = useMenuState();
 
   const { mutateAsync } = useDeleteSubsection(resumeId, sectionId, sectionName, subsectionName);
 
@@ -43,12 +52,14 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
     changeIsAllUpdating(false);
   }
 
-  const handleClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    if (target.closest(`.${styles.tools}`) || dropdownMenuRef.current?.contains(target)) return;
-
+  const handleClick = () => {
     onToggle(sectionId, id);
+  }
+
+  const handleControlClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    toggle();
   }
 
   const dropdownMenuItems: MenuItemData = [
@@ -68,51 +79,53 @@ export default function Subsection({ className, id, subsectionName, sectionId, s
     },
   ];
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-
-      if (!dropdownMenuRef.current?.contains(target) && !dropdownMenuButtonRef.current?.contains(target)) {
-        close();
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
-
   return (
-    <div className={clsx(styles.subsection, className)} id={id}>
-      <header className={styles.head} onClick={handleClick}>
-        <div className={styles.titleWrapper}>
-          <h3 className={styles.title}>{title || defaultTitle}</h3>
+    <>
+      <div className={clsx(styles.subsection, className)} id={id}>
+        <header className={styles.head} onClick={handleClick}>
+          <div className={styles.titleWrapper}>
+            <h3 className={styles.title}>{title || defaultTitle}</h3>
 
-          {subtitle && <span className={styles.subtitle}>{subtitle}</span>}
-        </div>
-
-        <div className={styles.controls}>
-          <div className={styles.tools}>
-            <Ellipsis className={styles.control} ref={dropdownMenuButtonRef as any} type="button" onClick={() => toggle()} />
+            {subtitle && <span className={styles.subtitle}>{subtitle}</span>}
           </div>
 
-          <ChevronDown className={clsx(styles.control, { [styles.arrowOpen]: isOpen })} />
-        </div>
+          <div className={styles.controls}>
+            <div className={styles.tools}>
+              <Ellipsis className={styles.control} ref={dropdownMenuButtonRef as any} type="button" onClick={handleControlClick} />
+            </div>
 
-        {isDropdownOpen && <DropdownMenu
-          id={dropdownMenuId}
-          data={dropdownMenuItems}
-          positioner={{ triggerRef: dropdownMenuButtonRef, contentRef: dropdownMenuRef }}
-        />}
-      </header>
+            <ChevronDown className={clsx(styles.control, { [styles.arrowOpen]: isOpen })} />
+          </div>
+        </header>
 
-      <div className={clsx(styles.body, { [styles.bodyOpen]: isOpen })}>
-        <div className={styles.bodyContainer}>
-          <div className={styles.bodyContent}>
-            {children}
+        <div className={clsx(styles.body, { [styles.bodyOpen]: isOpen })}>
+          <div className={styles.bodyContainer}>
+            <div className={styles.bodyContent}>
+              {children}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <ResponsiveDropdownMenu
+        data={dropdownMenuItems}
+        {...menuActions}
+
+        className={styles.dropdownMenu}
+        isOpen={isDropdownOpen}
+        id={dropdownMenuId}
+
+        positioner={{
+          triggerRef: dropdownMenuButtonRef,
+          contentRef: dropdownMenuRef,
+          offsetY: 3,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+          transformOrigin: { vertical: "top", horizontal: "right" },
+        }}
+
+        title="Действия"
+        onClose={close}
+      />
+    </>
   );
 }

@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive";
 
 import Sidebar from "@/components/menu/Sidebar/Sidebar";
 import Container from "@/components/utils/Container/Container";
-import Header from "./components/Header/Header";
+import Header from "../../components/header/Header/Header";
 
 import { breakpoints } from "@/constants/breakpoints/breakpoints";
 import { maxWidth } from "@/utils/media/maxWidth";

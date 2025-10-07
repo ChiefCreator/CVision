@@ -15,11 +15,6 @@
 
 @include max($mobile-l) {
 	.content {
-		padding: var(--container-padding--mobile);
 		border-radius: 0;
-	}
-
-	.label {
-		padding: var(--container-padding--mobile);
 	}
 }

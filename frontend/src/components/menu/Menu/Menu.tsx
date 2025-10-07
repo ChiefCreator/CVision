@@ -39,9 +39,10 @@ export default React.memo(function Menu({
   isHideElements = false,
   subMenuDropdownType = DropdownTypeEnum.absolute,
   subMenuDropdownProps = {},
+  level = 0,
   ...props
 }: MenuProps) {
-  const { data, level } = props;
+  const { data } = props;
 
   return (
     <MenuProvider
