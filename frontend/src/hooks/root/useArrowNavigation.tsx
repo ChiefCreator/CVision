@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState } from "react";
 // Context
 type ItemRef = React.RefObject<HTMLButtonElement | HTMLAnchorElement | null>;
 
+type ItemRefs = React.RefObject<ItemRef[]>;
+
 interface NavigationLevel {
   refs: ItemRef[];
   focusedIndex: number;
@@ -11,7 +13,8 @@ interface NavigationLevel {
 }
 
 interface ArrowNavigationType {
-  register: (level: number, ref: ItemRef) => number;
+  levels: Record<number, NavigationLevel>;
+  register: (level: number, ref: ItemRef | ItemRefs) => number;
   focusNext: (level: number) => void;
   focusPrev: (level: number) => void;
   focusSubmenu: (level: number) => void;
@@ -32,12 +35,24 @@ interface ArrowNavigationProviderProps {
 export function ArrowNavigationProvider({ children }: ArrowNavigationProviderProps) {
   const [levels, setLevels] = useState<Record<number, NavigationLevel>>({});
 
-  const register = (level: number, ref: ItemRef) => {
+  const checkIsItemRefs = (ref: ItemRef | ItemRefs): ref is ItemRefs => {
+    return Array.isArray(ref.current);
+  }
+
+  const register = (level: number, ref: ItemRef | ItemRefs) => {
     setLevels(prev => {
       const current = prev[level] || { refs: [], focusedIndex: -1 };
 
-      if (!current.refs.includes(ref)) {
-        current.refs = [...current.refs, ref].filter(item => item.current);
+      if (checkIsItemRefs(ref)) {
+        ref.current.forEach(r => {
+          if (!current.refs.includes(r)) {
+            current.refs = [...current.refs, r].filter(item => item.current);
+          }
+        });
+      } else {
+        if (!current.refs.includes(ref)) {
+          current.refs = [...current.refs, ref].filter(item => item.current);
+        }
       }
 
       return { ...prev, [level]: current };
@@ -45,6 +60,7 @@ export function ArrowNavigationProvider({ children }: ArrowNavigationProviderPro
 
     return levels[level]?.refs.length - 1;
   };
+
   const setSubmenuTrigger = (level: number, triggerRef: ItemRef, parent: number) => {
     setLevels(prev => ({
       ...prev,
@@ -55,6 +71,7 @@ export function ArrowNavigationProvider({ children }: ArrowNavigationProviderPro
       },
     }));
   };
+
   const setFocus = (level: number, index: number) => {
     const levelData = levels[level];
     if (!levelData) return;
@@ -69,6 +86,7 @@ export function ArrowNavigationProvider({ children }: ArrowNavigationProviderPro
       }));
     }
   };
+  
   const getFocusedIndex = (level: number) => levels[level]?.focusedIndex ?? -1;
 
   const focusNext = (level: number) => {
@@ -77,12 +95,14 @@ export function ArrowNavigationProvider({ children }: ArrowNavigationProviderPro
     const nextIndex = (focusedIndex + 1) % refs.length;
     setFocus(level, nextIndex);
   };
+
   const focusPrev = (level: number) => {
     const { refs, focusedIndex } = levels[level] || { refs: [], focusedIndex: -1 };
 
     const prevIndex = (focusedIndex - 1 + refs.length) % refs.length;
     setFocus(level, prevIndex);
   };
+
   const focusSubmenu = (level: number) => {
     const subLevel = level + 1;
     const sub = levels[subLevel];
@@ -91,17 +111,19 @@ export function ArrowNavigationProvider({ children }: ArrowNavigationProviderPro
       setFocus(subLevel, 0);
     }
   };
+
   const focusParent = (level: number) => {
     const parentLevel = level - 1;
     const parent = levels[parentLevel];
 
-    if (parent && parent.focusedIndex !== -1) {
-      setFocus(parentLevel, parent.focusedIndex);
+    if (parent) {
+      setFocus(parentLevel, parent.focusedIndex === -1 ? parent.refs.length - 1 : parent.focusedIndex);
     }
   };
 
   return (
     <ArrowNavigationContext.Provider value={{
+      levels,
       register,
       focusNext,
       focusPrev,
