@@ -1,0 +1,43 @@
+.list-wrapper {
+	padding: var(--container-padding);
+	background-color: var(--color-neutral);
+	border-bottom-left-radius: var(--section-border-radius);
+	border-bottom-right-radius: var(--section-border-radius);
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	position: sticky;
+	top: 0;
+}
+
+.list {
+	width: 100%;
+}
+
+.trigger {
+	flex: 1 1 50%;
+}
+
+.burger-menu {
+	display: none;
+}
+
+.sidebar-popover {
+	display: none;
+}
+
+.content-wrapper {
+	margin-top: var(--section-gap);
+}
+
+@include max($tablet-l) {
+	.burger-menu {
+		display: block;
+	}
+
+	.sidebar-popover {
+		display: block;
+	}
+}

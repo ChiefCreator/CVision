@@ -18,10 +18,15 @@
 	}
 }
 
+@include max($tablet-l) {
+	.head {
+		min-height: 50px;
+		border-radius: var(--section-border-radius);
+	}
+}
+
 @include max($mobile-l) {
 	.head {
-		min-height: auto;
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
+		min-height: 50px;
 	}
 }

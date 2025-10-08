@@ -45,21 +45,28 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
     },
   ];
 
+  const downloadButton = (
+    <Button
+      className={styles.buttonDownload}
+      type="buttonMenu"
+      variant="secondary"
+      menuData={menuData}
+      menuPositionerProps={{ containerRef: resumePreviewRef }}
+      menuPortalProps={{ containerId: resumePreviewId }}
+      onClick={handleDownload}
+    >
+      Скачать
+    </Button>
+  )
+
   return (
     <div className={clsx(styles.preview, className)} id={resumePreviewId} ref={resumePreviewRef}>
       <Container className={styles.previewContainer}>
-        <header className={styles.previewHead}>
-          <Button
-            type="buttonMenu"
-            variant="secondary"
-            menuData={menuData}
-            menuPositionerProps={{ containerRef: resumePreviewRef }}
-            menuPortalProps={{ containerId: resumePreviewId }}
-            onClick={handleDownload}
-          >Скачать</Button>
+        <header className={clsx(styles.previewHead)}>
+          {downloadButton}
         </header>
   
-        <div className={styles.previewBody}>
+        <div className={clsx(styles.previewBody)}>
           <Document
             performance="preview"
             className={styles.document}
@@ -67,15 +74,22 @@ export default React.memo(function ResumePreview({ className }: ResumePreviewPro
           />
         </div>
   
-        <footer className={styles.previewFoot}>
+        <footer className={clsx(styles.previewFoot)}>
           <LoadingStatus
             className={styles.loadingStatus}
+            labelClassName={styles.loadingStatusLabel}
+            iconClassName={styles.loadingStatusIcon}
+            spinnerClassName={styles.loadingStatusSpinner}
             status={isAllUpdating ? "loading" : "loaded"}
           />
   
           <DocumentButtons className={styles.buttons} />
         </footer>
       </Container>
+
+      <div className={clsx(styles.tabletFooter, styles.container)}>
+				{downloadButton}
+			</div>
     </div>
   );
 })

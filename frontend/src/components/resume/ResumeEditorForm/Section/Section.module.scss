@@ -105,9 +105,3 @@
 		}
 	}
 }
-
-@include max($mobile-l) {
-	.section {
-		border-radius: 0;
-	}
-}
