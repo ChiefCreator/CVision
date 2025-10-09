@@ -22,8 +22,8 @@ model User {
   isTwoFactorEnabled Boolean    @default(false) @map("is_two_factor_enabled")
   authMethod         AuthMethod @default(credentials) @map("auth_method")
 
-  accounts          Account[]
-  resumes           Resume[]
+  accounts  Account[]
+  documents Document[]
 }
 
 model Account {
@@ -37,7 +37,7 @@ model Account {
   refreshToken String? @map("refresh_token")
   accessToken  String  @map("access_token")
   expiresAt    Int     @map("expires_at")
-  email        String? 
+  email        String?
 
   userId String @map("user_id")
 
@@ -81,419 +81,88 @@ enum AuthMethod {
   yandex
 }
 
-enum ResumeTemplate {
-  classic
-  modern
-  creative
-  professional
+// Document
+
+enum DocumentName {
+  resume
+  coverLetter
 }
 
-model Resume {
-  id        String         @id @default(uuid())
-  createdAt DateTime       @default(now()) @map("created_at")
-  updatedAt DateTime       @updatedAt @map("updated_at")
-  template  ResumeTemplate @default(classic)
-
-  title                     String?
-  personalDetails           PersonalDetails?
-  professionalSummary       ProfessionalSummary?
-  employmentHistory         EmploymentHistory?
-  education                 Education?
-  links                     Links?
-  skills                    Skills?
-  languages                 Languages?
-  courses                   Courses?
-  internships               Internships?
-  hobbies                   Hobbies?
-  extraCurricularActivities ExtraCurricularActivities?
-  references                References?
-  customSections            CustomSections[]
-
-  userId String @map("user_id")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-enum SectionTypes {
-  personalDetails
-  professionalSummary
-  employmentHistory
-  education
-  links
-  skills
-  languages
-  courses
-  internships
-  hobbies
-  extraCurricularActivities
-  references
-  customSections
-}
-
-model GeneralSection {
+model DocumentType {
   id   String       @id @default(uuid())
-  type SectionTypes @unique
+  name DocumentName @unique
 
-  defaultTitle String
-  description  String?
-
-  personalDetails           PersonalDetails[]
-  professionalSummary       ProfessionalSummary[]
-  employmentHistory         EmploymentHistory[]
-  education                 Education[]
-  links                     Links[]
-  skills                    Skills[]
-  languages                 Languages[]
-  courses                   Courses[]
-  internships               Internships[]
-  hobbies                   Hobbies[]
-  extraCurricularActivities ExtraCurricularActivities[]
-  references                References[]
-  customSections            CustomSections[]
+  templates        DocumentTemplate[]
+  sectionTemplates SectionTemplate[]
+  documents        Document[]
 }
 
-model PersonalDetails {
-  id    String  @id @default(uuid())
-  title String?
+model DocumentTemplate {
+  id String @id @default(uuid())
 
-  avatarUrl      String? @map("avatar_url")
-  jobTitle       String? @map("job_title")
-  fullName       String? @map("full_name")
-  email          String?
-  phone          String?
-  address        String?
-  city           String?
-  country        String?
-  postalCode     String? @map("postal_code")
-  drivingLicense String? @map("driving_license")
-  birthPlace     String? @map("birth_place")
-  birthDate      String? @map("birth_date")
-  nationality    String?
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model ProfessionalSummary {
-  id    String  @id @default(uuid())
-  title String?
-
-  summary String?
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model EmploymentHistory {
-  id    String                        @id @default(uuid())
-  title String?
-  order Int
-  data  EmploymentHistorySubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model EmploymentHistorySubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  jobTitle    String? @map("job_title")
-  employer    String?
-  startDate   String? @map("start_date")
-  endDate     String? @map("end_date")
-  city        String?
+  key         String
+  title       String
   description String?
+  previewUrl  String? @map("preview_url")
 
-  sectionId String @map("section_id")
+  documentTypeId String @map("document_type_id")
 
-  section EmploymentHistory @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  documentType DocumentType @relation(fields: [documentTypeId], references: [id])
+  documents    Document[]
+
+  @@unique([documentTypeId, key])
 }
 
-model Education {
-  id    String                @id @default(uuid())
-  title String?
-  order Int
-  data  EducationSubsection[]
+model Document {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
+  title String
 
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  userId     String  @map("user_id")
+  typeId     String  @map("type_id")
+  templateId String? @map("template_id")
+
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type     DocumentType      @relation(fields: [typeId], references: [id])
+  template DocumentTemplate? @relation(fields: [templateId], references: [id])
+  sections Section[]
 }
 
-model EducationSubsection {
-  id    String @id @default(uuid())
-  order Int
+// Section
 
-  school      String?
-  degree      String?
-  startDate   String? @map("start_date")
-  endDate     String? @map("end_date")
-  city        String?
-  description String?
+model SectionTemplate {
+  id String @id @default(uuid())
 
-  sectionId String @map("section_id")
+  title           String
+  key             String
+  allowedChildren String[] @map("allowed_children")
+  schema          Json
 
-  section Education @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  documentTypeId String @map("document_type_id")
+
+  documentType DocumentType @relation(fields: [documentTypeId], references: [id])
+  sections     Section[]
+
+  @@unique([documentTypeId, key])
 }
 
-model Links {
-  id    String           @id @default(uuid())
-  title String?
-  order Int
-  data  LinkSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model LinkSubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  label String?
-  url   String?
-
-  sectionId String @map("section_id")
-
-  section Links @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model Skills {
-  id          String            @id @default(uuid())
-  title       String?
-  order       Int
-  isShowLevel Boolean           @default(true)
-  data        SkillSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model SkillSubsection {
-  id    String @id @default(uuid())
-  order Int
+model Section {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   title String?
-  level SkillLevel? @default(expert)
-
-  sectionId String @map("section_id")
-
-  section Skills @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model Languages {
-  id    String               @id @default(uuid())
-  title String?
-  order Int
-  data  LanguageSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model LanguageSubsection {
-  id    String @id @default(uuid())
+  data  Json?
   order Int
 
-  title String?
-  level LanguageLevel?
+  documentId String  @map("document_id")
+  parentId   String? @map("parent_id")
+  templateId String? @map("template_id")
 
-  sectionId String @map("section_id")
-
-  section Languages @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model Courses {
-  id    String             @id @default(uuid())
-  title String?
-  order Int
-  data  CourseSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model CourseSubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  title       String?
-  institution String?
-  startDate   String? @map("start_date")
-  endDate     String? @map("end_date")
-
-  sectionId String @map("section_id")
-
-  section Courses @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model Internships {
-  id    String                 @id @default(uuid())
-  title String?
-  order Int
-  data  InternshipSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model InternshipSubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  jobTitle    String? @map("job_title")
-  employer    String?
-  startDate   String? @map("start_date")
-  endDate     String? @map("end_date")
-  city        String?
-  description String?
-
-  sectionId String @map("section_id")
-
-  section Internships @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model Hobbies {
-  id               String  @id @default(uuid())
-  title            String?
-  order            Int
-  hobbyDescription String?
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model ExtraCurricularActivities {
-  id    String                              @id @default(uuid())
-  title String?
-  order Int
-  data  ExtraCurricularActivitySubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model ExtraCurricularActivitySubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  functionTitle String? @map("function_title")
-  employer      String?
-  startDate     String? @map("start_date")
-  endDate       String? @map("end_date")
-  city          String?
-  description   String?
-
-  sectionId String @map("section_id")
-
-  section ExtraCurricularActivities @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model References {
-  id    String                @id @default(uuid())
-  title String?
-  order Int
-  data  ReferenceSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @unique @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model ReferenceSubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  referentFullName String? @map("referent_full_name")
-  company          String?
-  phone            String?
-  email            String?
-
-  sectionId String @map("section_id")
-
-  section References @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-model CustomSections {
-  id    String             @id @default(uuid())
-  title String?
-  order Int
-  data  CustomSubsection[]
-
-  generalSectionId String @map("general_section_id")
-  resumeId         String @map("resume_id")
-
-  generalSection GeneralSection @relation(fields: [generalSectionId], references: [id], onDelete: Cascade)
-  resume         Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-}
-
-model CustomSubsection {
-  id    String @id @default(uuid())
-  order Int
-
-  title       String?
-  city        String?
-  startDate   String? @map("start_date")
-  endDate     String? @map("end_date")
-  description String?
-
-  sectionId String @map("section_id")
-
-  section CustomSections @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-}
-
-enum SkillLevel {
-  novice
-  beginner
-  skillful
-  experienced
-  expert
-}
-
-enum LanguageLevel {
-  nativeSpeaker
-  highlyProficient
-  goodWorkingKnowledge
-  workingKnowledge
-  A1
-  A2
-  B1
-  B2
-  C1
-  C2
+  document    Document         @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  parent      Section?         @relation("Subsections", fields: [parentId], references: [id], onDelete: Cascade)
+  subsections Section[]        @relation("Subsections")
+  template    SectionTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
 }
