@@ -1,0 +1,18 @@
+.tab {
+	white-space: nowrap;
+	text-wrap: nowrap;
+	
+	&[data-variant="primary"] {
+		padding: 8px 12px;
+		font-size: 15px;
+		border-radius: 6px;
+		color: var(--color-text--lighten);
+	}
+
+	&_active {
+		&[data-variant="primary"] {
+			color: var(--color-text);
+			background-color: var(--color-neutral);
+		}
+	}
+}

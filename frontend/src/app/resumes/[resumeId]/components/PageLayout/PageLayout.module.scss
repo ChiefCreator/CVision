@@ -1,0 +1,16 @@
+.burger-menu {
+	position: fixed;
+	top: 10px;
+	left: calc(var(--section-padding) / 2);
+	pointer-events: all;
+}
+
+@include max($tablet-l) {
+	.burger-menu {
+		display: none;
+	}
+
+	.sidebar-popover {
+		display: none;
+	}
+}

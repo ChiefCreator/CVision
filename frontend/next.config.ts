@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
   },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "src")],
+  },
   webpack(config) {
     const oneOfRule = config.module?.rules.find((rule: any) => Array.isArray(rule.oneOf));
 
@@ -32,7 +35,10 @@ const nextConfig: NextConfig = {
           }
 
           if (loader.loader.includes("sass-loader") && !loader.options?.additionalData) {
-            loader.options.additionalData = `@use "@/assets/styles/mixin" as *;`;
+            loader.options.additionalData = `
+              @use "@/assets/styles/mixin" as *;
+              @use "@/assets/styles/breakpoints" as *;
+            `;
             loader.options.sassOptions = {
               ...(loader.options.sassOptions || {}),
               includePaths: [path.resolve(__dirname, "src")],

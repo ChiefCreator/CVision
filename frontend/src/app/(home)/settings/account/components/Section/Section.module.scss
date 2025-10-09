@@ -1,14 +1,20 @@
 .content {
 	background-color: var(--color-neutral--dark);
-	padding: 20px;
+	padding: var(--container-padding);
 	border-radius: 20px;
 }
 
 .label {
-	padding: 0 20px;
+	padding: 0 var(--container-padding);
 	font-size: 14px;
 	font-weight: 500;
 	color: var(--color-text--lighten);
 	text-transform: uppercase;
 	margin-bottom: 5px;
+}
+
+@include max($mobile-l) {
+	.content {
+		border-radius: 0;
+	}
 }

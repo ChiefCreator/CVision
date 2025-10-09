@@ -1,3 +1,4 @@
+import { PortalProps } from "@/components/position/Portal/Portal";
 import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { MenuItemData } from "@/types/menu/menu";
 import { LoadingStatus } from "@/types/root";
@@ -17,7 +18,9 @@ export interface BaseButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBut
 export interface ButtonMenuProps extends BaseButtonProps {
   type: "buttonMenu";
   menuData: MenuItemData;
-  menuPositionerProps?: PositionerProps;
+  menuPositionerProps?: Partial<PositionerProps>;
+  menuPortalProps?: Partial<Omit<PortalProps, "children">>;
+  menuTitle?: string;
 }
 
 export interface SimpleButtonProps extends BaseButtonProps {

@@ -22,3 +22,13 @@
 .button {
 	margin-top: 20px;
 }
+
+@include max($tablet-m) {
+	.modal {
+		max-width: 100%;
+	}
+
+	.title {
+		display: none;
+	}
+}

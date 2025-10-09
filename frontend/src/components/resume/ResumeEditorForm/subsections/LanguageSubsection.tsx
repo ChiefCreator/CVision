@@ -1,13 +1,13 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 import { useChange } from "../Subsection/hooks/useChange";
 
-import Subsection from "../Subsection/Subsection";
+import FormField from "@/components/form/FormField/FormField";
+import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
-import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import EditSelect from "@/components/select/EditSelect/EditSelect";
-import FormField from "@/components/form/FormField/FormField";
+import Subsection from "../Subsection/Subsection";
 
 import { languages } from "@/constants/root/languages";
 
@@ -16,6 +16,7 @@ import type { Language } from "@/types/resumeSubsection/subsections";
 import type { SubsectionProps } from "../Subsection/Subsection";
 
 import styles from "@/components/resume/ResumeEditorForm/Subsection/Subsection.module.scss";
+import { ArrowNavigationProvider } from "@/hooks/root/useArrowNavigation";
 
 interface LanguageSubsectionProps extends Language, Omit<SubsectionProps, "children" | "defaultTitle" | "subTitle" | "title" | "onClickChange"> {
   onChange: ChangeResumeField;
@@ -44,7 +45,7 @@ export default React.memo(function LanguageSubsection({ id, subsectionName, sect
       onToggle={onToggle}
       onClickChange={changeOnClick}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldEditInput
             label="Язык"
@@ -58,11 +59,14 @@ export default React.memo(function LanguageSubsection({ id, subsectionName, sect
         </FormGroupCell>
         <FormGroupCell>
           <FormField label="Уровень">
-            <EditSelect
-              selectedValue={level}
-              data={languages}
-              onChange={changeObj.level}
-            />
+            <ArrowNavigationProvider>
+              <EditSelect
+                selectedValue={level}
+                defaultLabel="Выберите уровень языка"
+                data={languages}
+                onChange={changeObj.level}
+              />
+            </ArrowNavigationProvider>
           </FormField>
         </FormGroupCell>
       </FormGroup>

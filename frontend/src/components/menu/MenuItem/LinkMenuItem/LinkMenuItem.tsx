@@ -17,7 +17,7 @@ const checkIsLinkActive = (activePathname: string, pathname: string, isIndexPath
   return activePathname === pathname;
 }
 
-export default function LinkMenuItem({ level, title, Icon, pathname, isIndexPathname = false, isHideElements = false, isRepeatRegisterArrowNavigation= false }: LinkMenuItemProps) {
+export default function LinkMenuItem({ level, title, Icon, pathname, isIndexPathname = false, isHideElements = false, isRepeatRegisterArrowNavigation = false, onClick }: LinkMenuItemProps) {
   const { register, focusNext, focusPrev, focusParent } = useArrowNavigation();
   const activePathname = usePathname();
   
@@ -46,6 +46,10 @@ export default function LinkMenuItem({ level, title, Icon, pathname, isIndexPath
     }
   };
 
+  const handleClick = () => {
+    onClick?.();
+  }
+
   useEffect(() => {
     register(level, ref);
   }, [isRepeatRegisterArrowNavigation]);
@@ -60,6 +64,7 @@ export default function LinkMenuItem({ level, title, Icon, pathname, isIndexPath
       aria-label={isHideElements ? title : undefined}
 
       onKeyDown={handleKeyDown}
+      onClick={handleClick}
     >
       {Icon && <Icon className={baseStyles.menuItemIcon} aria-hidden="true" />}
 

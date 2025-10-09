@@ -19,14 +19,14 @@
   position: relative;
   background-color: var(--color-neutral--darken);
 
-  &:hover {
+  @include hover-supported {
     background-color: var(--color-neutral--ultra-darken);
   }
 
   &_active {
     background-color: var(--color-secondary);
 
-    &:hover {
+    @include hover-supported {
       background-color: var(--color-secondary--dark);
     }
   }
@@ -55,7 +55,7 @@
   color: var(--color-secondary--light);
   cursor: pointer;
 
-  &:hover {
+  @include hover-supported {
     color: var(--color-secondary--dark);
   }
 }

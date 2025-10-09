@@ -30,7 +30,8 @@
     }
     .cell {
       cursor: initial;
-      &:hover {
+
+      @include hover-supported {
         background-color: initial;
       }
     }
@@ -45,8 +46,8 @@
   border-radius: 6px;
   transition: background-color .2s var(--transition-primary);
   cursor: pointer;
-  
-  &:hover {
+
+  @include hover-supported {
     background-color: var(--slider-selector-color-third);
   }
 }

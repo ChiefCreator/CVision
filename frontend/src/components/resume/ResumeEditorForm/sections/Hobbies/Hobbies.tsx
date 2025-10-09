@@ -1,16 +1,16 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 
-import Section from "../../Section/Section";
+import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
-import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
+import Section from "../../Section/Section";
 
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { Hobbies } from "@/types/resumeSection/sections";
-import type { ChangeResumeField } from "@/types/resume/resumeUpdateFunctions";
-import type { ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 
-import styles from "./Hobbies.module.scss";
+import clsx from "clsx";
+import styles from "./../../Section/Section.module.scss";
 
 interface HobbiesProps {
   sectionData: Hobbies;
@@ -40,10 +40,9 @@ export default React.memo(function Hobbies({ sectionData, isOpen, onToggle, onCh
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="12fr">
+      <FormGroup className={clsx(styles.formGroup, styles.formGroupOneColumn)}>
         <FormGroupCell>
           <FormFieldTextEditor
-            className={styles.textEditor}
             label="Хобби"
 
             placeholder="Например занятие спортом, чтение книг..."

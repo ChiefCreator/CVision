@@ -1,11 +1,11 @@
 "use client"
 
 import clsx from "clsx";
-import Modal, { ModalProps } from "../../Modal";
 
 import { useCurrentUserQuery } from "@/api/user/hooks";
 import Button from "@/components/button/Button/Button";
 import FormFieldFormInput from "@/components/form/FormField/FormFieldFormInput/FormFieldFormInput";
+import AdaptiveModal, { AdaptiveModalProps } from "@/components/position/AdaptiveModal/AdaptiveModal";
 import { useDeleteUser } from "@/hooks/user/useDeleteUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
@@ -14,7 +14,7 @@ import styles from "./DeleteAccountModal.module.scss";
 import { formSchema } from "./formSchema";
 
 interface DeleteAccountModalProps {
-	modal: Omit<ModalProps, "children">;
+	modal: Omit<AdaptiveModalProps, "children">;
 }
 
 export default function DeleteAccountModal({ modal }: DeleteAccountModalProps) {
@@ -37,7 +37,7 @@ export default function DeleteAccountModal({ modal }: DeleteAccountModalProps) {
 	}, [modal.isOpen]);
 
 	return (
-		<Modal {...modal} className={clsx(styles.modal, modal.className)}>
+		<AdaptiveModal {...modal} className={clsx(styles.modal, modal.className)}>
 			<h2 className={styles.title}>Вы уверены?</h2>
 
 			<p className={styles.description}>Это действие нельзя будет отменить. Ваш аккаунт будет навсегда удален без возможности восстановления всех ваших резюме, сопроводительных писем и других данных.</p>
@@ -67,6 +67,6 @@ export default function DeleteAccountModal({ modal }: DeleteAccountModalProps) {
 					Удалить аккаунт
 				</Button>
 			</form>
-		</Modal>
+		</AdaptiveModal>
 	)
 }

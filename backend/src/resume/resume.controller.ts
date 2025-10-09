@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Authorization } from "src/auth/decorators/authentication.decorator";
+import { User } from "src/auth/decorators/user.decorator";
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { ResumeFieldUpdates } from './dto/update-resume.dto';
 import { ResumeService } from './resume.service';
@@ -24,8 +25,8 @@ export class ResumeController {
   }
 
   @Post()
-  createOne(@Body() dto: CreateResumeDto) {
-    return this.resumeService.createOne(process.env.TEST_USER_ID!, dto);
+  createOne(@User("id") id: string, @Body() dto: CreateResumeDto) {
+    return this.resumeService.createOne(id, dto);
   }
   @Delete(":resumeId")
   deleteOne(@Param("resumeId") resumeId: string) {

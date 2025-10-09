@@ -1,3 +1,4 @@
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import type {
   ButtonMenuItem as ButtonMenuItemType,
@@ -12,14 +13,19 @@ interface BaseMenuItemProps {
   level: number;
   index: number;
   isHideElements?: boolean;
-  isRepeatRegisterArrowNavigation?: boolean
+  isRepeatRegisterArrowNavigation?: boolean;
+
+  onClick?: () => void;
 }
 
-export interface LinkMenuItemProps extends LinkMenuItemType, BaseMenuItemProps {}
+export type LinkMenuItemProps = LinkMenuItemType & BaseMenuItemProps;
+
 export interface ButtonMenuItemProps extends ButtonMenuItemType, BaseMenuItemProps {
   dropdownType: DropdownTypeEnum;
+  dropdownPositionerProps?: Partial<PositionerProps>;
 }
-export interface ControlMenuItemProps extends ControlMenuItemType, BaseMenuItemProps {}
+
+export type ControlMenuItemProps = ControlMenuItemType & BaseMenuItemProps;
 
 type MenuItemProps = LinkMenuItemProps | ButtonMenuItemProps | ControlMenuItemProps;
 

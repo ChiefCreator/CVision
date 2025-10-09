@@ -11,7 +11,7 @@ import { isLinkMenuItem } from "@/utils/menu/isMenuItem";
 import type { MenuItemData } from "@/types/menu/menu";
 import type { ButtonMenuItemProps } from "../MenuItem";
 
-import { useMenu } from "@/hooks/menu/useMenu";
+import { useMenuContext } from "@/hooks/menu/useMenuContext";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import clsx from "clsx";
 import baseStyles from "./../MenuItem.module.scss";
@@ -27,15 +27,26 @@ const isChildrenHaveActiveItem = (children: MenuItemData, activePathname: string
   })
 }
 
-export default function ButtonMenuItem({ id, title, Icon, children, isHideElements, level, isRepeatRegisterArrowNavigation, dropdownType }: ButtonMenuItemProps) {
+export default function ButtonMenuItem({
+  id,
+  title,
+  Icon,
+  children,
+  isHideElements,
+  level,
+  isRepeatRegisterArrowNavigation,
+  dropdownType,
+  dropdownPositionerProps = {},
+  onClick,
+}: ButtonMenuItemProps) {
   const { register, focusNext, focusPrev, focusSubmenu, focusParent, setSubmenuTrigger } = useArrowNavigation();
-  const { openMenuPath, toggleSubMenu, openSubMenu, closeSubMenu } = useMenu();
+  const { openMenuPath, toggleSubMenu, openSubMenu, closeSubMenu } = useMenuContext();
   const activePathname = usePathname();
  
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const isSubMenuOpen = openMenuPath.includes(id);
+  const isSubMenuOpen = openMenuPath?.includes(id);
   const isActive = isChildrenHaveActiveItem(children, activePathname) && !isSubMenuOpen;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -63,6 +74,12 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
     }
   };
 
+  const handleClick = () => {
+    toggleSubMenu(level, id);
+
+    onClick?.();
+  }
+
   useEffect(() => {
     register(level, triggerRef);
   }, [isRepeatRegisterArrowNavigation]);
@@ -81,8 +98,8 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
         aria-expanded={isSubMenuOpen}
         aria-controls={id}
 
-        onClick={() => toggleSubMenu(level, id)}
         onKeyDown={handleKeyDown}
+        onClick={handleClick}
       >
         {Icon && <Icon className={baseStyles.menuItemIcon} />}
     
@@ -101,7 +118,14 @@ export default function ButtonMenuItem({ id, title, Icon, children, isHideElemen
         data={children}
         level={level + 1}
         isOpen={isSubMenuOpen}
-        {...(dropdownType === DropdownTypeEnum.absolute ? { triggerRef, contentRef, closeSubMenu } : {} as any)}
+        {...(dropdownType === DropdownTypeEnum.absolute ? {
+          closeSubMenu,
+          positionerProps: {
+            triggerRef,
+            contentRef,
+            ...dropdownPositionerProps,
+          }
+        } : {} as any)}
       />
     </>
   );

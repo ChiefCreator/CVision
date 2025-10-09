@@ -1,0 +1,50 @@
+.menu {
+	width: 35px;
+	aspect-ratio: 1;
+	padding: 5px;
+	cursor: pointer;
+
+  &.open {
+		.line {
+			top: 50%;
+		}
+    .line:first-child {
+      transform: rotate(45deg);
+    }
+    .line:last-child {
+			width: 100%;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+.container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.line {
+	display: block;
+	position: absolute;
+	left: 0;
+  
+	height: 2px;
+	min-height: 2px;
+	max-height: 2px;
+	border-radius: .5px;
+	background-color: var(--color-primary);
+	transform-origin: center;
+	translate: 0 -50%;
+	transition: .2s top var(--transition-primary), .2s width var(--transition-primary);
+
+	&:first-child {
+    width: 100%;
+		top: 33.3%;
+  }
+
+	&:last-child {
+    width: 50%;
+		top: 66.6%;
+  }
+}

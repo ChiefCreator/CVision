@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-interface PortalProps {
+export interface PortalProps {
   children: ReactNode;
   containerId?: string;
 }

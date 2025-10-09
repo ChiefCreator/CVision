@@ -1,0 +1,45 @@
+.popover {
+	min-width: 150px;
+	padding: 8px;
+	overflow: hidden;
+
+	&[data-variant="primary"] {
+		border-radius: 8px;
+		background-color: var(--color-neutral);
+		box-shadow: 0 0 3px var(--color-neutral--ultra-darken);
+
+		.container {
+			&::-webkit-scrollbar-thumb {
+				background-color: var(--color-primary);
+			}
+		}
+	}
+
+	&[data-variant="secondary"] {
+		background-color: var(--color-neutral--dark);
+
+		.container {
+			&::-webkit-scrollbar-thumb {
+				background-color: var(--color-secondary);
+			}
+		}
+	}
+}
+
+.container {
+	max-height: 250px;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+	}
+}

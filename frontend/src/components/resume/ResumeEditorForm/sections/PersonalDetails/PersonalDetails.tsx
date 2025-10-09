@@ -1,16 +1,15 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 
-import Section from "../../Section/Section";
+import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormGroup from "@/components/form/FormGroup/FormGroup";
 import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
-import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
+import Section from "../../Section/Section";
 
+import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { PersonalDetails } from "@/types/resumeSection/sections";
-import type { ChangeResumeField } from "@/types/resume/resumeUpdateFunctions";
-import type { ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 
-import styles from "./PersonalDetails.module.scss";
+import styles from "./../../Section/Section.module.scss";
 
 interface PersonalDetailsProps {
   sectionData: PersonalDetails;
@@ -52,7 +51,7 @@ export default React.memo(function PersonalDetails({ sectionData, isOpen, onTogg
       onToggle={onToggle}
       onChange={changeObj.title}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           "Аватар"
         </FormGroupCell>
@@ -65,7 +64,7 @@ export default React.memo(function PersonalDetails({ sectionData, isOpen, onTogg
             onChange={changeObj.jobTitle}
           />
         </FormGroupCell>
-        <FormGroupCell gridArea="2 / 1 / 2 / 3">
+        <FormGroupCell className={styles.formGroupCellPersonalDetailsFullName}>
           <FormFieldEditInput
             label="Полное имя"
             
@@ -92,7 +91,7 @@ export default React.memo(function PersonalDetails({ sectionData, isOpen, onTogg
             onChange={changeObj.phone}
           />
         </FormGroupCell>
-        <FormGroupCell gridArea="4 / 1 / 5 / 3">
+        <FormGroupCell className={styles.formGroupCellPersonalDetailsAddress}>
           <FormFieldEditInput
             label="Адрес"
             

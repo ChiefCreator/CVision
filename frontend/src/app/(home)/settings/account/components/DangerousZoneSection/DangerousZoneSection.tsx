@@ -35,6 +35,8 @@ export default function DangerousZoneSection() {
 					id: modalId,
 					isOpen,
 					onClose: close,
+
+					title: "Вы уверены?"
 				}}
 			/>
 		</>

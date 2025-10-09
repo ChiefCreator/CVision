@@ -1,4 +1,5 @@
 import Courses from "../../components/resume/ResumeEditorForm/sections/Courses/Courses";
+import CustomSection from "../../components/resume/ResumeEditorForm/sections/CustomSection/CustomSection";
 import Education from "../../components/resume/ResumeEditorForm/sections/Education/Education";
 import EmploymentHistory from "../../components/resume/ResumeEditorForm/sections/EmploymentHistory/EmploymentHistory";
 import ExtraCurricularActivities from "../../components/resume/ResumeEditorForm/sections/ExtraCurricularActivities/ExtraCurricularActivities";
@@ -10,7 +11,6 @@ import PersonalDetails from "../../components/resume/ResumeEditorForm/sections/P
 import ProfessionalSummary from "../../components/resume/ResumeEditorForm/sections/ProfessionalSummary/ProfessionalSummary";
 import References from "../../components/resume/ResumeEditorForm/sections/References/References";
 import Skills from "../../components/resume/ResumeEditorForm/sections/Skills/Skills";
-import CustomSection from "../../components/resume/ResumeEditorForm/sections/CustomSection/CustomSection";
 
 import type { SectionComponentMap } from "@/types/resumeSection/section";
 

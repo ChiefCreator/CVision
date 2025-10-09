@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
 import { useResume } from "@/hooks/resume/useResume";
+import { useCallback, useEffect, useState } from "react";
 
-import ResumeEditorFormSkeleton from "./ResumeEditorFormSkeleton";
-import Head from "./Head/Head";
 import AddSection from "./AddSection/AddSection";
+import Head from "./Head/Head";
+import ResumeEditorFormSkeleton from "./ResumeEditorFormSkeleton";
 
 import { SECTION_NAMES } from "@/constants/resumeSection/sectionNames";
 import { SECTION_COMPONENTS_MAP } from "../../../constants/resumeSection/sectionComponentsMap";
 
+import { resumeToSections } from "@/utils/resume/resumeToSections";
 import { isListResumeSectionByData } from "@/utils/resumeSection/isResumeSection";
-import { resumeToSections } from "@/utils/resume/resumeToSections"
 
-import type { BaseComponent } from "@/types/root";
 import type { SectionComponentProps } from "@/types/resumeSection/section";
+import type { BaseComponent } from "@/types/root";
 
-import styles from "./ResumeEditorForm.module.scss";
 import clsx from "clsx";
+import styles from "./ResumeEditorForm.module.scss";
 
 interface ResumeEditorForm extends BaseComponent {}
 
@@ -66,6 +66,7 @@ export default function ResumeEditorForm({ className }: ResumeEditorForm) {
       };
     });
   }, [setSectionsOpenState]);
+  
   const checkIsOpen = useCallback((sectionId: string, subsectionId?: string): boolean => {
     if (sectionsOpenState === "auto") return true;
   

@@ -1,0 +1,1 @@
+export type PopoverVariant = "primary" | "secondary";

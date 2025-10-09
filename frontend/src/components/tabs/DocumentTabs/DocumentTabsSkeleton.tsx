@@ -15,7 +15,7 @@ export default function DocumentTabsSkeleton() {
           </div>
 
           <div className={styles.controlsList}>
-            <ButtonSkeleton />
+            <ButtonSkeleton className={styles.control} containerClassName={styles.controlSkeletonContainer} />
           </div>
         </div>
       </div>

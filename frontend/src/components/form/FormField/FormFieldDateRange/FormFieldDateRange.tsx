@@ -1,20 +1,21 @@
 import React from "react";
 
+import InputDate from "@/components/input/InputDate/InputDate";
+import { BaseComponent } from "@/types/root";
 import FormGroup from "../../FormGroup/FormGroup";
 import FormGroupCell from "../../FormGroup/FormGroupCell";
-import InputDate from "@/components/input/InputDate/InputDate";
 import FormField from "../FormField";
 
-interface FormFieldDateRangeProps {
+interface FormFieldDateRangeProps extends BaseComponent {
   startDate?: string;
   endDate?: string;
   onChangeStartDate: (date: string) => void;
   onChangeEndDate: (date: string) => void;
 };
 
-export default React.memo(function FormFieldDateRange({ startDate, endDate, onChangeStartDate, onChangeEndDate }: FormFieldDateRangeProps) {
+export default React.memo(function FormFieldDateRange({ className, startDate, endDate, onChangeStartDate, onChangeEndDate }: FormFieldDateRangeProps) {
   return (
-    <FormGroup gridTemplateColumns="1fr 1fr">
+    <FormGroup className={className}>
       <FormGroupCell>
         <FormField label="Дата начала">
           <InputDate

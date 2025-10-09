@@ -1,20 +1,26 @@
 .section {
-  flex-grow: 1;
-  background-color: var(--color-neutral);
-  border-top-left-radius: var(--section-border-radius);
-  border-top-right-radius: var(--section-border-radius);
-  padding: var(--section-padding);
+	flex-grow: 1;
+	background-color: var(--color-neutral);
+	border-top-left-radius: var(--section-border-radius);
+	border-top-right-radius: var(--section-border-radius);
+	padding: var(--container-padding);
 }
 
 .title {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--color-text);
+	font-size: 18px;
+	font-weight: 500;
+	color: var(--color-text);
 }
 
 .list {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+	margin-top: 20px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+}
+
+@include max($tablet-s) {
+	.list {
+		grid-template-columns: 1fr;
+	}
 }

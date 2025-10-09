@@ -1,13 +1,13 @@
+.sidebar-popover {
+  width: 250px;
+}
+
 .sidebar {
-  position: sticky;
   top: 0;
-  width: 58px;
   height: 100vh;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-right: 20px;
   border-right: 1px solid transparent;
-  transition: width .4s var(--transition-primary);
+  background-color: var(--color-neutral);
+  pointer-events: all;
 
   &__container {
     width: 100%;
@@ -23,12 +23,22 @@
     margin-top: auto;
   }
 
-  &_open {
-    width: 250px;
+  &[data-performance="static"] {
+    position: sticky;
+    width: 78px;
+    padding: var(--container-padding);
+    transition: width .4s var(--transition-primary);
   }
 
-  &:hover {
-    border-right: 1px solid var(--color-neutral-primary--dark);
+  &[data-performance="absolute"] {
+    width: 100%;
+    height: auto;
+  }
+
+  &_open {
+    &[data-performance="static"] {
+      width: 250px;
+    }
   }
 }
 

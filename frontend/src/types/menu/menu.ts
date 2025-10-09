@@ -1,6 +1,6 @@
-import type { IconComponent } from "@/types/root";
+import type { BaseComponent, IconComponent } from "@/types/root";
 
-export interface BaseMenuItem {
+export interface BaseMenuItem extends BaseComponent {
 	id: string;
 	title: string;
 	Icon?: IconComponent
@@ -25,3 +25,5 @@ export interface ControlMenuItem extends BaseMenuItem {
 export type MenuItem = LinkMenuItem | ButtonMenuItem | ControlMenuItem;
 
 export type MenuItemData = MenuItem[];
+
+export type MenuItemType = MenuItem["type"];

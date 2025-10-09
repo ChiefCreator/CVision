@@ -1,0 +1,38 @@
+.header {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	padding: 20px 0;
+	background-color: var(--color-neutral);
+}
+
+.container {
+	display: flex;
+	align-items: center;
+}
+
+.button-menu {
+	margin-left: auto;
+}
+
+.logo {
+	max-width: 100px;
+}
+
+.controls {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-left: auto;
+}
+
+@include min($tablet-l) {
+	.header {
+		position: static;
+	}
+
+	.logo,
+	.burgerMenu {
+		display: none;
+	}
+}

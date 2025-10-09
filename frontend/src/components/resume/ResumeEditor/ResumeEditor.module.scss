@@ -1,16 +1,47 @@
 .editor {
-  display: flex;
-  background-color: var(--color-primary--light);
+	background-color: var(--color-primary--light);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
 
-  &__form {
-    flex: 1 1 auto;
-    max-width: 50%;
-  }
+.tabs {
+	display: none;
+	width: 100%;
+}
 
-  &__preview {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    flex: 1 1 auto;
-  }
+.container {
+	display: flex;
+	flex-grow: 1;
+}
+
+.form {
+	flex: 1 1 auto;
+	max-width: 50%;
+}
+
+.preview {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	flex-grow: 1;
+	overflow-y: auto;
+}
+
+@include max($tablet-l) {
+	.editor {
+		background-color: var(--color-neutral--dark);
+	}
+
+	.tabs {
+		display: flex;
+	}
+
+	.form {
+		display: none;
+	}
+
+	.preview {
+		display: none;
+	}
 }

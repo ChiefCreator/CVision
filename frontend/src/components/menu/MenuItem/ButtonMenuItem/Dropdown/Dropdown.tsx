@@ -1,3 +1,4 @@
+import { PositionerProps } from "@/components/position/Positioner/Positioner";
 import { DropdownTypeEnum } from "@/types/menu/dropdown";
 import type { MenuItemData } from "@/types/menu/menu";
 import AbsoluteDropdown from "./AbsoluteDropdown";
@@ -16,9 +17,8 @@ export interface StaticDropdownProps extends BaseDropdownProps {
 
 export interface AbsoluteDropdownProps extends BaseDropdownProps {
   type: DropdownTypeEnum.absolute;
+  positionerProps: PositionerProps;
   closeSubMenu: () => void;
-  triggerRef: React.RefObject<HTMLDivElement | null>;
-  contentRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export interface NoneDropdownProps {

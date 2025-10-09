@@ -1,32 +1,12 @@
+@use "./mixins/max" as *;
+@use "./breakpoints" as *;
+
 :root {
-	// Color
-	--color-primary: black;
-	--color-primary--light: rgb(38, 39, 42);
-
-	--color-secondary: rgb(26, 145, 240);
-	--color-secondary--dark: rgb(14, 105, 181);
-	--color-secondary--light: rgb(79, 166, 238);
-
-	--color-tertiary: rgb(48, 56, 72);
-	--color-tertiary--light: rgb(64, 73, 91);
-
-	--color-neutral: white;
-	--color-neutral--soft-dark: rgb(248, 248, 248);
-	--color-neutral--dark: rgb(241, 241, 241);
-	--color-neutral--darken: rgb(212, 212, 212);
-  --color-neutral--more-darken: rgb(199, 199, 199);
-  --color-neutral--ultra-darken: rgb(161, 161, 161);
-
-	--color-text: black;
-	--color-text--light: rgb(72, 72, 72);
-	--color-text--lighten: rgb(110, 110, 110);
-
-	--color-text-inverse: white;
-	--color-text-inverse--dark: rgb(207, 207, 207);
-	--color-text-inverse--darken: rgb(125, 125, 125);
-
-	// Transition
+  // Transition
 	--transition-primary: ease-out;
+
+  // Container
+  --container-padding: 20px;
 
 	// Other
 	--document-width: 794px;
@@ -43,10 +23,10 @@
 
 :root[data-theme="light"] {
   --color-primary: black;
-  --color-primary--light: rgb(38, 39, 42);
+  --color-primary--light: rgb(23, 23, 23);
 
   --color-secondary: rgb(26, 145, 240);
-  --color-secondary--dark: rgb(14, 105, 181);
+  --color-secondary--dark: rgb(23, 128, 214);
   --color-secondary--light: rgb(79, 166, 238);
 
   --color-tertiary: rgb(48, 56, 72);
@@ -64,21 +44,9 @@
   --color-text--lighten: rgb(110, 110, 110);
 
   --color-text-inverse: white;
+  --color-text-inverse--soft-dark: rgb(233, 233, 233);
   --color-text-inverse--dark: rgb(207, 207, 207);
   --color-text-inverse--darken: rgb(125, 125, 125);
-
-  --transition-primary: ease-out;
-
-  --document-width: 794px;
-  --document-height: 1123px;
-  --document-aspect-ratio: 1 / 1.4142;
-
-  --section-border-radius: 10px;
-  --section-padding: 20px;
-  --section-gap: 4px;
-
-  --subsection-border-radius: 8px;
-  --subsection-padding: 15px;
 }
 
 :root[data-theme="dark"] {
@@ -104,19 +72,13 @@
   --color-text--lighten: rgb(102, 102, 102);
 
   --color-text-inverse: black;
+  --color-text-inverse--soft-dark: rgb(26, 26, 26);
   --color-text-inverse--dark: rgb(41, 41, 41);
   --color-text-inverse--darken: rgb(125, 125, 125);
+}
 
-  --transition-primary: ease-out;
-
-  --document-width: 794px;
-  --document-height: 1123px;
-  --document-aspect-ratio: 1 / 1.4142;
-
-  --section-border-radius: 10px;
-  --section-padding: 20px;
-  --section-gap: 4px;
-
-  --subsection-border-radius: 8px;
-  --subsection-padding: 15px;
+@include max($mobile-l) {
+  :root {
+    --container-padding: 10px;
+  }
 }

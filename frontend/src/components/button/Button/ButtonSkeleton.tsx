@@ -1,8 +1,19 @@
+import { BaseComponent } from "@/types/root";
 import Skeleton from "react-loading-skeleton";
+
+import clsx from "clsx";
 import styles from "./Button.module.scss";
 
-export default function ButtonSkeleton() {
+interface ButtonSkeletonProps extends BaseComponent {
+  containerClassName?: string;
+}
+
+export default function ButtonSkeleton({ className, containerClassName, style = {} }: ButtonSkeletonProps) {
   return (
-    <Skeleton className={styles.button} style={{ width: "150px", backgroundColor: "var(--base-color)", cursor: "initial" }} />
+    <Skeleton
+      className={clsx(styles.button, className)}
+      containerClassName={containerClassName}
+      style={{ width: "150px", backgroundColor: "var(--base-color)", cursor: "initial", ...style }}
+    />
   );
 }

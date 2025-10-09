@@ -1,15 +1,15 @@
-import React from "react";
 import { useFieldChange } from "@/api/resume/hooks";
+import React from "react";
 import { useChange } from "../Subsection/hooks/useChange";
 
 import { transformStringDatesToRangeFormat } from "@/utils/date/transformStringDatesToRangeFormat";
 
-import Subsection from "../Subsection/Subsection";
-import FormGroup from "@/components/form/FormGroup/FormGroup";
-import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
+import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
 import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
 import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
-import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
+import FormGroup from "@/components/form/FormGroup/FormGroup";
+import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
+import Subsection from "../Subsection/Subsection";
 
 import type { ChangeResumeField, ResumeSectionChangeObj } from "@/types/resume/resumeUpdateFunctions";
 import type { CustomData } from "@/types/resumeSubsection/subsections";
@@ -45,7 +45,7 @@ export default React.memo(function CustomSubsection({ id, subsectionName, sectio
       onToggle={onToggle}
       onClickChange={changeOnClick}
     >
-      <FormGroup className={styles.formGroup} gridTemplateColumns="6fr 6fr">
+      <FormGroup className={styles.formGroup}>
         <FormGroupCell>
           <FormFieldEditInput
             label="Название"
@@ -68,13 +68,14 @@ export default React.memo(function CustomSubsection({ id, subsectionName, sectio
         </FormGroupCell>
         <FormGroupCell>
           <FormFieldDateRange
+            className={styles.formGroupDateRange}
             startDate={startDate}
             endDate={endDate}
             onChangeStartDate={changeObj.startDate}
             onChangeEndDate={changeObj.endDate}
           />
         </FormGroupCell>
-        <FormGroupCell gridArea="3 / 1 / 4 / 3">
+        <FormGroupCell className={styles.formGroupCellCustomDescription}>
           <FormFieldTextEditor
             className={styles.textEditor}
             label="Описание"

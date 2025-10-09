@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useLayoutEffect, useRef } from "react";
+import React, { useImperativeHandle, useLayoutEffect } from "react";
 
 import stylesPositioner from "./Positioner.module.scss";
 import { useCalculatePosition } from "./hooks/useRecalculatePosition";
@@ -13,23 +13,45 @@ export interface PositionerHandle {
 }
 
 export interface PositionerProps {
-  positionerHandleRef?: React.RefObject<PositionerHandle | null>;
   contentRef: React.RefObject<HTMLElement | null>;
   triggerRef?: React.RefObject<HTMLElement | SVGElement | null> | null;
+  containerRef?: React.RefObject<HTMLElement | null>;
   anchorOrigin?: Origin;
   transformOrigin?: Origin;
   offsetX?: number;
   offsetY?: number;
   matchTriggerWidth?: boolean;
+
   position?: {
     left?: number;
     top?: number;
   }
+
+  isFixed?: boolean;
   children?: React.ReactNode;
+  positionerHandleRef?: React.RefObject<PositionerHandle | null>;
 }
 
-export default function Positioner({ positionerHandleRef, contentRef, triggerRef, anchorOrigin = { vertical: "bottom", horizontal: "left" }, transformOrigin = { vertical: "top", horizontal: "left" }, offsetX = 0, offsetY = 0, matchTriggerWidth = false, position, children }: PositionerProps) {
-  const { styles, updateStyles } = useCalculatePosition({ contentRef, triggerRef, anchorOrigin, transformOrigin, offsetX, offsetY, matchTriggerWidth, position });
+export default function Positioner({
+  contentRef,
+  triggerRef,
+  containerRef,
+  anchorOrigin = { vertical: "bottom", horizontal: "left" },
+  transformOrigin = { vertical: "top", horizontal: "left" },
+  offsetX = 0,
+  offsetY = 0,
+  matchTriggerWidth = false,
+  position,
+  isFixed = false,
+  children,
+  positionerHandleRef,
+}: PositionerProps) {
+  const { styles, updateStyles } = useCalculatePosition({
+    contentRef, triggerRef, containerRef,
+    anchorOrigin, transformOrigin,
+    offsetX, offsetY,
+    matchTriggerWidth, position, isFixed,
+  });
 
   useLayoutEffect(() => {
     updateStyles();
@@ -40,6 +62,7 @@ export default function Positioner({ positionerHandleRef, contentRef, triggerRef
       window.removeEventListener("resize", updateStyles);
     };
   }, [updateStyles]);
+
   useImperativeHandle(positionerHandleRef, () => ({
     recalcPosition: updateStyles,
   }))

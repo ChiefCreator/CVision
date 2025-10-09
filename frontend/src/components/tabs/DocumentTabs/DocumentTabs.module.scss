@@ -11,14 +11,23 @@
   }
 }
 .buttons-list {
+  flex-grow: 1;
   display: flex;
   gap: 20px;
   position: relative;
+  overflow: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .controls-list {
   display: flex;
   gap: 20px;
+  white-space: nowrap;
+  text-wrap: nowrap;
 }
 
 .line {
@@ -33,4 +42,36 @@
   background-color: var(--color-primary);
   border-radius: 20px;
   transition: width .2s var(--transition-primary), left .2s var(--transition-primary);
+}
+
+@include max($tablet-m) {
+  .indicator {
+    display: none;
+  }
+}
+
+@include max($mobile-l) {
+  .buttons-list {
+    width: 100%;
+  }
+
+  .header {
+    &__content {
+      flex-direction: column;
+      align-items: start;
+      justify-content: start;
+    }
+  }
+
+  .controls-list {
+    width: 100%;
+  }
+
+  .control {
+    width: 100% !important;
+  }
+
+  .control-skeleton-container {
+    width: 100%;
+  }
 }
