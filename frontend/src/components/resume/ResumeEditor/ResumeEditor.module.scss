@@ -1,6 +1,8 @@
 .editor {
 	background-color: var(--color-primary--light);
 	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 .tabs {
@@ -10,6 +12,7 @@
 
 .container {
 	display: flex;
+	flex-grow: 1;
 }
 
 .form {
@@ -31,7 +34,7 @@
 	}
 
 	.tabs {
-		display: block;
+		display: flex;
 	}
 
 	.form {

@@ -1,3 +1,8 @@
+.tabs {
+	display: flex;
+	flex-direction: column;
+}
+
 .list-wrapper {
 	padding: var(--container-padding);
 	background-color: var(--color-neutral);
@@ -30,6 +35,11 @@
 
 .content-wrapper {
 	margin-top: var(--section-gap);
+	flex-grow: 1;
+}
+
+.content {
+	height: 100%;
 }
 
 @include max($tablet-l) {

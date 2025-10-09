@@ -1,9 +1,11 @@
 .preview {
+	height: 100%;
+
 	&__container {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-    max-width: 450px;
+		max-width: 450px;
 		height: 100%;
 		padding: var(--container-padding);
 	}
@@ -53,12 +55,21 @@
 
 @include max($tablet-l) {
 	.preview {
+		height: calc(100% - 52px);
 		&__head {
 			display: none;
 		}
 
 		&__container {
 			max-width: 100%;
+		}
+
+		&__body {
+			flex-grow: 0;
+		}
+
+		&__foot {
+			margin: 0;
 		}
 	}
 
