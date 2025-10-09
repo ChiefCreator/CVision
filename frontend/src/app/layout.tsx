@@ -13,8 +13,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               (function() {
                 try {
                   var saved = localStorage.getItem("theme");
-                  var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-                  document.documentElement.dataset.theme = theme;
+
+                  if (!saved || saved === "system") {
+                    saved = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                  }
+                  
+                  document.documentElement.dataset.theme = saved;
                 } catch (e) {}
               })();
             `,
