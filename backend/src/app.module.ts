@@ -5,9 +5,6 @@ import { AuthModule } from "./auth/auth.module";
 import { EmailConfirmationModule } from './auth/email-confirmation/email-confirmation.module';
 import { PasswordRecoveryModule } from './auth/password-recovery/password-recovery.module';
 import { DocumentModule } from './document/document.module';
-import { ResumeModule } from './resume/resume.module';
-import { SectionResumeModule } from './section-resume/section-resume.module';
-import { SubsectionResumeModule } from './subsection-resume/subsection-resume.module';
 import { UserModule } from './user/user.module';
 
 import appConfig from './config/app.config';
@@ -25,9 +22,6 @@ import { isProd } from './utils/env.utils';
 
 @Module({
   imports: [
-    ResumeModule,
-    SectionResumeModule,
-    SubsectionResumeModule,
     DocumentModule,
     UserModule,
     AuthModule,

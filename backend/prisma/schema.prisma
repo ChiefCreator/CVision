@@ -118,15 +118,15 @@ model Document {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title String
+  title String?
 
-  userId     String  @map("user_id")
-  typeId     String  @map("type_id")
-  templateId String? @map("template_id")
+  userId     String @map("user_id")
+  typeId     String @map("type_id")
+  templateId String @map("template_id")
 
-  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type     DocumentType      @relation(fields: [typeId], references: [id])
-  template DocumentTemplate? @relation(fields: [templateId], references: [id])
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type     DocumentType     @relation(fields: [typeId], references: [id])
+  template DocumentTemplate @relation(fields: [templateId], references: [id])
   sections Section[]
 }
 
@@ -135,17 +135,33 @@ model Document {
 model SectionTemplate {
   id String @id @default(uuid())
 
-  title           String
-  key             String
-  allowedChildren String[] @map("allowed_children")
-  schema          Json
+  title        String
+  key          String
+  schema       Json?
+  isDefault    Boolean @default(false) @map("is_default")
+  isOrderFixed Boolean @default(false) @map("is_order_fixed")
+  defaultOrder Int?    @map("default_order")
+  isMultiple   Boolean @default(false)
 
   documentTypeId String @map("document_type_id")
 
-  documentType DocumentType @relation(fields: [documentTypeId], references: [id])
-  sections     Section[]
+  documentType    DocumentType              @relation(fields: [documentTypeId], references: [id])
+  sections        Section[]
+  allowedChildren SectionTemplateRelation[] @relation("ParentTemplate")
+  allowedParents  SectionTemplateRelation[] @relation("ChildTemplate")
 
   @@unique([documentTypeId, key])
+}
+
+model SectionTemplateRelation {
+  id       String @id @default(uuid())
+  parentId String @map("parent_id")
+  childId  String @map("child_id")
+
+  parentTemplate SectionTemplate @relation("ParentTemplate", fields: [parentId], references: [id], onDelete: Cascade)
+  childTemplate  SectionTemplate @relation("ChildTemplate", fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([parentId, childId])
 }
 
 model Section {
@@ -159,10 +175,12 @@ model Section {
 
   documentId String  @map("document_id")
   parentId   String? @map("parent_id")
-  templateId String? @map("template_id")
+  templateId String  @map("template_id")
 
-  document    Document         @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  parent      Section?         @relation("Subsections", fields: [parentId], references: [id], onDelete: Cascade)
-  subsections Section[]        @relation("Subsections")
-  template    SectionTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  document    Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  parent      Section?        @relation("Subsections", fields: [parentId], references: [id], onDelete: Cascade)
+  subsections Section[]       @relation("Subsections")
+  template    SectionTemplate @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  @@unique([documentId, parentId, order])
 }
