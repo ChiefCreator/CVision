@@ -1,23 +1,16 @@
-import { CoverLetter } from "../coverLetter/coverLetter";
-import { Resume } from "../resume/resume";
+import { Section } from "../resumeSection/section";
+import { BaseEntityFields } from "../root";
+import { DocumentTemplate } from "./documentTemplate/documentTemplate";
+import { DocumentType } from "./documentType/documentType";
 
-export type DocumentType = "resume" | "coverLetter";
+export interface Document extends BaseEntityFields {
+	userId: string;
+	typeId: string;
+	templateId: string;
 
-export type DocumentPerformance = "preview" | "print";
+	title?: string;
 
-
-export interface DocumentDataMap {
-  resume: Resume;
-  coverLetter: CoverLetter
+	type: DocumentType;
+	template: DocumentTemplate;
+	sections: Section[];
 }
-
-export type DocumentData = DocumentDataMap[DocumentType];
-
-export type DocumentMap = {
-  [K in DocumentType]: {
-    type: K;
-    data: DocumentDataMap[K];
-  }
-}
-
-export type Document = DocumentMap[DocumentType];
