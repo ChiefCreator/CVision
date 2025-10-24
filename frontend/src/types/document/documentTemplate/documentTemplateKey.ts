@@ -1,4 +1,4 @@
-import { DOCUMENT_TYPES_MAP } from "@/constants/document/documentTypesMap";
+import { DocumentConfig } from "../documentConfig";
 import { DocumentTypeName } from "../documentType/documentTypeName";
 
-export type DocumentTemplateKey = (typeof DOCUMENT_TYPES_MAP)[DocumentTypeName]["templates"][number];
+export type DocumentTemplateKey<T extends DocumentTypeName = DocumentTypeName> = DocumentConfig[T]["templates"][number];

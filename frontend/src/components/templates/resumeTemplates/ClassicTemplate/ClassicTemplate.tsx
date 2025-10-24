@@ -1,46 +1,74 @@
-import React from "react";
+import { Document } from "@/types/document/document";
+import React, { CSSProperties, useMemo } from "react";
 
-import Head from "./components/Section/sections/Head/Head";
-import Links from "./components/Section/sections/Links";
-import PersonalInformation from "./components/Section/sections/PersonalInformation";
+import PersonalInformation from "./components/sections/PersonalInformation";
+import { adaptDocument } from "./utils/adaptDocument";
 
-import { CLASSIC_TEMPLATE_REORDERED_SECTION_COMPONENTS_MAP } from "./constants/reorderedSectionsMap";
+import Links from "./components/sections/Links";
+import { templateSectionsMap } from "./constants/templateSectionsMap";
+import { TemplateSectionName } from "./types/templateSectionName";
 
-import clsx from "clsx";
-import styles from "./ClassicTemplate.module.scss";
-import { montserrat } from "./fonts/Montserrat";
-import { pt_serif } from "./fonts/PT_Serif";
-import { ClassicTemplateData } from "./types/data";
-import { ClassicTemplateReorderedSectionComponentProps } from "./types/reorderedTypes";
-import { getReorderedDataItems } from "./utils/getReorderedDataItems";
-import { isTypeOfSection } from "./utils/isTypeOfSection";
+import Head from "./components/Head";
+
+import { createStyles } from "@/utils/styles/createStyles";
 
 interface ClassicTemplateProps {
-  data: ClassicTemplateData;
+  data: Document<"resume">;
 }
 
-export default React.memo(function ClassicTemplate({ data }: ClassicTemplateProps) {
-  const headData = data.find(s => isTypeOfSection(s, "head"))?.data;
-  const personalInformationData = data.find(s => isTypeOfSection(s, "personalInformation"))?.data;
-  const linksData = data.find(s => isTypeOfSection(s, "links"))?.data;
+export default React.memo(function ClassicTemplate({ data: documentData }: ClassicTemplateProps) {
+  const {
+    head,
+    personalInformation,
+    links,
+    ...otherSectionsData
+  } = adaptDocument(documentData);
+  const { font, size, spacing } = documentData.settings;
 
-  const reorderedDataItems = getReorderedDataItems(data);
+  const styles = useMemo(() => createStyles({
+    template: {
+      "--color-primary": "black",
+      "--color-contrast": "black",
+      "--color-contrast--light": "rgb(69, 69, 69)",
+
+      "--font-primary": font.primary.currentOption.value,
+      "--font-size": `${12 * (size.currentOption.value || 1)}px`,
+      "--font-size-title": `${22 * (size.currentOption.value || 1)}px`,
+      "--font-size-section-title": `${18 * (size.currentOption.value || 1)}px`,
+      "--line-height": `${spacing.currentOption.value || 100}%`,
+
+      "--column-1": "30%",
+      "--column-2": "70%",
+
+      fontFamily: "var(--font-primary)",
+      fontSize: "var(--font-size)",
+      color: "var(--color-contrast)",
+      lineHeight: "var(--line-height)",
+    } as Record<string, CSSProperties>
+  }), [])
 
   return (
-    <div className={clsx(styles.template, pt_serif.variable, montserrat.variable)}>
-      {headData && <Head data={headData} />}
+    <div style={styles.template}>
+      <Head {...head} />
 
-      <ul className={styles.sections}>
-        {personalInformationData && <li><PersonalInformation data={personalInformationData} /></li>}
-        {linksData && <li><Links data={linksData} /></li>}
+      <div>
+        <PersonalInformation {...personalInformation} />
+        <Links {...links as any} />
 
-        {reorderedDataItems.map(({ data, name }) => {
-          const Section = CLASSIC_TEMPLATE_REORDERED_SECTION_COMPONENTS_MAP[name] as React.ComponentType<ClassicTemplateReorderedSectionComponentProps<typeof name>>;
+        {Object.entries(otherSectionsData).map(([key, data]) => {
+          const Section = templateSectionsMap[key as TemplateSectionName];
+          
           if (!Section || !data) return null;
 
-          return <li key={data.id}><Section data={data} /></li>;
+          if (Array.isArray(data)) {
+            return data.map(data => (
+              <Section key={data.id} {...data as any} />
+            ))
+          }
+
+          return <Section key={data.id} {...data as any} />;
         })}
-      </ul>
+      </div>
     </div>
   );
 })

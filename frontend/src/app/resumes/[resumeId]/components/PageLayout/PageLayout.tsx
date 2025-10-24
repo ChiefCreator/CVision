@@ -2,7 +2,6 @@
 
 import { useAbsoluteSidebarContext } from "@/hooks/menu/useAbsoluteSidebarContext";
 
-import ResumeEditor from "@/components/resume/ResumeEditor/ResumeEditor";
 
 import BurgerMenu from "@/components/button/BurgerMenu/BurgerMenu";
 import Sidebar from "@/components/menu/Sidebar/Sidebar";
@@ -20,7 +19,7 @@ export default function PageLayout({ resumeId }: PageLayoutProps) {
 		<>
 			<div className={styles.layout}>
 				<div className={styles.content}>
-					<ResumeEditor resumeId={resumeId} />
+					{/* <ResumeEditor resumeId={resumeId} /> */}
 				</div>
 			</div>
 

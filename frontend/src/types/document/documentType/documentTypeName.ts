@@ -1,3 +1,3 @@
-import { DOCUMENT_TYPES_MAP } from "@/constants/document/documentTypesMap";
+import { DocumentConfig } from "../documentConfig";
 
-export type DocumentTypeName = keyof typeof DOCUMENT_TYPES_MAP;
+export type DocumentTypeName = keyof DocumentConfig;

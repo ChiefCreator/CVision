@@ -3,6 +3,7 @@ import path from 'path';
 
 import { getCssModuleLocalIdent } from "next/dist/build/webpack/config/blocks/css/loaders/getCssModuleLocalIdent";
 
+
 const SRC_PATH = path.resolve(__dirname, "src");
 
 const GLOBAL_SCSS_IMPORTS = `
@@ -16,6 +17,7 @@ const nextConfig: NextConfig = {
     domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
   },
   webpack(config, { dev, isServer }) {
+    config.resolve.alias.canvas = false; 
     config.resolve.alias['@'] = path.resolve(__dirname, "src");
 
     const oneOfRule = config.module?.rules.find((rule: any) => Array.isArray(rule.oneOf))?.oneOf;

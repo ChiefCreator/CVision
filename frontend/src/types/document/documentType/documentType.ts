@@ -2,10 +2,10 @@ import { DocumentTemplate } from "../documentTemplate/documentTemplate";
 import { SectionTemplate } from "../sectionTemplate/sectionTemplate";
 import { DocumentTypeName } from "./documentTypeName";
 
-export interface DocumentType {
+export interface DocumentType<T extends DocumentTypeName = DocumentTypeName> {
   id: string;
-  name: DocumentTypeName;
+  name: T;
 
-  templates: DocumentTemplate[];
+  templates: DocumentTemplate<T>[];
   sectionTemplates: SectionTemplate[];
 }

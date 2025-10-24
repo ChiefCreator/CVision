@@ -1,11 +1,12 @@
 import { JSONValue } from "@/types/root";
+import { DocumentTypeName } from "../documentType/documentTypeName";
 import { SectionTemplateKey } from "./sectionTemplateKey";
 
-export interface SectionTemplate {
+export interface SectionTemplate<T extends DocumentTypeName = DocumentTypeName> {
 	id: string;
 	documentTypeId: string;
 
-	key: SectionTemplateKey;
+	key: SectionTemplateKey<T>;
 	title: string;
 	schema?: JSONValue;
 	isDefault: boolean;
@@ -13,15 +14,15 @@ export interface SectionTemplate {
 	defaultOrder?: number;
 	isMultiple: boolean;
 
-	allowedChildren: SectionTemplateRelation[];
-	allowedParents: SectionTemplateRelation[];
+	allowedChildren: SectionTemplateRelation<T>[];
+	allowedParents: SectionTemplateRelation<T>[];
 }
 
-export interface SectionTemplateRelation {
+export interface SectionTemplateRelation<T extends DocumentTypeName = DocumentTypeName> {
   id: string;
   parentId: string;
   childId: string;
 
-	parentTemplate: SectionTemplate;
-  childTemplate: SectionTemplate;
+	parentTemplate: SectionTemplate<T>;
+  childTemplate: SectionTemplate<T>;
 }

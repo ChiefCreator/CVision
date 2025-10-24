@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 
 import { documentService } from '@/api/document/documentService';
-import { DocumentType } from '@/types/document/document';
+import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
 
 export function usePdfDownloader() {
-  const downloadPdf = useCallback(async (type: DocumentType, id: string) => {
+  const downloadPdf = useCallback(async (type: DocumentTypeName, id: string) => {
     try {
       const response = await documentService.downloadPdf(type, id);
 

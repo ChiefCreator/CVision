@@ -6,9 +6,9 @@ import ActionButtonSkeleton from "./ActionButton/ActionButtonSkeleton";
 import clsx from "clsx";
 import styles from "./DocumentCard.module.scss";
 
-export default function DocumentCardSkeleton() {
-  return (
-    <div className={clsx(styles.card, styles.cardSkeleton)}>
+export default function DocumentCardSkeleton({ count = 1 }: { count?: number }) {
+  return Array.from({ length: count }).map((_, i) => (
+    <div className={clsx(styles.card, styles.cardSkeleton)} key={i}>
       <header className={styles.headerMobile}>
         <div className={styles.titleWrapper}>
           <TitleEditorSkeleton />
@@ -38,5 +38,5 @@ export default function DocumentCardSkeleton() {
         </div>
       </div>
     </div>
-  );
+  ))
 }

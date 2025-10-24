@@ -1,12 +1,12 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { generalSections, resumeKeys } from './queryKeys';
 import { resumeService } from '@/api/resume/resumeService';
 import { updateResumeFields } from '@/utils/resume/updateResumeFields';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { generalSections, resumeKeys } from '../document/queryKeys';
 
+import type { CreateResume, Resume, ResumeFieldUpdates } from '@/types/resume/resume';
 import type { ChangeResumeField } from '@/types/resume/resumeUpdateFunctions';
-import type { Resume, CreateResume, ResumeFieldUpdates } from '@/types/resume/resume';
 
 export const useResumesQuery = () => {
   return useQuery({

@@ -16,6 +16,12 @@ export class DocumentController {
   // find
 
   @Authorization()
+  @Get(":id")
+  async findOne(@Param("id") id: string) {
+    return this.documentService.findById(id);
+  }
+
+  @Authorization()
   @Get()
   async findAll(
     @User("id") userId: string,
@@ -69,16 +75,33 @@ export class DocumentController {
 
   // other
 
+  
   @Authorization()
-  @Get(":type/:id/pdf")
-  async downloadPDF(@Param("type") type: DocumentType, @Param("id") id: string, @Res() res: Response) {
-    const buffer = await this.documentService.generatePdf(type, id);
+  @Post("export/pdf")
+  async generatePDF(
+    @Body("html") html: string,
+    @Res() res: Response
+  ) {
+    const buffer = await this.documentService.generatePdfFromHtml(html);
   
     res.set({
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${type}-${id}.pdf"`,
+      "Content-Disposition": `attachment; filename="document.pdf"`,
     });
   
     res.send(buffer);
   }
+
+  // @Authorization()
+  // @Get(":type/:id/pdf")
+  // async downloadPDF(@Param("type") type: DocumentType, @Param("id") id: string, @Res() res: Response) {
+  //   const buffer = await this.documentService.generatePdf(type, id);
+  
+  //   res.set({
+  //     "Content-Type": "application/pdf",
+  //     "Content-Disposition": `attachment; filename="${type}-${id}.pdf"`,
+  //   });
+  
+  //   res.send(buffer);
+  // }
 }

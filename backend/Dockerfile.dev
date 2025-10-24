@@ -3,6 +3,31 @@ FROM node:${NODE_VERSION}-alpine
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    font-noto \
+    bash \
+    git \
+    curl \
+    udev \
+    alsa-lib \
+    libx11 \
+    libxcomposite \
+    libxdamage \
+    libxrandr \
+    libxrender \
+    libxext \
+    libxi \
+    libxtst \
+    libc6-compat \
+    pango \
+    cairo
+
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
@@ -13,6 +38,8 @@ COPY . .
 
 RUN pnpm add -D nodemon
 RUN pnpm prisma generate
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 EXPOSE 4200
 

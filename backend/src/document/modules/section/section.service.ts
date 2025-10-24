@@ -31,6 +31,15 @@ export class SectionService {
     return section;
   }
 
+  async findAllRoot(documentId: string) {
+    const sections = await this.prismaService.section.findMany({
+      where: { documentId, parentId: null },
+      include: { template: true, subsections: true },
+    });
+
+    return sections;
+  }
+
   // create
 
   async create(documentId: string, dto: CreateSectionDto) {

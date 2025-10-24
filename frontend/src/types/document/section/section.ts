@@ -1,15 +1,23 @@
-import { BaseEntityFields, JSONValue } from "@/types/root";
+import { BaseEntityFields } from "@/types/root";
+import { DocumentTypeName } from "../documentType/documentTypeName";
 import { SectionTemplate } from "../sectionTemplate/sectionTemplate";
+import { SectionTemplateKey } from "../sectionTemplate/sectionTemplateKey";
+import { SectionData, SectionItemData } from "./sectionDataMap";
 
-export interface Section extends BaseEntityFields {
+export interface Section<
+  T extends DocumentTypeName = DocumentTypeName,
+  K extends SectionTemplateKey<T> = SectionTemplateKey<T>,
+> extends BaseEntityFields {
 	documentId: string;
 	templateId: string;
   parentId?: string;
 
   title?: string;
-  data?: JSONValue;
+  data?: SectionData<T, K>;
   order: number;
 
-  template: SectionTemplate;
-  subsections: Section[];
+  template: SectionTemplate<T>;
+  subsections: SectionItemData<T, K> extends never
+    ? []
+    : (Omit<Section<T, K>, "data" | "subsections"> & { data: SectionItemData<T, K>; subsections: [] })[];
 }

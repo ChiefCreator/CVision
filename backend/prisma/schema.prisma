@@ -105,6 +105,50 @@ model DocumentTemplate {
   description String?
   previewUrl  String? @map("preview_url")
 
+  // Пример структуры:
+  //  {
+  //   "accentColor": {
+  //     "default": "id",
+  //     "options": [
+  //       { "id": "id", "name": "name", "value": "value" },
+  //     ]
+  //   },
+  //   "font": {
+  //     "primary": {
+  //       "default": "id",
+  //       "options": [
+  //         { "id": "id", "name": "name", "value": "value" },
+  //       ]
+  //     }
+  //   },
+  //   "spacing": {
+  //     "default": "id",
+  //     "options": [
+  //       { "id": "id", "name": "name", "value": "value" },
+  //     ]
+  //   },
+  //   "size": {
+  //     "default": "id",
+  //     "options": [
+  //       { "id": "id", "name": "name", "value": "value" },
+  //     ]
+  //   },
+  //   "format": {
+  //     "default": "id",
+  //     "options": [
+  //       { "id": "id", "name": "name", "value": "value" },
+  //     ]
+  //   }
+  // }
+  settings Json?
+
+  premium                   Boolean  @default(false)
+  supportsFontSizing        Boolean  @default(true) @map("supports_font_sizing")
+  supportsSpacing           Boolean  @default(true) @map("supports_spacing")
+  supportsCustomAccentColor Boolean  @default(true) @map("supports_custom_accent_color")
+  supportsPhoto             Boolean  @default(true) @map("supports_photo")
+  supportedFormats          String[] @default(["pdf"]) @map("supported_formats")
+
   documentTypeId String @map("document_type_id")
 
   documentType DocumentType @relation(fields: [documentTypeId], references: [id])
@@ -118,7 +162,14 @@ model Document {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title String?
+  title    String?
+  // Пример структуры:
+  // {
+  //   "accentColor": {
+  //     "currentOption": { "id": "id", "name": "name", "value": "value" },
+  //   }
+  // }
+  settings Json?
 
   userId     String @map("user_id")
   typeId     String @map("type_id")

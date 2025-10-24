@@ -1,110 +1,85 @@
 "use client"
 
-import { ResponsiveTemplateProvider } from "@/components/document/hooks/useResponsiveTemplateContext";
-import { useEffect, useMemo, useRef, useState } from "react";
-
-
-import TabButton from "./TabButton/TabButton";
-import TabPanel from "./TabPanel/TabPanel";
-
-import type { DocumentTabType, DocumentTabsMap } from "./types/document";
+import { useCreateDocument } from "@/api/document/hooks/useCreateDocument";
+import { useGetDocuments } from "@/api/document/hooks/useGetDocuments";
+import { useMemo, useRef, useState } from "react";
 
 import Button from "@/components/button/Button/Button";
-import { useStaticSidebarContext } from "@/hooks/menu/useStaticSidebarContext";
+import DocumentCard from "@/components/document/DocumentCard/DocumentCard";
+import DocumentCardSkeleton from "@/components/document/DocumentCard/DocumentCardSkeleton";
+import Tabs, { TabsApi } from "../Tabs/Tabs";
+
 import { MenuItemData } from "@/types/menu/menu";
+
 import styles from "./DocumentTabs.module.scss";
-import DocumentTabsSkeleton from "./DocumentTabsSkeleton";
-import { useDocumentTabsContext } from "./hooks/useDocumentTabsContext";
 
 export default function DocumentTabs() {
-  const { isAnimating } = useStaticSidebarContext();
-  const { resumesDoc, isLoading, createResume, changeTab, activeTab } = useDocumentTabsContext();
-  
+  const { data: documents, isLoading } = useGetDocuments();
+  const { mutate: createDocument } = useCreateDocument();
+
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });
-  const tabButtonsRef = useRef<HTMLButtonElement[]>([]);
-  const buttonsListRef = useRef<HTMLDivElement | null>(null);
+  const tabsApiRef = useRef<TabsApi>(null);
 
-  const calcIndicatorSize = (activeTab: DocumentTabType) => {
-    const tabButtonActive = tabButtonsRef.current.find(button => button.id === `tab-${activeTab}`);
+  const calcIndicatorSize = (activeValue: string) => {
+    const triggers = tabsApiRef.current?.getTriggers();
 
-    if (!tabButtonActive) return { width: 0, left: 0 };
+    const activeTrigger = triggers?.find(trigger => trigger.id === `trigger-${activeValue}`);
 
-    const width = tabButtonActive.offsetWidth;
-    const left = tabButtonActive.offsetLeft;
+    if (!activeTrigger) return { width: 0, left: 0 };
+
+    const width = activeTrigger.offsetWidth;
+    const left = activeTrigger.offsetLeft;
 
     return { width, left };
   }
 
-  const tabs = useMemo<DocumentTabsMap>(() => ({
-    all: {
-      title: "Все документы",
-      data: resumesDoc
-    },
-    resume: {
-      title: "Резюме",
-      data: resumesDoc
-    },
-    coverLetter: {
-      title: "Сопроводительные письма",
-      data: undefined
-    },
-  }), [resumesDoc]);
+  const handleChangeValue = (activeValue: string) => {
+    setIndicatorSize(calcIndicatorSize(activeValue));
+  }
+
   const menuData = useMemo<MenuItemData>(() => ([
     {
       type: "control",
       id: "create-resume",
       title: "Резюме",
-      onClick: () => createResume({}),
+      onClick: () => createDocument({
+        type: "resume",
+        template: "classic",
+      }),
     },
     {
       type: "control",
       id: "create-cover-letter",
       title: "Сопроводительное письмо",
-      onClick: () => console.log("create-cover-letter"),
+      onClick: () => createDocument({
+        type: "coverLetter",
+        template: "classic",
+      }),
     },
   ]), []);
 
-  useEffect(() => {
-    if (isLoading) return;
-
-    setIndicatorSize(calcIndicatorSize(activeTab));
-  }, [activeTab, isLoading])
-
-  useEffect(() => {
-    const buttonsListEl = buttonsListRef.current;
-    const activeButton = tabButtonsRef.current.find(el => el.id === `tab-${activeTab}`);
-
-    if (buttonsListEl && activeButton) {
-      const buttonsListRect = buttonsListEl.getBoundingClientRect();
-      const activeButtonRect = activeButton.getBoundingClientRect();
-    
-      buttonsListEl.scrollTo({
-        left: buttonsListEl.scrollLeft + (activeButtonRect.left - buttonsListRect.left),
-        behavior: "smooth",
-      });
-    }
-  }, [activeTab])
-
-  if (isLoading) return <DocumentTabsSkeleton />;
-
   return (
-    <div className={styles.tabs}>
+    <Tabs
+      className={styles.tabs}
+      defaultValue="all"
+      apiRef={tabsApiRef}
+      onChangeValue={handleChangeValue}
+    >
       <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.buttonsList} role="tablist" ref={buttonsListRef}>
-            {Object.entries(tabs).map(([type, { title }], i) => (
-              <TabButton
-                key={type}
-                id={`tab-${type}`}
-                isActive={type === activeTab}
-                ref={(el: HTMLButtonElement) => tabButtonsRef.current[i] = el}
-                role="tab"
-                aria-selected={type === activeTab}
-                aria-controls={`tabpanel-${type}`}
-                onClick={() => changeTab(type as DocumentTabType)}
-              >{title}</TabButton>
-            ))}
-          </div>
+        <div className={styles.headerContainer}>
+          <Tabs.List className={styles.tabsList}>
+            <Tabs.Trigger className={styles.tabsTrigger} value="all">
+              Все документы
+            </Tabs.Trigger>
+
+            <Tabs.Trigger className={styles.tabsTrigger} value="resume">
+              Резюме
+            </Tabs.Trigger>
+
+            <Tabs.Trigger className={styles.tabsTrigger} value="coverLetter">
+              Сопроводительные письма
+            </Tabs.Trigger>
+          </Tabs.List>
 
           <div className={styles.controlsList}>
             <Button
@@ -122,13 +97,20 @@ export default function DocumentTabs() {
       </header>
 
       <div className={styles.body}>
-        <ResponsiveTemplateProvider isRecalc={isAnimating}>
-          <TabPanel
-            data={tabs[activeTab].data}
-            id={`tabpanel-${activeTab}`}
-          />
-        </ResponsiveTemplateProvider>
+        <Tabs.Content className={styles.tabsContent} value="all">
+          <div className={styles.documentsList}>
+            {isLoading && <DocumentCardSkeleton count={4} />}
+
+            {documents?.map(document => (
+              <DocumentCard
+                key={document.id}
+                className={styles.documentCard}
+                data={document}
+              />
+            ))}
+          </div>
+        </Tabs.Content>
       </div>
-    </div>
+    </Tabs>
   );
 }

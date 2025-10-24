@@ -1,17 +1,10 @@
 import { LucideProps } from "lucide-react";
 import { CSSProperties } from "react";
-import { GeneralSection } from "./resumeSection/generalSection";
 
 export interface BaseEntityFields {
   id: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface BaseSectionResume extends Omit<GeneralSection, "id" | "type"> {
-  id: string;
-  title?: string;
-  order: number;
 }
 
 export interface BaseSubsectionResume {

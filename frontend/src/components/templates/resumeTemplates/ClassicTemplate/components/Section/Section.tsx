@@ -1,29 +1,40 @@
-import { ClassicTemplateSectionName } from "../../types/section";
-import ColumnListSection from "./ColumnListSection/ColumnListSection";
-import HorizontalListSection from "./HorizontalListSection/HorizontalListSection";
+import { createStyles } from "@/utils/styles/createStyles";
 
 import type { BaseComponent } from "@/types/root";
+import ColumnSection from "./ColumnSection";
+import RowSection from "./RowSection";
 
 interface BaseSectionProps extends BaseComponent {
-  id: string;
-  name: ClassicTemplateSectionName;
   title?: string;
   children: React.ReactNode;
 }
 
-export interface ColumnListSectionProps extends BaseSectionProps {
-  type: "columnList";
+export interface ColumnSectionProps extends BaseSectionProps {
+  type: "column";
 }
 
-export interface HorizontalListSectionProps extends BaseSectionProps {
-  type: "horizontalList";
+export interface RowSectionProps extends BaseSectionProps {
+  type: "row";
 }
 
-export type SectionProps = ColumnListSectionProps | HorizontalListSectionProps;
+export type SectionProps = ColumnSectionProps | RowSectionProps;
+
+export const sectionStyles = createStyles({
+	section: {
+		borderTop: "2px solid var(--color-primary)",
+		padding: "10px",
+	},
+	title: {
+		fontSize: "var(--font-size-section-title)",
+		fontWeight: "var(--font-subtitle)",
+		textTransform: "uppercase",
+		letterSpacing: "1px",
+	},
+});
 
 export default function Section(props: SectionProps) {
   switch (props.type) {
-    case "columnList": return <ColumnListSection {...props} />;
-    case "horizontalList": return <HorizontalListSection {...props} />;
+    case "column": return <ColumnSection {...props} />;
+    case "row": return <RowSection {...props} />;
   }
 }

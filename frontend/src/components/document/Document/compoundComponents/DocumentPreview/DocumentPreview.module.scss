@@ -1,0 +1,12 @@
+.viewer {
+	width: 100%;
+}
+
+.canvas {
+	width: 100%;
+
+	&_hidden {
+		display: none;
+	}
+}
+
