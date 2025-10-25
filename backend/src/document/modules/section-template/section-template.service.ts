@@ -3,6 +3,7 @@ import { DocumentSectionName } from "src/document/types/document-section-name.ty
 import { DocumentType } from "src/document/types/document-type.types";
 import { PrismaService } from "src/prisma/prisma.service";
 import { DocumentTypeService } from "../document-type/document-type.service";
+import { QueryFilterDto } from "./dto/query-filter.dto";
 
 @Injectable()
 export class SectionTemplateService {
@@ -45,5 +46,18 @@ export class SectionTemplateService {
     }
 
     return template;
+  }
+
+  async findAllRoot(queryFilter: QueryFilterDto) {
+    const documentTemplates = await this.prismaService.sectionTemplate.findMany({
+      where: {
+        ...queryFilter,
+        allowedParents: {
+          none: {},
+        }
+      }
+    });
+
+    return documentTemplates;
   }
 }

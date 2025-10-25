@@ -193,6 +193,7 @@ model SectionTemplate {
   isOrderFixed Boolean @default(false) @map("is_order_fixed")
   defaultOrder Int?    @map("default_order")
   isMultiple   Boolean @default(false)
+  isRequired   Boolean @default(false)
 
   documentTypeId String @map("document_type_id")
 
