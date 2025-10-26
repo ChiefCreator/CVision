@@ -19,7 +19,11 @@ export class SectionTemplateService {
       where: {
         documentTypeId,
         isDefault: true,
-      }
+      },
+      include: {
+        allowedChild: true,
+        allowedParent: true,
+      },
     });
   }
 
@@ -34,12 +38,18 @@ export class SectionTemplateService {
   }
 
   async findByDocumentTypeIdAndKey(documentTypeId: string, key: DocumentSectionName) {
-    const template = await this.prismaService.sectionTemplate.findUnique({ where: {
-      documentTypeId_key: {
-        documentTypeId,
-        key,
-      }
-    } });
+    const template = await this.prismaService.sectionTemplate.findUnique({
+      where: {
+        documentTypeId_key: {
+          documentTypeId,
+          key,
+        },
+      },
+      include: {
+        allowedChild: true,
+        allowedParent: true,
+      },
+    });
 
     if (!template) {
       throw new NotFoundException("Шаблон данных для секции не найден.");
@@ -52,10 +62,12 @@ export class SectionTemplateService {
     const documentTemplates = await this.prismaService.sectionTemplate.findMany({
       where: {
         ...queryFilter,
-        allowedParents: {
-          none: {},
-        }
-      }
+        allowedParent: null,
+      },
+      include: {
+        allowedChild: true,
+        allowedParent: true,
+      },
     });
 
     return documentTemplates;

@@ -195,25 +195,18 @@ model SectionTemplate {
   isMultiple   Boolean @default(false)
   isRequired   Boolean @default(false)
 
-  documentTypeId String @map("document_type_id")
+  documentTypeId  String  @map("document_type_id")
+  allowedChildId  String? @unique @map("allowed_child_id")
+  allowedParentId String? @unique @map("allowed_parent_id")
 
-  documentType    DocumentType              @relation(fields: [documentTypeId], references: [id])
-  sections        Section[]
-  allowedChildren SectionTemplateRelation[] @relation("ParentTemplate")
-  allowedParents  SectionTemplateRelation[] @relation("ChildTemplate")
+  allowedChild  SectionTemplate? @relation("TemplateChild", fields: [allowedChildId], references: [id])
+  childOfThis   SectionTemplate? @relation("TemplateParent")
+  allowedParent SectionTemplate? @relation("TemplateParent", fields: [allowedParentId], references: [id])
+  parentOfThis  SectionTemplate? @relation("TemplateChild")
+  documentType  DocumentType     @relation(fields: [documentTypeId], references: [id])
+  sections      Section[]
 
   @@unique([documentTypeId, key])
-}
-
-model SectionTemplateRelation {
-  id       String @id @default(uuid())
-  parentId String @map("parent_id")
-  childId  String @map("child_id")
-
-  parentTemplate SectionTemplate @relation("ParentTemplate", fields: [parentId], references: [id], onDelete: Cascade)
-  childTemplate  SectionTemplate @relation("ChildTemplate", fields: [childId], references: [id], onDelete: Cascade)
-
-  @@unique([parentId, childId])
 }
 
 model Section {
