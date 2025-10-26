@@ -34,5 +34,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   get documentTemplate() { return this.client.documentTemplate; }
   get section() { return this.client.section; }
   get sectionTemplate() { return this.client.sectionTemplate; }
-  get sectionTemplateRelation() { return this.client.sectionTemplateRelation; }
 }
