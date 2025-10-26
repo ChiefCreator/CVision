@@ -1,0 +1,53 @@
+import { useCreateSection } from "@/api/section/hooks/useCreateSection";
+import { ChangeDocumentField } from "@/types/document/changeField";
+import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
+import { Section } from "@/types/document/section/section";
+import { SectionTemplateKey } from "@/types/document/sectionTemplate/sectionTemplateKey";
+import { useCallback } from "react";
+import { useEditorFormContext } from "../../../hooks/useEditorFormContext";
+
+export function useSection<
+	T extends DocumentTypeName = DocumentTypeName,
+	K extends SectionTemplateKey<T> = SectionTemplateKey<T>
+>(section: Section<T, K>) {
+	const { checkIsOpen, toggleSection, changeField, changeIsAllUpdating } = useEditorFormContext();
+	const { mutateAsync: createSection } = useCreateSection();
+
+	const id = section.id;
+	const isOpen = checkIsOpen(id);
+
+  const onHeadClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+		const element = e.target as HTMLDivElement;
+
+		if (element.closest(`[data-skip]`)) return;
+		
+    toggleSection(id);
+  }, [id, toggleSection]);
+
+	const changeSectionField: ChangeDocumentField = (path, value) => {
+		return changeField(`sections[id=${id}].${path}`, value);
+	}
+
+	const addSubsection = async () => {
+    changeIsAllUpdating(true);
+    
+    const createdSection = await createSection({
+			documentId: section.documentId,
+			template: section.template?.allowedChild?.key as any,
+			parentId: section.id,
+		});
+
+    toggleSection(createdSection.id);
+    changeIsAllUpdating(false);
+  }
+
+	return {
+		...section,
+		isOpen,
+		changeField: changeSectionField,
+		toggleSection,
+		addSubsection,
+		onHeadClick,
+		changeIsAllUpdating,
+	};
+}

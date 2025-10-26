@@ -1,3 +1,5 @@
+import { LanguageLevel } from "@/types/language/languageLevel";
+import { SkillLevel } from "@/types/skill/skillLevel";
 import { DocumentTypeName } from "../documentType/documentTypeName";
 import { SectionTemplateKey } from "../sectionTemplate/sectionTemplateKey";
 
@@ -55,7 +57,7 @@ export type SectionDataMap = {
       data: null;
       item: {
         title?: string;
-        level?: 'novice' | 'beginner' | 'skillful' | 'experienced' | 'expert';
+        level?: SkillLevel;
       };
     };
 
@@ -63,17 +65,7 @@ export type SectionDataMap = {
       data: null;
       item: {
         title?: string;
-        level?:
-          | 'nativeSpeaker'
-          | 'highlyProficient'
-          | 'goodWorkingKnowledge'
-          | 'workingKnowledge'
-          | 'A1'
-          | 'A2'
-          | 'B1'
-          | 'B2'
-          | 'C1'
-          | 'C2';
+        level?: LanguageLevel;
       };
     };
 

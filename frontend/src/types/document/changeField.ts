@@ -1,0 +1,1 @@
+export type ChangeDocumentField<T = any> = (path: string, value: any) => T;

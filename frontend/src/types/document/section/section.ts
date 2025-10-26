@@ -21,3 +21,8 @@ export interface Section<
     ? []
     : (Omit<Section<T, K>, "data" | "subsections"> & { data: SectionItemData<T, K>; subsections: [] })[];
 }
+
+export type Subsection<
+  T extends DocumentTypeName = DocumentTypeName,
+  K extends SectionTemplateKey<T> = SectionTemplateKey<T>
+> = (Omit<Section<T, K>, "data" | "subsections"> & { data: SectionItemData<T, K>; subsections: [] })

@@ -1,0 +1,78 @@
+import React from "react";
+
+import { transformStringDatesToRangeFormat } from "@/utils/date/transformStringDatesToRangeFormat";
+
+import FormFieldDateRange from "@/components/form/FormField/FormFieldDateRange/FormFieldDateRange";
+import FormFieldEditInput from "@/components/form/FormField/FormFieldInput/FormFieldInput";
+import FormFieldTextEditor from "@/components/form/FormField/FormFieldTextEditor/FormFieldTextEditor";
+import FormGroup from "@/components/form/FormGroup/FormGroup";
+import FormGroupCell from "@/components/form/FormGroup/FormGroupCell";
+
+import { DomainSubsectionProps } from "../compoundComponents/Subsection/Subsection";
+import { SubsectionForm } from "../compoundComponents/Subsection/SubsectionForm";
+
+import styles from "@/components/form/EditorForm/compoundComponents/Subsection/Subsection.module.scss";
+
+export default React.memo(function EmploymentHistorySubsection({ subsection }: DomainSubsectionProps<"resume", "employmentHistory">) {
+  return (
+    <SubsectionForm
+      subsection={subsection}
+      title={subsection.data.jobTitle}
+      subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
+    >
+      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+        <FormGroup className={styles.formGroup}>
+          <FormGroupCell>
+            <FormFieldEditInput
+              label="Профессия"
+              
+              value={data.jobTitle}
+              placeholder={"Введите название профессии"}
+              onChange={v => changeField("jobTitle", v)}
+              isFocused={isFirstInputFocused}
+              setIsFocused={setIsFirstInputFocused}
+            />
+          </FormGroupCell>
+          <FormGroupCell>
+            <FormFieldEditInput
+              label="Работодатель"
+              
+              value={data.employer}
+              placeholder={"Введите работодателя"}
+              onChange={v => changeField("employer", v)}
+            />
+          </FormGroupCell>
+          <FormGroupCell>
+            <FormFieldDateRange
+              className={styles.formGroupDateRange}
+              startDate={data.startDate}
+              endDate={data.endDate}
+              onChangeStartDate={v => changeField("startDate", v)}
+              onChangeEndDate={v => changeField("endDate", v)}
+            />
+          </FormGroupCell>
+          <FormGroupCell>
+            <FormFieldEditInput
+              label="Город"
+              
+              value={data.city}
+              placeholder={"Введите название города"}
+              onChange={v => changeField("city", v)}
+            />
+          </FormGroupCell>
+          <FormGroupCell className={styles.formFieldCellEmploymentHistoryDescription} gridArea="3 / 1 / 4 / 3">
+            <FormFieldTextEditor
+              className={styles.textEditor}
+              label="Описание"
+              placeholder="Напишите краткое описание о вашем опыте, задачах и достижениях."
+
+              onChange={v => changeField("description", v)}
+            >
+              {data.description}
+            </FormFieldTextEditor>
+          </FormGroupCell>
+        </FormGroup>
+      )}
+    </SubsectionForm>
+  );
+})

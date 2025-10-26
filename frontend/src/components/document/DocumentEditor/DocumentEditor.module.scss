@@ -1,0 +1,48 @@
+.editor {
+	background-color: var(--color-primary--light);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.tabs {
+	display: none !important;
+	width: 100%;
+}
+
+.container {
+	display: flex;
+	flex-grow: 1;
+}
+
+.form {
+	flex-grow: 1;
+	max-width: 50%;
+}
+
+.preview {
+	position: sticky;
+	top: 0;
+	max-width: 50%;
+	height: 100vh;
+	flex-grow: 1;
+	overflow-y: auto;
+}
+
+@include max($tablet-l) {
+	.editor {
+		background-color: var(--color-neutral--dark);
+	}
+
+	.tabs {
+		display: flex !important;
+	}
+
+	.form {
+		display: none;
+	}
+
+	.preview {
+		display: none;
+	}
+}

@@ -13,16 +13,8 @@ export interface SectionTemplate<T extends DocumentTypeName = DocumentTypeName> 
 	isOrderFixed: boolean;
 	defaultOrder?: number;
 	isMultiple: boolean;
+	isRequired: boolean;
 
-	allowedChildren: SectionTemplateRelation<T>[];
-	allowedParents: SectionTemplateRelation<T>[];
-}
-
-export interface SectionTemplateRelation<T extends DocumentTypeName = DocumentTypeName> {
-  id: string;
-  parentId: string;
-  childId: string;
-
-	parentTemplate: SectionTemplate<T>;
-  childTemplate: SectionTemplate<T>;
+	allowedChild?: SectionTemplate<T>;
+	allowedParent?: SectionTemplate<T>;
 }

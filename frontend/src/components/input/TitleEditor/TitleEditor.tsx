@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
 import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
+import React, { useEffect, useRef, useState } from "react";
 
 import EditButton from "@/components/button/IconButton/EditButton/EditButton";
 import InputLine from "../InputLine/InputLine";
 
-import type { BaseComponent } from "@/types/root";
 import type { IconButtonProps } from "@/components/button/IconButton/IconButton";
+import type { BaseComponent } from "@/types/root";
 
-import clsx from 'clsx';
-import styles from "./TitleEditor.module.scss"
 import IconButton from "@/components/button/IconButton/IconButton";
+import clsx from 'clsx';
+import styles from "./TitleEditor.module.scss";
 
 export interface Control extends IconButtonProps {
   id: string;

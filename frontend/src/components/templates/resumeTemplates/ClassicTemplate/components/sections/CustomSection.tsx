@@ -9,7 +9,7 @@ import { StrictTemplateData } from "../../types/templateData";
 import SubsectionList from "../SubsectionList";
 
 export default React.memo(function CustomSection({ title, subsections }: StrictTemplateData["customSections"][number]) {
-  if (checkIsAllSubsectionsDataEmpty(subsections.map(s => s.data))) return null;
+  if (checkIsAllSubsectionsDataEmpty(subsections?.map(s => s.data))) return null;
 
   return (
     <Section type="column" title={title}>
