@@ -1,9 +1,11 @@
 "use client"
 
-import EditorForm from "@/components/form/EditorForm/EditorForm";
-import { FormProps } from "../../../compoundComponents/FormWrapper/FormWrapper";
+import { useDocumentSections } from "@/api/document/hooks/useGetDocument";
+import { memo, useMemo } from "react";
+import { useDocumentEditorContext } from "../../../hooks/useDocumentEditorContext";
 
-import { DomainSectionProps } from "@/components/form/EditorForm/compoundComponents/Section/Section";
+
+import EditorForm from "@/components/form/EditorForm/EditorForm";
 import Courses from "@/components/form/EditorForm/sections/Courses/Courses";
 import CustomSection from "@/components/form/EditorForm/sections/CustomSection/CustomSection";
 import Education from "@/components/form/EditorForm/sections/Education/Education";
@@ -17,8 +19,10 @@ import PersonalDetails from "@/components/form/EditorForm/sections/PersonalDetai
 import ProfessionalSummary from "@/components/form/EditorForm/sections/ProfessionalSummary/ProfessionalSummary";
 import References from "@/components/form/EditorForm/sections/References/References";
 import Skills from "@/components/form/EditorForm/sections/Skills/Skills";
+
+import { DomainSectionProps } from "@/components/form/EditorForm/compoundComponents/Section/Section";
 import { SectionDataMap } from "@/types/document/section/sectionDataMap";
-import { useDocumentEditorContext } from "../../../hooks/useDocumentEditorContext";
+import { FormProps } from "../../../compoundComponents/FormWrapper/FormWrapper";
 
 import clsx from "clsx";
 import styles from "./ResumeForm.module.scss";
@@ -42,7 +46,8 @@ const sectionsMap: Record<keyof SectionDataMap["resume"], SectionComponentType> 
 };
 
 export default function ResumeForm({ className }: FormProps) {
-  const { document } = useDocumentEditorContext();
+  const { id } = useDocumentEditorContext();
+  const sections = useDocumentSections(id);
 
 	return (
 		<EditorForm
@@ -51,14 +56,16 @@ export default function ResumeForm({ className }: FormProps) {
       <EditorForm.Header className={styles.header} />
 
       <ul className={styles.sectionsList}>
-        {document?.sections.sort((p, c) => p.order - c.order).map((section) => {
+        {sections?.sort((p, c) => p.order - c.order).map((section) => {
           const Section = sectionsMap[section.template.key] as React.ComponentType<DomainSectionProps>;
           
           if (!Section) return null;
 
+          const MemoSection = useMemo(() => memo(Section), [Section]);
+
           return (
             <li key={section.id}>
-              <Section section={section} />
+              <MemoSection section={section} />
             </li>
           )
         })}

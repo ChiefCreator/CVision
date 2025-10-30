@@ -1,6 +1,8 @@
 "use client"
 
+import { useDocument } from "@/components/document/DocumentEditor/hooks/useDocument";
 import { useDocumentEditorContext } from "@/components/document/DocumentEditor/hooks/useDocumentEditorContext";
+import { Document } from "@/types/document/document";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
 import AddSection from "./compoundComponents/AddSection/AddSection";
@@ -12,17 +14,19 @@ import { EditorFormProvider } from "./hooks/useEditorFormContext";
 import { useToggleSections } from "./hooks/useToggleSections";
 
 interface EditorFormProps extends BaseComponent {
+	data?: Document;
 	children: React.ReactNode;
 }
 
 export default function EditorForm({ className, children }: EditorFormProps) {
-	const data = useDocumentEditorContext();
-	const toggleSectionsData = useToggleSections({ document: data.document!, isGetLoading: data.isGetLoading });
+	const { id } = useDocumentEditorContext();
+	const { document, isGetLoading } = useDocument(id);
+	const toggleSectionsData = useToggleSections({ document: document!, isGetLoading });
 
-	if (data.isGetError) return "loading"
+	if (isGetLoading) return "loading";
 
 	return (
-		<EditorFormProvider value={{ ...data, ...toggleSectionsData }}>
+		<EditorFormProvider value={toggleSectionsData}>
 			<div className={clsx(styles.form, className)}>
 				{children}
 			</div>

@@ -1,6 +1,7 @@
 import { useDeleteSection } from "@/api/section/hooks/useDeleteSection";
+import { useDocument } from "@/components/document/DocumentEditor/hooks/useDocument";
+import { useDocumentEditorContext } from "@/components/document/DocumentEditor/hooks/useDocumentEditorContext";
 import { useAdaptivePopover } from "@/hooks/position/useAdaptivePopover";
-import { ChangeDocumentField } from "@/types/document/changeField";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
 import { Subsection as SubsectionT } from "@/types/document/section/section";
 import { SectionTemplateKey } from "@/types/document/sectionTemplate/sectionTemplateKey";
@@ -11,10 +12,12 @@ export function useSubsection<
 	T extends DocumentTypeName = DocumentTypeName,
 	K extends SectionTemplateKey<T> = SectionTemplateKey<T>
 >(subsection: SubsectionT<T, K>) {
-	const { id } = subsection;
+	const id = subsection.id;
 	const parentId = subsection.parentId!;
 
-	const { document, checkIsOpen, toggleSection, changeField, changeIsAllUpdating } = useEditorFormContext();
+	const { id: docId } = useDocumentEditorContext();
+	const { changeIsAllUpdating, getHandler } = useDocument(docId);
+	const { checkIsOpen, toggleSection } = useEditorFormContext();
 	const { mutateAsync } = useDeleteSection();
   const popoverProps = useAdaptivePopover();
 
@@ -22,26 +25,34 @@ export function useSubsection<
 
 	const isOpen = checkIsOpen(parentId!, id);
 
-  const deleteSubsection = async () => {
+	const getSubsectionDataFieldHandler = useCallback((subPath: string) => {
+    return getHandler(`sections[id=${parentId}].subsections[id=${id}].data.${subPath}`);
+  }, [parentId, id, getHandler]);
+
+  const deleteSubsection = useCallback(async () => {
     changeIsAllUpdating(true);
-    await mutateAsync({ documentId: document!.id, id });
+    await mutateAsync({ documentId: docId, id });
 
     changeIsAllUpdating(false);
-  }
+  }, [docId, id, mutateAsync, changeIsAllUpdating]);
 
-  const handleClickHeader = () => {
+	const toggleFirstInputFocus = useCallback((isFocused?: boolean) => {
+		if (isFocused === undefined) {
+			return setIsFirstInputFocused(prev => !prev);
+		}
+
+		setIsFirstInputFocused(isFocused);
+	}, [setIsFirstInputFocused]);
+
+  const handleHeaderClick = useCallback(() => {
     toggleSection(parentId!, id);
-  }
+  }, [parentId, id]);
 
-  const handleControlClick = (e: React.MouseEvent) => {
+  const handleControlClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
 
     popoverProps.toggle();
-  }
-
-	const changeSubsectionField: ChangeDocumentField = (path, value) => {
-		return changeField(`sections[id=${parentId}].subsections[id=${id}].${path}`, value);
-	}
+  }, [popoverProps.toggle]);
 
 	const handleClickToChange = useCallback(() => {
     toggleSection(parentId, id, true);
@@ -53,11 +64,11 @@ export function useSubsection<
 		isOpen,
 		popoverProps,
 		isFirstInputFocused,
-		changeField: changeSubsectionField,
+		getDataFieldHandler: getSubsectionDataFieldHandler,
 		deleteSubsection,
-		handleClickHeader,
+		toggleFirstInputFocus,
+		handleHeaderClick,
 		handleControlClick,
 		handleClickToChange,
-		setIsFirstInputFocused,
 	}
 }

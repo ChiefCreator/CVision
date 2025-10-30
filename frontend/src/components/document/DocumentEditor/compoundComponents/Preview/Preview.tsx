@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { useRef } from "react";
 
 import Document from "@/components/document/Document/Document";
+import { useDocument } from "../../hooks/useDocument";
 import { useDocumentEditorContext } from "../../hooks/useDocumentEditorContext";
 import styles from "./Preview.module.scss";
 
@@ -16,7 +17,8 @@ interface PreviewProps extends BaseComponent {}
 
 
 export default function Preview({ className }: PreviewProps) {
-	const { delayedDocument: document, isAllUpdating } = useDocumentEditorContext();
+	const { id } = useDocumentEditorContext();
+	const { delayedDocument: document, isAllUpdating } = useDocument(id);
 
 	const resumePreviewRef = useRef<HTMLDivElement | null>(null);
 

@@ -1,7 +1,6 @@
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
 import { Subsection as SubsectionT } from "@/types/document/section/section";
 import { SectionTemplateKey } from "@/types/document/sectionTemplate/sectionTemplateKey";
-import { Dispatch, SetStateAction } from "react";
 import { useSubsection } from "./hooks/useSubsection";
 import Subsection from "./Subsection";
 
@@ -15,8 +14,10 @@ interface SubsectionFormProps<
 	children: (props: {
 		isFirstInputFocused: boolean;
 		data: SubsectionT<T, K>["data"];
-		setIsFirstInputFocused: Dispatch<SetStateAction<boolean>>
-		changeField: (path: string, val: string) => void;
+		onToggleFirstInputFocus: (isFocused?: boolean | undefined) => void
+		getDataFieldHandler: (path: string, options?: {
+      extractValue?: ((arg: any) => any);
+    }) => (arg: any) => void;
 	}) => React.ReactNode;
 }
 
@@ -26,21 +27,19 @@ export function SubsectionForm<T extends DocumentTypeName, K extends SectionTemp
 	subtitle,
 	children,
 }: SubsectionFormProps<T, K>) {
-	const subsectionData = useSubsection(subsection);
-
 	const {
 		id,
 		data,
 		isOpen,
 		popoverProps,
 		isFirstInputFocused,
-		changeField,
+		getDataFieldHandler,
 		deleteSubsection,
-		handleClickHeader,
+		toggleFirstInputFocus,
+		handleHeaderClick,
 		handleControlClick,
 		handleClickToChange,
-		setIsFirstInputFocused,
-	} = subsectionData;
+	} = useSubsection(subsection);
 
 	return (
 		<Subsection
@@ -49,16 +48,16 @@ export function SubsectionForm<T extends DocumentTypeName, K extends SectionTemp
 			subtitle={subtitle}
 			isOpen={isOpen}
 			dropdownMenuProps={popoverProps}
-			deleteSubsection={deleteSubsection}
-			handleClickHeader={handleClickHeader}
-			handleControlClick={handleControlClick}
-			onClickChange={handleClickToChange}
+			onDeleteSubsection={deleteSubsection}
+			onHeaderClick={handleHeaderClick}
+			onControlClick={handleControlClick}
+			onChangeClick={handleClickToChange}
 		>
 			{children({
 				data,
 				isFirstInputFocused,
-				changeField,
-				setIsFirstInputFocused
+				getDataFieldHandler,
+				onToggleFirstInputFocus: toggleFirstInputFocus,
 			})}
 		</Subsection>
 	);

@@ -8,7 +8,9 @@ import ResumeForm from "../../components/forms/ResumeForm/ResumeForm";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
 import { BaseComponent } from "@/types/root";
 
+import { useDocumentTypeName } from "@/api/document/hooks/useGetDocument";
 import clsx from "clsx";
+import { useDocument } from "../../hooks/useDocument";
 import styles from "./FormWrapper.module.scss";
 
 export interface FormProps extends BaseComponent {};
@@ -21,14 +23,14 @@ const formsMap: Record<DocumentTypeName, FormComponentType | null> = {
 };
 
 export default function FormWrapper({ className }: BaseComponent) {
-	const { document, isGetLoading } = useDocumentEditorContext();
+  const { id } = useDocumentEditorContext();
+  const { isGetLoading } = useDocument(id);
+  const typeName = useDocumentTypeName(id);
 
   if (isGetLoading) {
-    return <div className={className}>loading..</div>;
+    return <div className={className}>loading...</div>;
   }
 
-  const typeName = document?.type.name;
-  
   const Form = typeName ? formsMap[typeName] : null;
 
   return (

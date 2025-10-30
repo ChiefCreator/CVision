@@ -21,7 +21,7 @@ export default React.memo(function SkillSubsection({ subsection, isShowLevel = t
       title={subsection.data.title}
       subtitle={isShowLevel ? undefined : skills.find(s => s.value === subsection.data.level)?.label}
     >
-      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+      {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             <FormFieldEditInput
@@ -29,9 +29,9 @@ export default React.memo(function SkillSubsection({ subsection, isShowLevel = t
               
               value={data.title}
               placeholder={"Введите навык"}
-              onChange={v => changeField("title", v)}
+              onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
-              setIsFocused={setIsFirstInputFocused}
+              setIsFocused={onToggleFirstInputFocus}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -46,7 +46,7 @@ export default React.memo(function SkillSubsection({ subsection, isShowLevel = t
                 selectedValue={data.level!}
                 data={skills}
                 isDisabled={!isShowLevel}
-                onSelect={v => changeField("level", v)}
+                onSelect={getDataFieldHandler("level")}
               />
             </FormFieldSliderSelect>
           </FormGroupCell>

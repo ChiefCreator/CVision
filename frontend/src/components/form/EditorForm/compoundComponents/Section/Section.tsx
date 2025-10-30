@@ -22,11 +22,11 @@ export interface BaseSectionProps extends BaseComponent {
   title: string;
   template: DocumentTemplate;
   isOpen: boolean;
-  onHeadClick: () => void;
-  changeField: (path: string, val: string)  => void;
-  toggleSection: (sectionId: string, subsectionId?: string, open?: boolean) => void;
-  addSubsection: () => void;
-  changeIsAllUpdating: (isUpdating: boolean) => void;
+  onHeadClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onChangeTitle: (val: string) => any;
+  onToggleSection: (sectionId: string, subsectionId?: string, open?: boolean) => void;
+  onAddSubsection: () => void;
+  onChangeIsAllUpdating: (isUpdating: boolean) => void;
 }
 
 export interface SingleSectionProps extends BaseSectionProps {

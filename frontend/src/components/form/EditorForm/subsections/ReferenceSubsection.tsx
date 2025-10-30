@@ -16,7 +16,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
       title={subsection.data.referentFullName}
       subtitle={subsection.data.company}
     >
-      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+      {({ data, isFirstInputFocused, getDataFieldHandler, onToggleFirstInputFocus }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             <FormFieldEditInput
@@ -24,9 +24,9 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
               
               value={data.referentFullName}
               placeholder={"Введите имя работодателя"}
-              onChange={v => changeField("referentFullName", v)}
+              onChange={getDataFieldHandler("referentFullName")}
               isFocused={isFirstInputFocused}
-              setIsFocused={setIsFirstInputFocused}
+              setIsFocused={onToggleFirstInputFocus}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -35,7 +35,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
               
               value={data.company}
               placeholder={"Введите компанию"}
-              onChange={v => changeField("company", v)}
+              onChange={getDataFieldHandler("company")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -44,7 +44,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
               
               value={data.phone}
               placeholder={"Введите телефон"}
-              onChange={v => changeField("phone", v)}
+              onChange={getDataFieldHandler("phone")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -53,7 +53,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
               
               value={data.email}
               placeholder={"Введите эл. почту"}
-              onChange={v => changeField("email", v)}
+              onChange={getDataFieldHandler("email")}
             />
           </FormGroupCell>
         </FormGroup>

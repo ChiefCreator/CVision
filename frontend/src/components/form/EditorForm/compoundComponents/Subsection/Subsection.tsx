@@ -37,10 +37,10 @@ export interface SubsectionProps extends BaseComponent {
     open: () => void;
     isDrawer: boolean;
   }
-  deleteSubsection: () => void;
-  handleClickHeader: () => void;
-  handleControlClick: (e: React.MouseEvent) => void;
-  onClickChange: () => void;
+  onDeleteSubsection: () => void;
+  onHeaderClick: () => void;
+  onControlClick: (e: React.MouseEvent) => void;
+  onChangeClick: () => void;
 }
 
 export default function Subsection({
@@ -52,10 +52,10 @@ export default function Subsection({
   children,
   isOpen,
   dropdownMenuProps,
-  onClickChange,
-  deleteSubsection,
-  handleClickHeader,
-  handleControlClick
+  onDeleteSubsection,
+  onHeaderClick,
+  onControlClick,
+  onChangeClick
 }: SubsectionProps) {
   const menuActions = useMenuState();
 
@@ -65,21 +65,21 @@ export default function Subsection({
       id: "1",
       title: "Изменить",
       Icon: Pencil,
-      onClick: onClickChange,
+      onClick: onChangeClick,
     },
     {
       type: "control",
       id: "2",
       title: "Удалить",
       Icon: Trash2,
-      onClick: deleteSubsection,
+      onClick: onDeleteSubsection,
     },
   ];
 
   return (
     <>
       <div className={clsx(styles.subsection, className)} id={id}>
-        <header className={styles.head} onClick={handleClickHeader}>
+        <header className={styles.head} onClick={onHeaderClick}>
           <div className={styles.titleWrapper}>
             <h3 className={styles.title}>{title || defaultTitle}</h3>
 
@@ -92,7 +92,7 @@ export default function Subsection({
                 className={styles.control}
                 ref={dropdownMenuProps.triggerRef as any}
                 type="button"
-                onClick={handleControlClick}
+                onClick={onControlClick}
               />
             </div>
 

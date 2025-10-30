@@ -1,13 +1,10 @@
 "use client"
 
-import { useDocumentEditorContext } from "@/components/document/DocumentEditor/hooks/useDocumentEditorContext";
 import { createContext, useContext } from 'react';
 import { useToggleSections } from "./useToggleSections";
 
 // Context
-interface EditorFormContextType extends
-	ReturnType<typeof useDocumentEditorContext>,
-	ReturnType<typeof useToggleSections> {};
+interface EditorFormContextType extends ReturnType<typeof useToggleSections> {};
 
 export const EditorFormContext = createContext<EditorFormContextType | undefined>(undefined);
 

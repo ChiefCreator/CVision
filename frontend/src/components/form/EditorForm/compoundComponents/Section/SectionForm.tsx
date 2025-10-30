@@ -5,6 +5,8 @@ import Section from "./Section";
 
 import { Section as SectionT } from "@/types/document/section/section";
 
+import { memo } from "react";
+
 interface SectionFormProps<
   T extends DocumentTypeName = DocumentTypeName,
   K extends SectionTemplateKey<T> = SectionTemplateKey<T>
@@ -13,30 +15,33 @@ interface SectionFormProps<
   section: SectionT<T, K>;
   children: (props: {
     data: SectionT<T, K>["data"];
-    changeField: (path: string, val: string) => void;
+    onChangeField: (path: string, val: string) => void;
+    getDataFieldHandler: (path: string, options?: {
+      extractValue?: ((arg: any) => any);
+    }) => (arg: any) => void;
     subsections: SectionT<T, K>["subsections"];
   }) => React.ReactNode;
 }
 
-export function SectionForm<T extends DocumentTypeName, K extends SectionTemplateKey<T>>({
+function SectionFormF<T extends DocumentTypeName, K extends SectionTemplateKey<T>>({
   section,
   type,
 	children,
 }: SectionFormProps<T, K>) {
-  const sectionData = useSection(section);
-
-	const {
+  const {
 		data,
     subsections,
 		title,
     template,
     isOpen,
     changeField,
+    changeTitle,
     toggleSection,
     addSubsection,
-    onHeadClick,
+    handleHeadClick,
     changeIsAllUpdating,
-	} = sectionData;
+    getDataFieldHandler,
+	} = useSection(section);
 
   return (
     <Section
@@ -45,13 +50,22 @@ export function SectionForm<T extends DocumentTypeName, K extends SectionTemplat
       title={title as string}
       template={template as any}
       isOpen={isOpen}
-      toggleSection={toggleSection}
-      addSubsection={addSubsection}
-      onHeadClick={onHeadClick}
-      changeField={changeField}
-      changeIsAllUpdating={changeIsAllUpdating}
+      onToggleSection={toggleSection}
+      onAddSubsection={addSubsection}
+      onHeadClick={handleHeadClick}
+      onChangeTitle={changeTitle}
+      onChangeIsAllUpdating={changeIsAllUpdating}
     >
-      {children({ data, subsections, changeField })}
+      {children({
+        data,
+        subsections,
+        onChangeField: changeField,
+        getDataFieldHandler,
+      })}
     </Section>
   );
 }
+
+export const SectionForm = memo(SectionFormF) as <T extends DocumentTypeName, K extends SectionTemplateKey<T>>(
+  props: SectionFormProps<T, K>
+) => React.JSX.Element;

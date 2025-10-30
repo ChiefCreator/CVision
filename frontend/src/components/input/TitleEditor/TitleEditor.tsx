@@ -8,6 +8,7 @@ import type { IconButtonProps } from "@/components/button/IconButton/IconButton"
 import type { BaseComponent } from "@/types/root";
 
 import IconButton from "@/components/button/IconButton/IconButton";
+import { useValue } from "@/hooks/root/useValue";
 import clsx from 'clsx';
 import styles from "./TitleEditor.module.scss";
 
@@ -20,6 +21,7 @@ interface TitleEditorProps extends BaseComponent {
   controlClassName?: string;
   value?: string;
   defaultValue?: string;
+  placeholder?: string;
   isControlsShow?: boolean | "alwaysShow" | "neverShow";
   inputRef?: React.RefObject<HTMLInputElement>;
   controls?: Control[];
@@ -29,10 +31,18 @@ interface TitleEditorProps extends BaseComponent {
   onChange?: (value: string) => void;
 }
 
-export default React.memo(function TitleEditor({ className, value: valueProp, defaultValue: defaultValueProp, isControlsShow: isControlsShowProp, inputRef, controlClassName, controls, onChange }: TitleEditorProps) {
-  const defaultValue = defaultValueProp || "Без названия";
-  const [value, setValue] = useState(valueProp || "");
-
+export default React.memo(function TitleEditor({
+  className,
+  value: controlledValue,
+  defaultValue = '',
+  placeholder = "Нет названия",
+  isControlsShow: isControlsShowProp,
+  inputRef,
+  controlClassName,
+  controls,
+  onChange,
+}: TitleEditorProps) {
+  const { value, changeValue } = useValue({ controlledValue, defaultValue });
   const [isControlsShow, setIsControlsShow] = useState<TitleEditorProps["isControlsShow"]>(isControlsShowProp || false);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -50,6 +60,7 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
       return isShow;
     })
   }
+
   const isShowControls = () => {
     if (typeof isControlsShow === "boolean") {
       return isControlsShow;
@@ -57,6 +68,7 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
     if (isControlsShow === "alwaysShow") return true;
     if (isControlsShow === "neverShow") return false;
   }
+
   const setContentWrapperWidth = (isFullWidth: boolean) => {
     const controls = controlsRef.current;
     const contentWrapper = contentWrapperRef.current;
@@ -77,24 +89,29 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
-    setValue(value);
+
+    changeValue(value);
     onChange?.(value);
   }
+
   const handleFocus = () => {
     setIsFocused(true);
 
     finalInputRef.current?.focus();
   }
+
   const handleBlur = () => {
     setIsFocused(false);
 
     if (!value) {
-      setValue(defaultValue);
-      onChange?.(defaultValue);
+      changeValue(placeholder);
+
+      onChange?.(placeholder);
     }
   };
+
   const handleMouseenter = () => setIsHovered(true);
+
   const handleMouseleave = () => setIsHovered(false);
 
   useEffect(() => {
@@ -107,9 +124,6 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
 
     return () => window.removeEventListener("resize", handleResize);
   }, [isHovered, isFocused]);
-  useEffect(() => {
-    if (valueProp) setValue(valueProp)
-  }, [valueProp, setValue])
 
   useAnimateInputLine({ isFocused, isHovered, lineRef });
 
@@ -127,14 +141,14 @@ export default React.memo(function TitleEditor({ className, value: valueProp, de
               className={styles.input}
               value={value}
               ref={finalInputRef}
-              placeholder={defaultValue}
+              placeholder={placeholder}
               
               onChange={handleChange}
               onFocus={handleFocus}
               onBlur={handleBlur}
             ></input>
   
-            <div className={clsx(styles.editorHiddenContent, "invisible")} aria-hidden="true">{value || defaultValue}</div>
+            <div className={clsx(styles.editorHiddenContent, "invisible")} aria-hidden="true">{value || placeholder}</div>
 
             <InputLine className={styles.inputLine} ref={lineRef} />
           </div>

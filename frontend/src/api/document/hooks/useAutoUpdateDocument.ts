@@ -19,6 +19,7 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
   const [delayedDocument, setDelayedDocument] = useState<Document | undefined>(undefined);
 
   const fieldUpdatesRef = useRef<DocumentFieldUpdates>({});
+  const handlersRef = useRef<Record<string, (arg: any) => void>>({});
   const queryKey = useMemo(() => documentKeys.detail(id), [id]);
 
 	const changeField = useCallback<ChangeDocumentField>((path, value) => {
@@ -34,6 +35,33 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
 
     debouncedSend();
   }, [queryClient, queryKey]);
+
+  const getHandler = useCallback(
+    (
+      path: string,
+      options?: { extractValue?: (arg: any) => any }
+    ) => {
+      if (!handlersRef.current[path]) {
+        const extractValue =
+          options?.extractValue ||
+          ((arg: any) => {
+            if (arg && typeof arg === "object" && "target" in arg && "value" in arg.target) {
+              return arg.target.value;
+            }
+          
+            return arg;
+          });
+        
+        handlersRef.current[path] = (arg: any) => {
+          const val = extractValue(arg);
+          changeField(path, val);
+        };
+      }
+    
+      return handlersRef.current[path];
+    },
+    [changeField]
+  );
 
   const changeIsAllUpdating = useCallback((isUpdating: boolean) => {
     setIsAllUpdating(isUpdating);
@@ -71,6 +99,7 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
     isUpdatePending,
     isAllUpdating,
     changeField,
-    changeIsAllUpdating
-  };
+    changeIsAllUpdating,
+    getHandler,
+  }
 }

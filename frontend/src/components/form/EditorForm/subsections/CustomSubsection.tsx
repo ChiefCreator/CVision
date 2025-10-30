@@ -20,7 +20,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
       title={subsection.data.title}
       subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
     >
-      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+      {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             <FormFieldEditInput
@@ -28,9 +28,9 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
               
               value={data.title}
               placeholder={"Введите название"}
-              onChange={v => changeField("title", v)}
+              onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
-              setIsFocused={setIsFirstInputFocused}
+              setIsFocused={onToggleFirstInputFocus}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -39,7 +39,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
               
               value={data.city}
               placeholder={"Введите название города"}
-              onChange={v => changeField("city", v)}
+              onChange={getDataFieldHandler("city")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -47,8 +47,8 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
               className={styles.formGroupDateRange}
               startDate={data.startDate}
               endDate={data.endDate}
-              onChangeStartDate={v => changeField("startDate", v)}
-              onChangeEndDate={v => changeField("endDate", v)}
+              onChangeStartDate={getDataFieldHandler("startDate")}
+              onChangeEndDate={getDataFieldHandler("endDate")}
             />
           </FormGroupCell>
           <FormGroupCell className={styles.formGroupCellCustomDescription}>
@@ -56,7 +56,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
               className={styles.textEditor}
               label="Описание"
 
-              onChange={v => changeField("description", v)}
+              onChange={getDataFieldHandler("description")}
             >
               {data.description}
             </FormFieldTextEditor>

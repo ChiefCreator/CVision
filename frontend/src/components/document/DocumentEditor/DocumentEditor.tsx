@@ -1,6 +1,5 @@
 "use client"
 
-import { useDocumentEditor } from "./hooks/useDocumentEditor";
 import { DocumentEditorProvider } from "./hooks/useDocumentEditorContext";
 
 import FormWrapper from "./compoundComponents/FormWrapper/FormWrapper";
@@ -17,10 +16,8 @@ interface ResumeEditorProps extends BaseComponent {
 }
 
 export default function DocumentEditor({ id, className }: ResumeEditorProps) {
-	const data = useDocumentEditor({ id });
-
   return (
-		<DocumentEditorProvider value={{ ...data }}>
+		<DocumentEditorProvider value={{ id }}>
 			<div className={clsx(styles.editor, className)}>
 				<div className={styles.container}>
 					<MobileTabs className={styles.tabs} />

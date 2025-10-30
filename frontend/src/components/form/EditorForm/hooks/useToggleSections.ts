@@ -1,6 +1,6 @@
 import { Document } from "@/types/document/document";
 import { Section } from "@/types/document/section/section";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type SectionsOpenState = {
   [sectionId: string]: {
@@ -81,8 +81,8 @@ export function useToggleSections({ document, isGetLoading }: UseToggleSectionsP
     setSectionsOpenState(sectionsState);
   }, [isGetLoading]);
 
-  return {
+  return useMemo(() => ({
     toggleSection,
     checkIsOpen,
-  }
+  }), [toggleSection, checkIsOpen]);
 }

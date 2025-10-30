@@ -1,22 +1,25 @@
-import { useState, useRef, useEffect, useMemo } from "react";
 import { useAnimateInputLine } from "@/hooks/root/useAnimateInputLine";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import IconButton from "@/components/button/IconButton/IconButton";
-import InputLine from "../InputLine/InputLine";
 import { Bold, Italic, List, ListOrdered, Strikethrough, Underline } from "lucide-react";
+import InputLine from "../InputLine/InputLine";
 
-import styles from "./TextEditor.module.scss";
+import { useValue } from "@/hooks/root/useValue";
 import clsx from "clsx";
+import styles from "./TextEditor.module.scss";
 
 export interface TextEditorProps {
   placeholder?: string;
   children?: string;
+  defaultValue?: string;
   
   onChange?: (value: string) => void;
 }
 
-export default function TextEditor({ placeholder, children, onChange }: TextEditorProps) {
-  const [content, setContent] = useState(children || "");
+export default function TextEditor({ children: controlledValue, defaultValue = '', placeholder = "Нет названия", onChange }: TextEditorProps) {
+  const { value, changeValue } = useValue({ controlledValue, defaultValue });
+  
   const [isPlaceholderActive, setIsPlaceholderActive] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -32,13 +35,15 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
   const lineRef = useRef<HTMLDivElement>(null);
 
   const changeContent = (content: string) => {
-    setContent(content);
+    changeValue(content);
     onChange?.(content);
   }
+  
   const executeCommand = (command: string) => {
     document.execCommand(command, false, undefined);
     updateButtonStates();
   }
+
   const toggleBold = () => executeCommand("bold");
   const toggleItalic = () => executeCommand("italic");
   const toggleUnderline = () => executeCommand("underline");
@@ -68,8 +73,9 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
       setIsUnorderedList(document.queryCommandState("insertUnorderedList"));
     }
   };
+
   const checkIsContentEmpty = () => {
-    return content === "" || content === "<br>" || !content;
+    return value === "" || value === "<br>" || !value;
   }
 
   const handleInput = () => {
@@ -78,23 +84,25 @@ export default function TextEditor({ placeholder, children, onChange }: TextEdit
 
     changeContent(contentEl.innerHTML);
   }
+
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
   const handleMouseenter = () => setIsHovered(true);
   const handleMouseleave = () => setIsHovered(false);
 
   useEffect(() => {
-    if (content && contentRef.current) {
-      contentRef.current.innerHTML = content;
+    if (value && contentRef.current) {
+      contentRef.current.innerHTML = value;
     }
 
     document.addEventListener("selectionchange", updateButtonStates);
 
     return () => document.removeEventListener("selectionchange", updateButtonStates);
   }, []);
+
   useEffect(() => {
     setIsPlaceholderActive(checkIsContentEmpty())
-  }, [content]);
+  }, [value]);
 
   const editableButtonsData = useMemo(() => {
     return [

@@ -11,7 +11,7 @@ import styles from "./../../compoundComponents/Section/Section.module.scss";
 export default React.memo(function PersonalDetails({ section }: DomainSectionProps<"resume", "personalDetails">) {
   return (
     <SectionForm type="single" section={section}>
-      {({ data, changeField }) => (
+      {({ data, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             "Аватар"
@@ -22,7 +22,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.jobTitle}
               placeholder={"Введите название профессии"}
-              onChange={(v) => changeField("jobTitle", v)}
+              onChange={getDataFieldHandler("jobTitle")}
             />
           </FormGroupCell>
           <FormGroupCell className={styles.formGroupCellPersonalDetailsFullName}>
@@ -31,7 +31,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.fullName}
               placeholder={"Введите полное имя"}
-              onChange={(v) => changeField("fullName", v)}
+              onChange={getDataFieldHandler("fullName")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -40,7 +40,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.email}
               placeholder={"Введите эл. почту"}
-              onChange={(v) => changeField("email", v)}
+              onChange={getDataFieldHandler("email")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -49,7 +49,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.phone}
               placeholder={"Введите номер телефона"}
-              onChange={(v) => changeField("phone", v)}
+              onChange={getDataFieldHandler("phone")}
             />
           </FormGroupCell>
           <FormGroupCell className={styles.formGroupCellPersonalDetailsAddress}>
@@ -58,7 +58,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.address}
               placeholder={"Введите адрес"}
-              onChange={(v) => changeField("address", v)}
+              onChange={getDataFieldHandler("address")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -67,7 +67,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.city}
               placeholder={"Введите город"}
-              onChange={(v) => changeField("city", v)}
+              onChange={getDataFieldHandler("city")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -76,7 +76,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.country}
               placeholder={"Введите название страны"}
-              onChange={(v) => changeField("country", v)}
+              onChange={getDataFieldHandler("country")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -85,7 +85,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.postalCode}
               placeholder={"Введите почтовый код"}
-              onChange={(v) => changeField("postalCode", v)}
+              onChange={getDataFieldHandler("postalCode")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -94,7 +94,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.drivingLicense}
               placeholder={"Введите тип водительских прав"}
-              onChange={(v) => changeField("drivingLicense", v)}
+              onChange={getDataFieldHandler("drivingLicense")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -103,7 +103,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.birthPlace}
               placeholder={"Введите место рождения"}
-              onChange={(v) => changeField("birthPlace", v)}
+              onChange={getDataFieldHandler("birthPlace")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -112,7 +112,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.birthDate}
               placeholder={"Введите дату рождения"}
-              onChange={(v) => changeField("birthDate", v)}
+              onChange={getDataFieldHandler("birthDate")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -121,7 +121,7 @@ export default React.memo(function PersonalDetails({ section }: DomainSectionPro
 
               value={data?.nationality}
               placeholder={"Введите национальность"}
-              onChange={(v) => changeField("nationality", v)}
+              onChange={getDataFieldHandler("nationality")}
             />
           </FormGroupCell>
         </FormGroup>

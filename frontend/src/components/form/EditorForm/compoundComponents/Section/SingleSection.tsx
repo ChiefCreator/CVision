@@ -14,7 +14,7 @@ export default function SingleSection({
   template,
   isOpen,
   onHeadClick,
-  changeField,
+  onChangeTitle,
 }: SingleSectionProps) {
   // const deleteControlObj = useDelete({ sectionName , sectionId: id});
 
@@ -31,7 +31,7 @@ export default function SingleSection({
             defaultValue={template?.title}
             // controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
 
-            onChange={(v) => changeField(`title`, v)}
+            onChange={onChangeTitle}
           />
         </div>
 

@@ -20,7 +20,7 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
       title={subsection.data.functionTitle}
       subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
     >
-      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+      {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             <FormFieldEditInput
@@ -28,9 +28,9 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
               
               value={data.functionTitle}
               placeholder={"Введите название занятости"}
-              onChange={v => changeField("functionTitle", v)}
+              onChange={getDataFieldHandler("functionTitle")}
               isFocused={isFirstInputFocused}
-              setIsFocused={setIsFirstInputFocused}
+              setIsFocused={onToggleFirstInputFocus}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -39,7 +39,7 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
               
               value={data.employer}
               placeholder={"Введите работодателя"}
-              onChange={v => changeField("employer", v)}
+              onChange={getDataFieldHandler("employer")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -47,8 +47,8 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
               className={styles.formGroupDateRange}
               startDate={data.startDate}
               endDate={data.endDate}
-              onChangeStartDate={v => changeField("startDate", v)}
-              onChangeEndDate={v => changeField("endDate", v)}
+              onChangeStartDate={getDataFieldHandler("startDate")}
+              onChangeEndDate={getDataFieldHandler("endDate")}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -57,7 +57,7 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
               
               value={data.city}
               placeholder={"Введите название города"}
-              onChange={v => changeField("city", v)}
+              onChange={getDataFieldHandler("city")}
             />
           </FormGroupCell>
           <FormGroupCell className={styles.formGroupCellExtraCurricularDescription}>
@@ -66,7 +66,7 @@ export default React.memo(function ExtraCurricularActivitySubsection({ subsectio
               label="Описание"
               placeholder="Напишите краткое описание о вашем опыте, задачах и достижениях."
 
-              onChange={v => changeField("description", v)}
+              onChange={getDataFieldHandler("description")}
             >
               {data.description}
             </FormFieldTextEditor>

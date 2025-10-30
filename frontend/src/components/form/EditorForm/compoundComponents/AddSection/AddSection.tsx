@@ -6,6 +6,7 @@ import AddSectionSkeleton from "./AddSectionSkeleton";
 
 import { useCreateSection } from "@/api/section/hooks/useCreateSection";
 import { useGetRootSectionTemplates } from "@/api/sectionTemplate/hooks/useGetRootSectionTemplates";
+import { useDocument } from "@/components/document/DocumentEditor/hooks/useDocument";
 import { CreateSection } from "@/types/document/section/createSection";
 import { SectionTemplate } from "@/types/document/sectionTemplate/sectionTemplate";
 import { BaseComponent } from "@/types/root";
@@ -28,7 +29,8 @@ const sectionIconsMap: SectionIconsMap = {
 }
 
 export default function AddSection({ className }: AddSectionProps) {
-  const { document, isGetLoading,  toggleSection, changeIsAllUpdating } = useEditorFormContext();
+  const { toggleSection } = useEditorFormContext();
+  const { document, isGetLoading, changeIsAllUpdating } = useDocument();
   const { data: rootSectionTemplates, isLoading: isGetRootSectionTemplatesLoading } = useGetRootSectionTemplates({
     isDefault: false,
   });

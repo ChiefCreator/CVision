@@ -5,18 +5,19 @@ import AddSubsectionButton from "./AddSubsectionButton/AddSubsectionButton";
 import type { NestedSectionProps } from "./Section";
 
 import clsx from "clsx";
+import { memo } from "react";
 import styles from "./Section.module.scss";
 
-export default function NestedSection({
+export default memo(function NestedSection({
   className,
   id,
   children,
   title,
   template,
   isOpen,
-  addSubsection,
+  onAddSubsection,
   onHeadClick,
-  changeField,
+  onChangeTitle,
 }: NestedSectionProps) {
   // const deleteControlObj = useDelete({ sectionName , sectionId: id});
   // const controls = useMemo(() => [...deleteControlObj], [deleteControlObj]);
@@ -31,7 +32,7 @@ export default function NestedSection({
           defaultValue={template?.title}
           // controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
   
-          onChange={(v) => changeField("title", v)}
+          onChange={onChangeTitle}
         />
 
         <ChevronDown className={clsx(styles.arrow, { [styles.arrowOpen]: isOpen })} />
@@ -45,10 +46,10 @@ export default function NestedSection({
 
             <div className={styles.subsectionList}>{children}</div>
 
-            <AddSubsectionButton className={styles.addSubsectionButton} onClick={addSubsection} />
+            <AddSubsectionButton className={styles.addSubsectionButton} onClick={onAddSubsection} />
           </div>
         </div>
       </div>
     </div>
   );
-}
+})

@@ -16,7 +16,7 @@ export default React.memo(function LinkSubsection({ subsection }: DomainSubsecti
       title={subsection.data.label}
       subtitle={subsection.data.url}
     >
-      {({ data, isFirstInputFocused, setIsFirstInputFocused, changeField }) => (
+      {({ data, isFirstInputFocused, getDataFieldHandler, onToggleFirstInputFocus }) => (
         <FormGroup className={styles.formGroup}>
           <FormGroupCell>
             <FormFieldEditInput
@@ -24,9 +24,9 @@ export default React.memo(function LinkSubsection({ subsection }: DomainSubsecti
               
               value={data.label}
               placeholder={"Введите заголовок"}
-              onChange={v => changeField("label", v)}
+              onChange={getDataFieldHandler("label")}
               isFocused={isFirstInputFocused}
-              setIsFocused={setIsFirstInputFocused}
+              setIsFocused={onToggleFirstInputFocus}
             />
           </FormGroupCell>
           <FormGroupCell>
@@ -35,7 +35,7 @@ export default React.memo(function LinkSubsection({ subsection }: DomainSubsecti
               
               value={data.url}
               placeholder={"Введите ссылку"}
-              onChange={v => changeField("url", v)}
+              onChange={getDataFieldHandler("url")}
             />
           </FormGroupCell>
         </FormGroup>

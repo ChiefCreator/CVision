@@ -12,13 +12,13 @@ import styles from "./../../compoundComponents/Section/Section.module.scss";
 export default React.memo(function ProfessionalSummary({ section }: DomainSectionProps<"resume", "professionalSummary">) {
   return (
     <SectionForm type="single" section={section}>
-      {({ data, changeField }) => (
+      {({ data, getDataFieldHandler }) => (
         <FormGroup className={clsx(styles.formGroup, styles.formGroupOneColumn)}>
           <FormGroupCell>
             <FormFieldTextEditor
               placeholder="Напишите краткое резюме о себе, своих навыках и опыте."
 
-              onChange={v => changeField("summary", v)}
+              onChange={getDataFieldHandler("summary")}
             >
               {data?.summary}
             </FormFieldTextEditor>

@@ -1,10 +1,10 @@
 "use client"
 
 import { createContext, useContext } from 'react';
-import { useDocumentEditor } from "./useDocumentEditor";
 
 // Context
-interface DocumentEditorContextType extends ReturnType<typeof useDocumentEditor> { 
+interface DocumentEditorContextType {
+	id: string;
 };
 
 export const DocumentEditorContext = createContext<DocumentEditorContextType | undefined>(undefined);

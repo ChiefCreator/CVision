@@ -12,7 +12,7 @@ import styles from "./../../compoundComponents/Section/Section.module.scss";
 export default React.memo(function Hobbies({ section }: DomainSectionProps<"resume", "hobbies">) {
   return (
     <SectionForm type="single" section={section}>
-      {({ data, changeField }) => (
+      {({ data, getDataFieldHandler }) => (
         <FormGroup className={clsx(styles.formGroup, styles.formGroupOneColumn)}>
           <FormGroupCell>
             <FormFieldTextEditor
@@ -20,7 +20,7 @@ export default React.memo(function Hobbies({ section }: DomainSectionProps<"resu
 
               placeholder="Например занятие спортом, чтение книг..."
 
-              onChange={v => changeField("hobbyDescription", v)}
+              onChange={getDataFieldHandler("hobbyDescription")}
             >
               {data?.hobbyDescription}
             </FormFieldTextEditor>
