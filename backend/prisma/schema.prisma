@@ -165,8 +165,13 @@ model Document {
   title    String?
   // Пример структуры:
   // {
+  //   "accentColor": "id"
+  // }
+  // Или
+  // {
   //   "accentColor": {
-  //     "currentOption": { "id": "id", "name": "name", "value": "value" },
+  //     "id": "id",
+  //     "value": "value"
   //   }
   // }
   settings Json?

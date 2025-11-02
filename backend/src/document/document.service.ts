@@ -27,7 +27,9 @@ export class DocumentService {
 
   // find
 
-  async findById(id: string) {
+  async findById(id: string, options?: { resultDocument?: boolean }) {
+    const { resultDocument = true } = options ?? {};
+
     const document = await this.prismaService.document.findUnique({
       where: { id },
       include: {
@@ -40,7 +42,7 @@ export class DocumentService {
       throw new NotFoundException("Документ не существует");
     }
 
-    return this.getResultDocument(document);
+    return resultDocument ? this.getResultDocument(document) : document;
   }
 
   async findAll(userId: string) {
@@ -97,34 +99,42 @@ export class DocumentService {
   // update
 
   async update(id: string, dto: UpdateDocumentDto) {
-    const document = await this.findById(id);
+    const document = await this.findById(id, { resultDocument: false });
+
+    const { title, updatedAt, template, sections, settings } = dto;
 
     let newTemplateId = document.template.id;
 
-    if (dto.templateId) {
-      const documentTemplate = await this.documentTemplateService.findById(dto.templateId);
+    if (dto.template) {
+      const documentTemplate = await this.documentTemplateService.findByKeyAndDocumentType(template as any, document.type.name);
 
-      const allowedTemplates = DOCUMENT_TEMPLATES_MAP[document.template.key];
+      const allowedTemplates = DOCUMENT_TEMPLATES_MAP[document.type.name];
 
-      if (!allowedTemplates.includes(documentTemplate.key)) {
+      if (!allowedTemplates.includes(documentTemplate.key as any)) {
         throw new BadRequestException(`Шаблон ${documentTemplate.key} не разрешён для типа документа ${document.type.name}`);
       }
       
       newTemplateId = documentTemplate.id;
     }
-    
-    return this.prismaService.runInTransaction(async () => {
-      const updatedDocument = await this.prismaService.document.update({
-        where: { id },
-        data: {
-          title: dto.title,
-          updatedAt: dto.updatedAt,
-          templateId: newTemplateId,
-        },
-      });
 
-      if (dto.sections) {
-        await this.sectionService.updateAll(dto.sections);
+    return this.prismaService.runInTransaction(async () => {
+      if (title || updatedAt || (newTemplateId && template) || settings) {
+        await this.prismaService.document.update({
+          where: { id },
+          data: {
+            title,
+            updatedAt,
+            templateId: newTemplateId,
+            settings: {
+              ...document.settings as any,
+              ...settings ?? {} as any,
+            },
+          },
+        });
+      }
+
+      if (sections) {
+        await this.sectionService.updateAll(sections);
       }
 
       return this.findById(id);
@@ -247,7 +257,7 @@ export class DocumentService {
     );
   }
 
-  mergeSettings(documentSettingsValue: Prisma.JsonValue, templateSettingsValue: Prisma.JsonValue) {
+  private mergeSettings(documentSettingsValue: Prisma.JsonValue, templateSettingsValue: Prisma.JsonValue) {
     const documentSettings =
       (typeof documentSettingsValue === "object" && documentSettingsValue != null ? documentSettingsValue : {}) as DocumentSettings;
 
@@ -267,10 +277,13 @@ export class DocumentService {
 
       const { default: defaultId, options } = defaultSetting;
 
-      let currentOption: SettingOption | undefined = documentSetting?.currentOption;
+      let currentOption = {} as SettingOption;
 
-      if (!currentOption && defaultId) {
-        currentOption = options.find((v: SettingOption) => v.id === defaultId)!;
+      if (documentSetting && typeof documentSetting === "object") {
+        currentOption = documentSetting;
+      } else if ((documentSetting && typeof documentSetting === "string") || defaultId) {
+        currentOption = options.find(o => o.id === documentSetting)
+          ?? options.find(o => o.id === defaultId) ?? {} as SettingOption;
       }
 
       result[key] = {

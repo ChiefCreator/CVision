@@ -4,9 +4,7 @@ export interface SettingOption<T = string> {
   value: T;
 }
 
-export interface DocumentSetting<T = string> {
-	currentOption?: SettingOption<T>;
-}
+export type DocumentSetting<T = string> = SettingOption<T> | string;
 
 export interface DocumentTemplateSetting<T = string> {
   default: string;

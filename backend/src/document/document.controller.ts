@@ -74,7 +74,6 @@ export class DocumentController {
   }
 
   // other
-
   
   @Authorization()
   @Post("export/pdf")

@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
+import { DocumentSettings } from "../types/document-settings.types";
 import { UpdateSectionDto } from "./update-section.dto";
 
 export class UpdateDocumentDto {
@@ -12,8 +13,11 @@ export class UpdateDocumentDto {
 
 	@IsOptional()
 	@IsString({ message: "Шаблон документа должен быть строкой." })
-	templateId?: string;
+	template?: string;
 
 	@IsOptional()
 	sections?: UpdateSectionDto[];
+
+	@IsOptional()
+	settings?: DocumentSettings;
 }
