@@ -1,5 +1,6 @@
 import { Document } from "@/types/document/document";
 import { DocumentFieldUpdates } from "@/types/document/update";
+import { parseDocumentFieldUpdates } from "@/utils/document/parseDocumentFieldUpdates";
 import { updateDocumentFields } from "@/utils/document/updateDocumentFields";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { documentService } from "../documentService";
@@ -10,7 +11,11 @@ export function useUpdateDocument(id: string) {
   const queryKey = documentKeys.detail(id);
 
   return useMutation({
-    mutationFn: (fieldUpdates: DocumentFieldUpdates) => documentService.update(id, fieldUpdates),
+    mutationFn: (fieldUpdates: DocumentFieldUpdates) => {
+      const dto = parseDocumentFieldUpdates(fieldUpdates);
+
+      return documentService.update(id, dto);
+    },
     onMutate: async (fieldUpdates) => {
       await queryClient.cancelQueries({ queryKey });
 

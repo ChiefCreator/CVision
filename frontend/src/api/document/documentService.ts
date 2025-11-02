@@ -1,7 +1,7 @@
 import { apiClassic } from '@/api/api';
 import { Document } from "@/types/document/document";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
-import { DocumentFieldUpdates } from "@/types/document/update";
+import { UpdateDocumentDto } from "@/types/document/update";
 import { CreateDocumentDto, DeleteOne } from "./documentServiceTypes";
 
 class DocumentService {
@@ -36,8 +36,8 @@ class DocumentService {
 
   // update
 
-  async update(id: string, fieldUpdates: DocumentFieldUpdates) {
-    const res = await this.api.put<Document>(`${this.BASE_URL_SEGMENT}/${id}`, fieldUpdates);
+  async update(id: string, dto: UpdateDocumentDto) {
+    const res = await this.api.patch<Document>(`${this.BASE_URL_SEGMENT}/${id}`, dto);
 
     return res.data;
   }

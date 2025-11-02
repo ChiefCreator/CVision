@@ -2,7 +2,7 @@ import { sortByOrder } from "@/utils/root/sortByOrder";
 import React from "react";
 import { DomainSectionProps } from "../../compoundComponents/Section/Section";
 import { SectionForm } from "../../compoundComponents/Section/SectionForm";
-import EducationSubsection from "../../subsections/EducationSubsection";
+import EmploymentHistorySubsection from "../../subsections/EmploymentHistorySubsection";
 
 export default React.memo(function EmploymentHistory({ section }: DomainSectionProps<"resume", "employmentHistory">) {
   return (
@@ -10,7 +10,7 @@ export default React.memo(function EmploymentHistory({ section }: DomainSectionP
       {({ subsections }) => (
         <>
           {sortByOrder(subsections).map(s => (
-            <EducationSubsection key={s.id} subsection={s} />
+            <EmploymentHistorySubsection key={s.id} subsection={s} />
           ))}
         </>
       )}
