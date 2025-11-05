@@ -1,5 +1,4 @@
 import { useDeleteSection } from "@/api/section/hooks/useDeleteSection";
-import { useDocument } from "@/components/document/DocumentEditor/hooks/useDocument";
 import { useDocumentEditorContext } from "@/components/document/DocumentEditor/hooks/useDocumentEditorContext";
 import { useAdaptivePopover } from "@/hooks/position/useAdaptivePopover";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
@@ -15,8 +14,7 @@ export function useSubsection<
 	const id = subsection.id;
 	const parentId = subsection.parentId!;
 
-	const { id: docId } = useDocumentEditorContext();
-	const { changeIsAllUpdating, getHandler } = useDocument(docId);
+	const { id: docId, changeIsAllUpdating, getHandler } = useDocumentEditorContext();
 	const { checkIsOpen, toggleSection } = useEditorFormContext();
 	const { mutateAsync } = useDeleteSection();
   const popoverProps = useAdaptivePopover();

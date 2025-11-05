@@ -1,5 +1,4 @@
 import { useCreateSection } from "@/api/section/hooks/useCreateSection";
-import { useDocument } from "@/components/document/DocumentEditor/hooks/useDocument";
 import { useDocumentEditorContext } from "@/components/document/DocumentEditor/hooks/useDocumentEditorContext";
 import { ChangeDocumentField } from "@/types/document/changeField";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
@@ -12,9 +11,8 @@ export function useSection<
 	T extends DocumentTypeName = DocumentTypeName,
 	K extends SectionTemplateKey<T> = SectionTemplateKey<T>
 >(section: Section<T, K>) {
-	const { id: docId } = useDocumentEditorContext();
+	const { changeField, changeIsAllUpdating, getHandler } = useDocumentEditorContext();
 	const { checkIsOpen, toggleSection } = useEditorFormContext();
-	const { changeField, changeIsAllUpdating, getHandler } = useDocument(docId);
 	const { mutateAsync: createSection } = useCreateSection();
 
 	const id = section.id;

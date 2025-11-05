@@ -8,17 +8,15 @@ import clsx from "clsx";
 import { useRef } from "react";
 
 import Document from "@/components/document/Document/Document";
-import { useDocument } from "../../hooks/useDocument";
+import LoadingStatus from "@/components/loading/LoadingStatus/LoadingStatus";
 import { useDocumentEditorContext } from "../../hooks/useDocumentEditorContext";
 import styles from "./Preview.module.scss";
-
+import PreviewSkeleton from "./PreviewSkeleton";
 
 interface PreviewProps extends BaseComponent {}
 
-
 export default function Preview({ className }: PreviewProps) {
-	const { id } = useDocumentEditorContext();
-	const { delayedDocument: document, isAllUpdating } = useDocument(id);
+	const { delayedDocument: document, status, isGetLoading } = useDocumentEditorContext();
 
 	const resumePreviewRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,7 +49,9 @@ export default function Preview({ className }: PreviewProps) {
 		</Button>
 	)
 
-	if (!document) return;
+	if (isGetLoading && !document) {
+		return <PreviewSkeleton className={clsx(styles.preview, className)} />;
+	}
 
 	return (
 		<div className={clsx(styles.preview, className)} id={resumePreviewId} ref={resumePreviewRef}>
@@ -61,23 +61,20 @@ export default function Preview({ className }: PreviewProps) {
 				</header>
 	
 				<div className={clsx(styles.previewBody)}>
-					<Document
-						className={styles.document}
-						data={document}
-					/>
+					<Document className={styles.document} />
 				</div>
 	
-				{/* <footer className={clsx(styles.previewFoot)}>
+				<footer className={clsx(styles.previewFoot)}>
 					<LoadingStatus
 						className={styles.loadingStatus}
 						labelClassName={styles.loadingStatusLabel}
 						iconClassName={styles.loadingStatusIcon}
 						spinnerClassName={styles.loadingStatusSpinner}
-						status={isAllUpdating ? "loading" : "loaded"}
+						status={status === "loading" ? "loading" : "loaded"}
 					/>
 	
-					<DocumentButtons className={styles.buttons} />
-				</footer> */}
+					{/* <DocumentButtons className={styles.buttons} /> */}
+				</footer>
 			</Container>
 
 			<div className={clsx(styles.tabletFooter, styles.container)}>

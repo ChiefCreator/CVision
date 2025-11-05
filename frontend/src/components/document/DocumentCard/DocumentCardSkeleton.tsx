@@ -1,6 +1,6 @@
 import TitleEditorSkeleton from '@/components/input/TitleEditor/TitleEditorSkeleton';
 import Skeleton from 'react-loading-skeleton';
-import DocumentSkeleton from "../Document/DocumentSkeleton";
+import DocumentSkeleton from "../Document/compoundComponents/DocumentPreview/DocumentPreviewSkeleton";
 import ActionButtonSkeleton from "./ActionButton/ActionButtonSkeleton";
 
 import clsx from "clsx";

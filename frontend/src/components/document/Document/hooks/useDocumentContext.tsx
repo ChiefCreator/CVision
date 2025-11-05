@@ -1,16 +1,10 @@
 "use client"
 
-import { Document } from "@/types/document/document";
-import { createContext, Dispatch, SetStateAction, useContext } from 'react';
-import { Status } from "../Document";
-import { useDocumentPages } from "./useDocumentPages";
+import { useDocumentContext as useGlobalDocumentContext } from "@/hooks/document/useDocumentContext";
+import { createContext, useContext } from "react";
 
 // Context
-interface DocumentContextType extends ReturnType<typeof useDocumentPages> { 
-	data: Document;
-	status: Status;
-	setStatus: Dispatch<SetStateAction<Status>>;
-};
+interface DocumentContextType extends ReturnType<typeof useGlobalDocumentContext> { };
 
 export const DocumentContext = createContext<DocumentContextType | undefined>(undefined);
 

@@ -1,11 +1,10 @@
 "use client"
 
+import { useDocumentContext } from "@/hooks/document/useDocumentContext";
 import { createContext, useContext } from 'react';
 
 // Context
-interface DocumentEditorContextType {
-	id: string;
-};
+interface DocumentEditorContextType extends ReturnType<typeof useDocumentContext> {};
 
 export const DocumentEditorContext = createContext<DocumentEditorContextType | undefined>(undefined);
 

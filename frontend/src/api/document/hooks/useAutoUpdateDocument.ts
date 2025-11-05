@@ -1,7 +1,7 @@
 import { ChangeDocumentField } from "@/types/document/changeField";
 import { Document } from "@/types/document/document";
 import { DocumentFieldUpdates } from "@/types/document/update";
-import { updateDocumentFields } from "@/utils/document/updateDocumentFields";
+import { updateObjValueByField } from "@/utils/root/updateObjValueByField";
 import { useQueryClient } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import { useUpdateDocument } from "./useUpdateDocument";
 export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
   const queryClient = useQueryClient();
 
-	const { data: document, isLoading: isGetLoading, isError: isGetError } = useGetDocument(id);
+	const { data: document, isLoading: isGetLoading, isSuccess: isGetSuccess, isError: isGetError } = useGetDocument(id);
   const { mutateAsync: update, isPending: isUpdatePending } = useUpdateDocument(id);
 
 	const [isAllUpdating, setIsAllUpdating] = useState(false);
@@ -22,6 +22,20 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
   const handlersRef = useRef<Record<string, (arg: any) => void>>({});
   const queryKey = useMemo(() => documentKeys.detail(id), [id]);
 
+  const debouncedSend = useRef(
+    debounce(async () => {
+      const updates = { ...fieldUpdatesRef.current };
+
+      fieldUpdatesRef.current = {};
+
+      if (Object.keys(updates).length > 0) {
+        await update(updates);
+
+        setIsAllUpdating(false);
+      }
+    }, timer)
+  ).current;
+
 	const changeField = useCallback<ChangeDocumentField>((path, value) => {
     setIsAllUpdating(true);
 
@@ -30,7 +44,7 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
     queryClient.setQueryData(queryKey, (prevDoc?: Document) => {
       if (!prevDoc) return prevDoc;
 
-      return updateDocumentFields(prevDoc, { [path]: value });
+      return updateObjValueByField(prevDoc, path, value);
     });
 
     debouncedSend();
@@ -67,29 +81,17 @@ export const useAutoUpdateDocument = (id: string, timer: number = 800) => {
     setIsAllUpdating(isUpdating);
   }, [setIsAllUpdating]);
 
-  const debouncedSend = useRef(
-    debounce(async () => {
-      const updates = { ...fieldUpdatesRef.current };
-
-      fieldUpdatesRef.current = {};
-
-      if (Object.keys(updates).length > 0) {
-        await update(updates);
-
-        setIsAllUpdating(false);
-      }
-    }, timer)
-  ).current;
-
   useEffect(() => {
-    setDelayedDocument(document);
-  }, [isGetLoading])
-
-  useEffect(() => {
-    if (!isAllUpdating) {
+    if (!isUpdatePending) {
       setDelayedDocument(document);
     }
-  }, [isAllUpdating])
+  }, [isUpdatePending])
+
+  useEffect(() => {
+    if (isGetSuccess) {
+      setDelayedDocument(document);
+    }
+  }, [isGetSuccess])
 
   return {
     document,

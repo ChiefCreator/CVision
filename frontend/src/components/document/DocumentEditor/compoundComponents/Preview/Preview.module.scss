@@ -1,6 +1,4 @@
 .preview {
-	height: 100%;
-
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -38,6 +36,11 @@
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+.loading-status-skeleton {
+	font-size: 16px;
+	max-width: 80px;
 }
 
 .tablet-footer {
@@ -93,7 +96,7 @@
 	}
 
 	.button-download {
-		width: 100%;
+		width: 100% !important;
 	}
 }
 
