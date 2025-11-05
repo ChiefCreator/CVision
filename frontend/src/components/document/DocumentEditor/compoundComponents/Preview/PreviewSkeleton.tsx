@@ -5,6 +5,7 @@ import Container from "@/components/utils/Container/Container"
 import { BaseComponent } from "@/types/root"
 
 import ButtonSkeleton from "@/components/button/Button/ButtonSkeleton"
+import DocumentControlsSkeleton from "@/components/document/DocumentControls/DocumentControlsSkeleton"
 import clsx from "clsx"
 import Skeleton from "react-loading-skeleton"
 import styles from "./Preview.module.scss"
@@ -22,9 +23,12 @@ export default function PreviewSkeleton({ className }: BaseComponent) {
 				</div>
 	
 				<footer className={styles.previewFoot}>
-					<Skeleton className={clsx(styles.loadingStatus, styles.loadingStatusSkeleton)} />
+					<Skeleton
+						className={clsx(styles.loadingStatus, styles.loadingStatusSkeleton)}
+						baseColor={styles.loadingStatusSkeletonContainer}
+					/>
 	
-					{/* <DocumentButtons className={styles.buttons} /> */}
+					<DocumentControlsSkeleton className={styles.buttons} />
 				</footer>
 			</Container>
 

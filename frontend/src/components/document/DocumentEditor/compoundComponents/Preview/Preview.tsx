@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { useRef } from "react";
 
 import Document from "@/components/document/Document/Document";
+import DocumentControls from "@/components/document/DocumentControls/DocumentControls";
 import LoadingStatus from "@/components/loading/LoadingStatus/LoadingStatus";
 import { useDocumentEditorContext } from "../../hooks/useDocumentEditorContext";
 import styles from "./Preview.module.scss";
@@ -73,7 +74,7 @@ export default function Preview({ className }: PreviewProps) {
 						status={status === "loading" ? "loading" : "loaded"}
 					/>
 	
-					{/* <DocumentButtons className={styles.buttons} /> */}
+					<DocumentControls className={styles.buttons} />
 				</footer>
 			</Container>
 
