@@ -2,7 +2,7 @@
 
 import { useCreateDocument } from "@/api/document/hooks/useCreateDocument";
 import { useGetDocuments } from "@/api/document/hooks/useGetDocuments";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Button from "@/components/button/Button/Button";
 import DocumentCard from "@/components/document/DocumentCard/DocumentCard";
@@ -12,6 +12,7 @@ import Tabs, { TabsApi } from "../Tabs/Tabs";
 import { MenuItemData } from "@/types/menu/menu";
 
 import { DocumentProvider } from "@/hooks/document/useDocumentContext";
+import { sortDocumentsByUpdatedAt } from "@/utils/document/sortDocuments";
 import styles from "./DocumentTabs.module.scss";
 
 export default function DocumentTabs() {
@@ -20,23 +21,6 @@ export default function DocumentTabs() {
 
   const [indicatorSize, setIndicatorSize] = useState({ width: 0, left: 0 });
   const tabsApiRef = useRef<TabsApi>(null);
-
-  const calcIndicatorSize = (activeValue: string) => {
-    const triggers = tabsApiRef.current?.getTriggers();
-
-    const activeTrigger = triggers?.find(trigger => trigger.id === `trigger-${activeValue}`);
-
-    if (!activeTrigger) return { width: 0, left: 0 };
-
-    const width = activeTrigger.offsetWidth;
-    const left = activeTrigger.offsetLeft;
-
-    return { width, left };
-  }
-
-  const handleChangeValue = (activeValue: string) => {
-    setIndicatorSize(calcIndicatorSize(activeValue));
-  }
 
   const menuData = useMemo<MenuItemData>(() => ([
     {
@@ -58,6 +42,27 @@ export default function DocumentTabs() {
       }),
     },
   ]), []);
+
+  const calcIndicatorSize = (activeValue: string) => {
+    const triggers = tabsApiRef.current?.getTriggers();
+
+    const activeTrigger = triggers?.find(trigger => trigger.id === `trigger-${activeValue}`);
+
+    if (!activeTrigger) return { width: 0, left: 0 };
+
+    const width = activeTrigger.offsetWidth;
+    const left = activeTrigger.offsetLeft;
+
+    return { width, left };
+  }
+
+  const handleChangeValue = (activeValue: string) => {
+    setIndicatorSize(calcIndicatorSize(activeValue));
+  }
+
+  useEffect(() => {
+    setIndicatorSize(calcIndicatorSize("all"));
+  }, []);
 
   return (
     <Tabs
@@ -102,7 +107,7 @@ export default function DocumentTabs() {
           <div className={styles.documentsList}>
             {isLoading && <DocumentCardSkeleton count={4} />}
 
-            {documents?.map(document => (
+            {sortDocumentsByUpdatedAt(documents ?? []).map(document => (
               <DocumentProvider id={document.id} key={document.id}>
                 <DocumentCard
                   key={document.id}
