@@ -18,8 +18,8 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
   return (
     <SubsectionForm
       subsection={subsection}
-      title={transformStringsToSlashFormat(subsection.data.school, subsection.data.degree)}
-      subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
+      title={transformStringsToSlashFormat(subsection.data?.school, subsection.data?.degree)}
+      subtitle={transformStringDatesToRangeFormat(subsection.data?.startDate, subsection.data?.endDate)}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -27,7 +27,7 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Учреждение образования"
               
-              value={data.school}
+              value={data?.school}
               placeholder={"Введите название учреждения образования"}
               onChange={getDataFieldHandler("school")}
               isFocused={isFirstInputFocused}
@@ -38,7 +38,7 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Степень"
               
-              value={data.degree}
+              value={data?.degree}
               placeholder={"Введите степень"}
               onChange={getDataFieldHandler("degree")}
             />
@@ -46,8 +46,8 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
           <FormGroupCell>
             <FormFieldDateRange
               className={styles.formGroupDateRange}
-              startDate={data.startDate}
-              endDate={data.endDate}
+              startDate={data?.startDate}
+              endDate={data?.endDate}
               onChangeStartDate={getDataFieldHandler("startDate")}
               onChangeEndDate={getDataFieldHandler("endDate")}
             />
@@ -56,7 +56,7 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Город"
               
-              value={data.city}
+              value={data?.city}
               placeholder={"Введите название города"}
               onChange={getDataFieldHandler("city")}
             />
@@ -69,7 +69,7 @@ export default React.memo(function EducationSubsection({ subsection }: DomainSub
 
               onChange={getDataFieldHandler("description")}
             >
-              {data.description}
+              {data?.description}
             </FormFieldTextEditor>
           </FormGroupCell>
         </FormGroup>

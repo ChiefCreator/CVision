@@ -17,8 +17,8 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
   return (
     <SubsectionForm
       subsection={subsection}
-      title={subsection.data.title}
-      subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
+      title={subsection.data?.title}
+      subtitle={transformStringDatesToRangeFormat(subsection.data?.startDate, subsection.data?.endDate)}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -26,7 +26,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
             <FormFieldEditInput
               label="Название"
               
-              value={data.title}
+              value={data?.title}
               placeholder={"Введите название"}
               onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
@@ -37,7 +37,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
             <FormFieldEditInput
               label="Город"
               
-              value={data.city}
+              value={data?.city}
               placeholder={"Введите название города"}
               onChange={getDataFieldHandler("city")}
             />
@@ -45,8 +45,8 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
           <FormGroupCell>
             <FormFieldDateRange
               className={styles.formGroupDateRange}
-              startDate={data.startDate}
-              endDate={data.endDate}
+              startDate={data?.startDate}
+              endDate={data?.endDate}
               onChangeStartDate={getDataFieldHandler("startDate")}
               onChangeEndDate={getDataFieldHandler("endDate")}
             />
@@ -58,7 +58,7 @@ export default React.memo(function CustomSubsection({ subsection }: DomainSubsec
 
               onChange={getDataFieldHandler("description")}
             >
-              {data.description}
+              {data?.description}
             </FormFieldTextEditor>
           </FormGroupCell>
         </FormGroup>

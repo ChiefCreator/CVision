@@ -13,13 +13,14 @@ import { DomainSubsectionProps } from "../compoundComponents/Subsection/Subsecti
 import { SubsectionForm } from "../compoundComponents/Subsection/SubsectionForm";
 
 import styles from "@/components/form/EditorForm/compoundComponents/Subsection/Subsection.module.scss";
+import { SkillLevel } from "@/types/skill/skillLevel";
 
 export default React.memo(function SkillSubsection({ subsection, isShowLevel = true }: DomainSubsectionProps<"resume", "skills">) {
   return (
     <SubsectionForm
       subsection={subsection}
-      title={subsection.data.title}
-      subtitle={isShowLevel ? undefined : skills.find(s => s.value === subsection.data.level)?.label}
+      title={subsection.data?.title}
+      subtitle={isShowLevel ? undefined : skills.find(s => s.value === subsection.data?.level)?.label}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -27,7 +28,7 @@ export default React.memo(function SkillSubsection({ subsection, isShowLevel = t
             <FormFieldEditInput
               label="Навык"
               
-              value={data.title}
+              value={data?.title}
               placeholder={"Введите навык"}
               onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
@@ -38,12 +39,12 @@ export default React.memo(function SkillSubsection({ subsection, isShowLevel = t
             <FormFieldSliderSelect
               label="Уровень"
               themeClassName={sliderStyles.sliderTheme}
-              selectedValue={data.level!}
+              selectedValue={data?.level!}
               isDisabled={!isShowLevel}
-              selectedLabel={skills.find(s => s.value === subsection.data.level)?.label}
+              selectedLabel={skills.find(s => s.value === subsection.data?.level)?.label}
             >
               <SliderSelectSkill
-                selectedValue={data.level!}
+                selectedValue={data?.level ?? SkillLevel.Expert}
                 data={skills}
                 isDisabled={!isShowLevel}
                 onSelect={getDataFieldHandler("level")}

@@ -1,7 +1,6 @@
 "use client"
 
 import { useDocumentSections } from "@/api/document/hooks/useGetDocument";
-import { memo, useMemo } from "react";
 import { useDocumentEditorContext } from "../../../hooks/useDocumentEditorContext";
 
 
@@ -61,11 +60,9 @@ export default function ResumeForm({ className }: FormProps) {
           
           if (!Section) return null;
 
-          const MemoSection = useMemo(() => memo(Section), [Section]);
-
           return (
             <li key={section.id}>
-              <MemoSection section={section} />
+              <Section section={section} />
             </li>
           )
         })}

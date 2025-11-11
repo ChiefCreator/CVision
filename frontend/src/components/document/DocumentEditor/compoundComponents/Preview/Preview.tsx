@@ -17,14 +17,14 @@ import PreviewSkeleton from "./PreviewSkeleton";
 interface PreviewProps extends BaseComponent {}
 
 export default function Preview({ className }: PreviewProps) {
-	const { delayedDocument: document, status, isGetLoading } = useDocumentEditorContext();
+	const { delayedDocument: document, status, isGetLoading, download } = useDocumentEditorContext();
 
 	const resumePreviewRef = useRef<HTMLDivElement | null>(null);
 
 	const resumePreviewId = "resume-preview";
 
 	const handleDownload = () => {
-		console.log("download")
+		download(document?.title);
 	}
 
 	const menuData: MenuItemData = [

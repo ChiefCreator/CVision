@@ -50,31 +50,6 @@ class DocumentService {
     return res.data;
   }
 
-  // download
-
-  async downloadPdf(type: DocumentTypeName, id: string) {
-    return this.api.get<Buffer>(`${this.BASE_URL_SEGMENT}/${type}/${id}/pdf`, {
-      responseType: "blob",
-      headers: {
-        "Content-Type": "application/pdf",
-      },
-    });
-  }
-
-  downloadOnClient(type: DocumentTypeName, id: string, url: string) {
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = `${type}-${id}.pdf`;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }
-
   // export 
 
   async generatePdf(html: string) {

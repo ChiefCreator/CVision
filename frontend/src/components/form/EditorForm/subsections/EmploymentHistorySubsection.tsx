@@ -17,8 +17,8 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
   return (
     <SubsectionForm
       subsection={subsection}
-      title={subsection.data.jobTitle}
-      subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
+      title={subsection.data?.jobTitle}
+      subtitle={transformStringDatesToRangeFormat(subsection.data?.startDate, subsection.data?.endDate)}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -26,7 +26,7 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
             <FormFieldEditInput
               label="Профессия"
               
-              value={data.jobTitle}
+              value={data?.jobTitle}
               placeholder={"Введите название профессии"}
               onChange={getDataFieldHandler("jobTitle")}
               isFocused={isFirstInputFocused}
@@ -37,7 +37,7 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
             <FormFieldEditInput
               label="Работодатель"
               
-              value={data.employer}
+              value={data?.employer}
               placeholder={"Введите работодателя"}
               onChange={getDataFieldHandler("employer")}
             />
@@ -45,8 +45,8 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
           <FormGroupCell>
             <FormFieldDateRange
               className={styles.formGroupDateRange}
-              startDate={data.startDate}
-              endDate={data.endDate}
+              startDate={data?.startDate}
+              endDate={data?.endDate}
               onChangeStartDate={getDataFieldHandler("startDate")}
               onChangeEndDate={getDataFieldHandler("endDate")}
             />
@@ -55,7 +55,7 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
             <FormFieldEditInput
               label="Город"
               
-              value={data.city}
+              value={data?.city}
               placeholder={"Введите название города"}
               onChange={getDataFieldHandler("city")}
             />
@@ -68,7 +68,7 @@ export default React.memo(function EmploymentHistorySubsection({ subsection }: D
 
               onChange={getDataFieldHandler("description")}
             >
-              {data.description}
+              {data?.description}
             </FormFieldTextEditor>
           </FormGroupCell>
         </FormGroup>

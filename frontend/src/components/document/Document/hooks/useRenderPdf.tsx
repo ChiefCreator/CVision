@@ -1,21 +1,25 @@
-import { useGeneratePdf } from "@/api/document/hooks/useGeneratePdf";
 import { useEffect, useRef, useState } from "react";
 
 import ClassicTemplate from "@/components/templates/resumeTemplates/ClassicTemplate/ClassicTemplate";
 import { Document } from "@/types/document/document";
 import { renderToHtml } from "@/utils/template/renderToHtml";
+import { UseMutateFunction } from "@tanstack/react-query";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 
 interface UseRenderPdfProps {
   data: Document | undefined;
+  pdfBuffer: ArrayBuffer | undefined;
   pageIndex?: number;
+  generatePdf: UseMutateFunction<{
+    arrayBuffer: ArrayBuffer;
+    blob: Blob;
+  }, Error, string, unknown>;
   onSetPageCount?: (count: number) => void;
 }
 
-export function useRenderPdf({ data, pageIndex = 0, onSetPageCount }: UseRenderPdfProps) {
-  const { mutate: generatePdf, data: pdfData } = useGeneratePdf();
+export function useRenderPdf({ data, pdfBuffer, pageIndex = 0, generatePdf, onSetPageCount }: UseRenderPdfProps) {
   const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -34,10 +38,10 @@ export function useRenderPdf({ data, pageIndex = 0, onSetPageCount }: UseRenderP
     let isCanceled = false;
 
     async function loadDocument() {
-      if (!pdfData) return;
+      if (!pdfBuffer) return;
 
       try {
-        const pdf = await pdfjsLib.getDocument(pdfData.arrayBuffer).promise;
+        const pdf = await pdfjsLib.getDocument(pdfBuffer).promise;
 
         if (isCanceled) return pdf.destroy();
 
@@ -55,7 +59,7 @@ export function useRenderPdf({ data, pageIndex = 0, onSetPageCount }: UseRenderP
       isCanceled = true;
       setPdf(null);
     };
-  }, [pdfData?.arrayBuffer]);
+  }, [pdfBuffer]);
 
   useEffect(() => {
     let isCanceled = false;

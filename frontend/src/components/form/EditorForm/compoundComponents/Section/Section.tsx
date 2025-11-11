@@ -2,9 +2,10 @@ import React from "react";
 
 import type { BaseComponent } from "@/types/root";
 
-import { DocumentTemplate } from "@/types/document/documentTemplate/documentTemplate";
+import { Control } from "@/components/input/TitleEditor/TitleEditor";
 import { DocumentTypeName } from "@/types/document/documentType/documentTypeName";
 import { Section as SectionT } from "@/types/document/section/section";
+import { SectionTemplate } from "@/types/document/sectionTemplate/sectionTemplate";
 import { SectionTemplateKey } from "@/types/document/sectionTemplate/sectionTemplateKey";
 import NestedSection from "./NestedSection";
 import SingleSection from "./SingleSection";
@@ -20,8 +21,9 @@ export interface BaseSectionProps extends BaseComponent {
   id: string;
   children: React.ReactNode;
   title: string;
-  template: DocumentTemplate;
+  template: SectionTemplate;
   isOpen: boolean;
+  deleteControls: Control[];
   onHeadClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onChangeTitle: (val: string) => any;
   onToggleSection: (sectionId: string, subsectionId?: string, open?: boolean) => void;

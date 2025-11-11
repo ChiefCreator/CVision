@@ -13,8 +13,8 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
   return (
     <SubsectionForm
       subsection={subsection}
-      title={subsection.data.referentFullName}
-      subtitle={subsection.data.company}
+      title={subsection.data?.referentFullName}
+      subtitle={subsection.data?.company}
     >
       {({ data, isFirstInputFocused, getDataFieldHandler, onToggleFirstInputFocus }) => (
         <FormGroup className={styles.formGroup}>
@@ -22,7 +22,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Полное имя работодателя"
               
-              value={data.referentFullName}
+              value={data?.referentFullName}
               placeholder={"Введите имя работодателя"}
               onChange={getDataFieldHandler("referentFullName")}
               isFocused={isFirstInputFocused}
@@ -33,7 +33,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Компания"
               
-              value={data.company}
+              value={data?.company}
               placeholder={"Введите компанию"}
               onChange={getDataFieldHandler("company")}
             />
@@ -42,7 +42,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Телефон"
               
-              value={data.phone}
+              value={data?.phone}
               placeholder={"Введите телефон"}
               onChange={getDataFieldHandler("phone")}
             />
@@ -51,7 +51,7 @@ export default React.memo(function ReferenceSubsection({ subsection }: DomainSub
             <FormFieldEditInput
               label="Эл. почта"
               
-              value={data.email}
+              value={data?.email}
               placeholder={"Введите эл. почту"}
               onChange={getDataFieldHandler("email")}
             />

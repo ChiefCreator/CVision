@@ -17,8 +17,8 @@ export default React.memo(function CourseSubsection({ subsection }: DomainSubsec
   return (
     <SubsectionForm
       subsection={subsection}
-      title={transformStringsToSlashFormat(subsection.data.title, subsection.data.institution)}
-      subtitle={transformStringDatesToRangeFormat(subsection.data.startDate, subsection.data.endDate)}
+      title={transformStringsToSlashFormat(subsection.data?.title, subsection.data?.institution)}
+      subtitle={transformStringDatesToRangeFormat(subsection.data?.startDate, subsection.data?.endDate)}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -26,7 +26,7 @@ export default React.memo(function CourseSubsection({ subsection }: DomainSubsec
             <FormFieldEditInput
               label="Название курса"
               
-              value={data.title}
+              value={data?.title}
               placeholder={"Введите название курса"}
               onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
@@ -37,7 +37,7 @@ export default React.memo(function CourseSubsection({ subsection }: DomainSubsec
             <FormFieldEditInput
               label="Учреждение"
               
-              value={data.institution}
+              value={data?.institution}
               placeholder={"Введите учреждение"}
               onChange={getDataFieldHandler("institution")}
             />
@@ -45,8 +45,8 @@ export default React.memo(function CourseSubsection({ subsection }: DomainSubsec
           <FormGroupCell>
             <FormFieldDateRange
               className={styles.formGroupDateRange}
-              startDate={data.startDate}
-              endDate={data.endDate}
+              startDate={data?.startDate}
+              endDate={data?.endDate}
               onChangeStartDate={getDataFieldHandler("startDate")}
               onChangeEndDate={getDataFieldHandler("endDate")}
             />

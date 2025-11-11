@@ -1,4 +1,3 @@
-
 import TitleEditor from "@/components/input/TitleEditor/TitleEditor";
 import { ChevronDown } from "lucide-react";
 
@@ -13,13 +12,10 @@ export default function SingleSection({
   title,
   template,
   isOpen,
+  deleteControls,
   onHeadClick,
   onChangeTitle,
 }: SingleSectionProps) {
-  // const deleteControlObj = useDelete({ sectionName , sectionId: id});
-
-  // const controls = useMemo(() => [...deleteControlObj], [deleteControlObj]);
-
   return (
     <div className={clsx(styles.section, className)}>
       <header className={styles.head} onClick={onHeadClick}>
@@ -29,7 +25,7 @@ export default function SingleSection({
             controlClassName={styles.titleEditorControl}
             value={title}
             defaultValue={template?.title}
-            // controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
+            controls={template.isRequired ? undefined : deleteControls}
 
             onChange={onChangeTitle}
           />

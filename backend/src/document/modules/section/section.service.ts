@@ -21,7 +21,24 @@ export class SectionService {
   async findById(id: string) {
     const section = await this.prismaService.section.findUnique({
       where: { id },
-      include: { template: true, subsections: true },
+      include: {
+        template: {
+          include: {
+            allowedChild: true,
+            allowedParent: true,
+          },
+        },
+        subsections: {
+          include: {
+            template: {
+              include: {
+                allowedChild: true,
+                allowedParent: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!section) {
@@ -34,7 +51,24 @@ export class SectionService {
   async findAllRoot(documentId: string) {
     const sections = await this.prismaService.section.findMany({
       where: { documentId, parentId: null },
-      include: { template: true, subsections: true },
+      include: {
+        template: {
+          include: {
+            allowedChild: true,
+            allowedParent: true,
+          },
+        },
+        subsections: {
+          include: {
+            template: {
+              include: {
+                allowedChild: true,
+                allowedParent: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return sections;
@@ -168,6 +202,24 @@ export class SectionService {
   async delete(id: string) {
     const deletedSection = await this.prismaService.section.delete({
       where: { id },
+      include: {
+        template: {
+          include: {
+            allowedChild: true,
+            allowedParent: true,
+          },
+        },
+        subsections: {
+          include: {
+            template: {
+              include: {
+                allowedChild: true,
+                allowedParent: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return { deletedSection, message: "Секция успешно удалена" };

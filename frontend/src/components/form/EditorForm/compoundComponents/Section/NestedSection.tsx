@@ -15,25 +15,25 @@ export default memo(function NestedSection({
   title,
   template,
   isOpen,
+  deleteControls,
   onAddSubsection,
   onHeadClick,
   onChangeTitle,
 }: NestedSectionProps) {
-  // const deleteControlObj = useDelete({ sectionName , sectionId: id});
-  // const controls = useMemo(() => [...deleteControlObj], [deleteControlObj]);
-
   return (
     <div className={clsx(styles.section, className)}>
       <header className={styles.head} onClick={onHeadClick}>
-        <TitleEditor
-          className={styles.titleEditor}
-          controlClassName={styles.titleEditorControl}
-          value={title}
-          defaultValue={template?.title}
-          // controls={!isDefaultResumeSection(sectionName) ? controls : undefined}
-  
-          onChange={onChangeTitle}
-        />
+        <div className={styles.titleWrapper} data-skip>
+          <TitleEditor
+            className={styles.titleEditor}
+            controlClassName={styles.titleEditorControl}
+            value={title}
+            defaultValue={template?.title}
+            controls={template.isRequired ? undefined : deleteControls}
+    
+            onChange={onChangeTitle}
+          />
+        </div>
 
         <ChevronDown className={clsx(styles.arrow, { [styles.arrowOpen]: isOpen })} />
       </header>

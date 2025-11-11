@@ -49,11 +49,11 @@ export default React.memo(function ClassicTemplate({ data: documentData }: Class
 
   return (
     <div style={styles.template}>
-      <Head {...head} />
+      {head && <Head {...head} />}
 
       <div>
-        <PersonalInformation {...personalInformation} />
-        <Links {...links as any} />
+        {personalInformation && <PersonalInformation {...personalInformation} />}
+        {links && <Links {...links as any} />}
 
         {Object.entries(otherSectionsData).map(([key, data]) => {
           const Section = templateSectionsMap[key as TemplateSectionName];

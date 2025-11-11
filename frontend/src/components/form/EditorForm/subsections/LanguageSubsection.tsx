@@ -18,8 +18,8 @@ export default React.memo(function LanguageSubsection({ subsection }: DomainSubs
   return (
     <SubsectionForm
       subsection={subsection}
-      title={subsection.data.title}
-      subtitle={languages.find(l => l.value === subsection.data.level)?.label}
+      title={subsection.data?.title}
+      subtitle={languages.find(l => l.value === subsection.data?.level)?.label}
     >
       {({ data, isFirstInputFocused, onToggleFirstInputFocus, getDataFieldHandler }) => (
         <FormGroup className={styles.formGroup}>
@@ -27,7 +27,7 @@ export default React.memo(function LanguageSubsection({ subsection }: DomainSubs
             <FormFieldEditInput
               label="Язык"
               
-              value={data.title}
+              value={data?.title}
               placeholder={"Введите название языка"}
               onChange={getDataFieldHandler("title")}
               isFocused={isFirstInputFocused}
@@ -38,7 +38,7 @@ export default React.memo(function LanguageSubsection({ subsection }: DomainSubs
             <FormField label="Уровень">
               <ArrowNavigationProvider>
                 <EditSelect
-                  selectedValue={data.level}
+                  selectedValue={data?.level}
                   defaultLabel="Выберите уровень языка"
                   data={languages}
                   onChange={getDataFieldHandler("level")}

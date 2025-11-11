@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from "react"
+import React, { useEffect, useRef } from "react";
 
-import styles from "./SliderSelect.module.scss";
 import { BaseComponent } from "@/types/root";
 import clsx from "clsx";
+import styles from "./SliderSelect.module.scss";
 
 interface SliderSelectItem {
   label: string;

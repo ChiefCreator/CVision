@@ -3,6 +3,7 @@ import React from "react";
 import Section from "../Section/Section";
 
 
+import { SkillLevel } from "@/types/skill/skillLevel";
 import { checkIsAllSubsectionsDataEmpty } from "@/utils/template/checkIsAllSubsectionsDataEmpty";
 import { StrictTemplateData } from "../../types/templateData";
 import LabelValueBlock from "../LabelValueBlock";
@@ -18,7 +19,7 @@ export default React.memo(function Skills({ title, subsections }: StrictTemplate
           <LabelValueBlock
             key={id}
             label={data?.title}
-            value={data?.level}
+            value={data?.level ?? SkillLevel.Expert}
           />
         ))}
       </LabelValueBlockList>

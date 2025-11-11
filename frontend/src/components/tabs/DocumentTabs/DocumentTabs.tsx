@@ -11,6 +11,7 @@ import Tabs, { TabsApi } from "../Tabs/Tabs";
 
 import { MenuItemData } from "@/types/menu/menu";
 
+import { DocumentProvider } from "@/hooks/document/useDocumentContext";
 import styles from "./DocumentTabs.module.scss";
 
 export default function DocumentTabs() {
@@ -102,11 +103,12 @@ export default function DocumentTabs() {
             {isLoading && <DocumentCardSkeleton count={4} />}
 
             {documents?.map(document => (
-              <DocumentCard
-                key={document.id}
-                className={styles.documentCard}
-                data={document}
-              />
+              <DocumentProvider id={document.id} key={document.id}>
+                <DocumentCard
+                  key={document.id}
+                  className={styles.documentCard}
+                />
+              </DocumentProvider>
             ))}
           </div>
         </Tabs.Content>

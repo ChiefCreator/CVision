@@ -34,6 +34,7 @@ function SectionFormF<T extends DocumentTypeName, K extends SectionTemplateKey<T
 		title,
     template,
     isOpen,
+    deleteControls,
     changeField,
     changeTitle,
     toggleSection,
@@ -50,6 +51,7 @@ function SectionFormF<T extends DocumentTypeName, K extends SectionTemplateKey<T
       title={title as string}
       template={template as any}
       isOpen={isOpen}
+      deleteControls={deleteControls}
       onToggleSection={toggleSection}
       onAddSubsection={addSubsection}
       onHeadClick={handleHeadClick}

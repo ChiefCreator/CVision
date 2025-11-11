@@ -19,10 +19,10 @@ export interface Section<
   template: SectionTemplate<T>;
   subsections: SectionItemData<T, K> extends never
     ? []
-    : (Omit<Section<T, K>, "data" | "subsections"> & { data: SectionItemData<T, K>; subsections: [] })[];
+    : (Omit<Section<T, K>, "data" | "subsections"> & { data?: SectionItemData<T, K>; subsections: [] })[];
 }
 
 export type Subsection<
   T extends DocumentTypeName = DocumentTypeName,
   K extends SectionTemplateKey<T> = SectionTemplateKey<T>
-> = (Omit<Section<T, K>, "data" | "subsections"> & { data: SectionItemData<T, K>; subsections: [] })
+> = (Omit<Section<T, K>, "data" | "subsections"> & { data?: SectionItemData<T, K>; subsections: [] })

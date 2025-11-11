@@ -1,12 +1,13 @@
 import { useDrawer } from "@/hooks/position/useDrawer";
 
-import { Document as DocumentT } from "@/types/document/document";
 import { MenuItemData } from "@/types/menu/menu";
 
+import { useDeleteDocument } from "@/api/document/hooks/useDeleteDocument";
 import IconButton from "@/components/button/IconButton/IconButton";
 import TitleEditor from "@/components/input/TitleEditor/TitleEditor";
 import DrawerMenu from "@/components/menu/DrawerMenu/DrawerMenu";
 import { DOCUMENT_CONFIG } from "@/constants/document/documentConfig";
+import { useDocumentContext } from "@/hooks/document/useDocumentContext";
 import { BaseComponent } from "@/types/root";
 import { transformDateTo_DD_MMMM_YYYY_TIME_format } from "@/utils/date/formatDate";
 import clsx from "clsx";
@@ -15,17 +16,20 @@ import Link from "next/link";
 import Document from "../Document/Document";
 import ActionButton from "./ActionButton/ActionButton";
 import styles from "./DocumentCard.module.scss";
+import DocumentCardSkeleton from "./DocumentCardSkeleton";
 
-interface DocumentCardProps extends BaseComponent {
-  data: DocumentT;
-}
-
-export default function DocumentCard({ className, data }: DocumentCardProps) {
-  const { updatedAt, title, id } = data;
-
+export default function DocumentCard({ className }: BaseComponent) {
+  const { document, isGetLoading, download, getHandler } = useDocumentContext();
   const { id: drawerId, isOpen, open, close } = useDrawer();
+  const { mutate: deleteDocument } = useDeleteDocument();
 
-  const editPathname = `/${DOCUMENT_CONFIG[data.type.name].typePlural}/${id}`;
+  if (isGetLoading || !document) {
+    return <DocumentCardSkeleton />;
+  }
+
+  const { updatedAt, title, id, type } = document;
+
+  const editPathname = `/${DOCUMENT_CONFIG[type.name].typePlural}/${id}`;
   
   const actionsData: MenuItemData = [
     {
@@ -42,7 +46,7 @@ export default function DocumentCard({ className, data }: DocumentCardProps) {
       id: "download-pdf",
       Icon: DownloadCloud,
       title: "Скачать в PDF",
-      onClick: () => console.log("download"),
+      onClick: () => download(title),
     },
     {
       type: "control",
@@ -50,7 +54,7 @@ export default function DocumentCard({ className, data }: DocumentCardProps) {
       id: "delete",
       Icon: Trash2,
       title: "Удалить",
-      onClick: () =>  console.log("delete"),
+      onClick: () => deleteDocument(id),
     },
   ];
 
@@ -62,6 +66,7 @@ export default function DocumentCard({ className, data }: DocumentCardProps) {
             <TitleEditor
               className={styles.title}
               value={title}
+              onChange={getHandler("title")}
             />
 
             {updatedAt && (
@@ -80,10 +85,7 @@ export default function DocumentCard({ className, data }: DocumentCardProps) {
         </header>
 
         <Link className={styles.previewWrapper} href={editPathname}>
-          <Document
-            className={styles.preview}
-            data={data}
-          />
+          <Document className={styles.preview} />
         </Link>
           
         <div className={styles.info}>
@@ -91,6 +93,7 @@ export default function DocumentCard({ className, data }: DocumentCardProps) {
             <TitleEditor
               className={styles.title}
               value={title}
+              onChange={getHandler("title")}
             />
 
             {updatedAt && (
