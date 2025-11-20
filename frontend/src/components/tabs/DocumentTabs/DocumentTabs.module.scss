@@ -51,18 +51,6 @@
 		left 0.2s var(--transition-primary);
 }
 
-.documents-list {
-	display: grid;
-	grid-template-columns: repeat(2, 6fr);
-	gap: 20px;
-}
-
-@include max($laptop-s) {
-	.documents-list {
-		grid-template-columns: 12fr;
-	}
-}
-
 @include max($tablet-m) {
 	.indicator {
 		display: none;

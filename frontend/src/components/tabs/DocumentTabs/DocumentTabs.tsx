@@ -5,14 +5,14 @@ import { useGetDocuments } from "@/api/document/hooks/useGetDocuments";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Button from "@/components/button/Button/Button";
-import DocumentCard from "@/components/document/DocumentCard/DocumentCard";
-import DocumentCardSkeleton from "@/components/document/DocumentCard/DocumentCardSkeleton";
 import Tabs, { TabsApi } from "../Tabs/Tabs";
 
 import { MenuItemData } from "@/types/menu/menu";
 
-import { DocumentProvider } from "@/hooks/document/useDocumentContext";
-import { sortDocumentsByUpdatedAt } from "@/utils/document/sortDocuments";
+import DocumentsList from "@/components/document/DocumentsList/DocumentsList";
+import NoDocuments from "@/components/document/NoDocuments/NoDocuments";
+import { filterDocumentsByType } from "@/utils/document/filterDocumentsByType";
+
 import styles from "./DocumentTabs.module.scss";
 
 export default function DocumentTabs() {
@@ -91,7 +91,7 @@ export default function DocumentTabs() {
             <Button
               className={styles.control}
               type="buttonMenu"
-              variant={"secondary"}
+              variant="secondary"
               menuData={menuData}
             >Создать новый документ</Button>
           </div>
@@ -104,18 +104,81 @@ export default function DocumentTabs() {
 
       <div className={styles.body}>
         <Tabs.Content className={styles.tabsContent} value="all">
-          <div className={styles.documentsList}>
-            {isLoading && <DocumentCardSkeleton count={4} />}
+          <DocumentsList
+            className={styles.documentsList}
+            data={documents}
+            isLoading={isLoading}
+            emptyContent={
+              <NoDocuments
+                className={styles.noDocument}
+                illustrationSrc={"/images/no-documents/no-documents.jpg"}
+                title="Документы не найдены"
+                description="Здесь пока пусто... Добавьте свой первый документ, чтобы начать работу!"
+                controlsContent={
+                  <Button
+                    className={styles.noDocumentControl}
+                    type="buttonMenu"
+                    variant="secondary"
+                    menuData={menuData}
+                  >Создать новый документ</Button>
+                }
+              />
+            }
+          />
+        </Tabs.Content>
 
-            {sortDocumentsByUpdatedAt(documents ?? []).map(document => (
-              <DocumentProvider id={document.id} key={document.id}>
-                <DocumentCard
-                  key={document.id}
-                  className={styles.documentCard}
-                />
-              </DocumentProvider>
-            ))}
-          </div>
+        <Tabs.Content className={styles.tabsContent} value="resume">
+          <DocumentsList
+            className={styles.documentsList}
+            data={filterDocumentsByType(documents ?? [], "resume")}
+            isLoading={isLoading}
+            emptyContent={
+              <NoDocuments
+                className={styles.noDocument}
+                illustrationSrc={"/images/no-documents/no-resumes.jpg"}
+                title="Резюме не найдены"
+                description="Здесь пока пусто... Добавьте свое перове резюме, чтобы начать работу!"
+                controlsContent={
+                  <Button
+                    className={styles.noDocumentControl}
+                    type="simpleButton"
+                    variant="secondary"
+                    onClick={() => createDocument({
+                      type: "resume",
+                      template: "classic",
+                    })}
+                  >Создать новое резюме</Button>
+                }
+              />
+            }
+          />
+        </Tabs.Content>
+
+        <Tabs.Content className={styles.tabsContent} value="coverLetter">
+          <DocumentsList
+            className={styles.documentsList}
+            data={filterDocumentsByType(documents ?? [], "coverLetter")}
+            isLoading={isLoading}
+            emptyContent={
+              <NoDocuments
+                className={styles.noDocument}
+                illustrationSrc={"/images/no-documents/no-cover-letter.jpg"}
+                title="Сопроводительные письма не найдены"
+                description="Здесь пока пусто... Добавьте свое перове сопроводительное письмо, чтобы начать работу!"
+                controlsContent={
+                  <Button
+                    className={styles.noDocumentControl}
+                    type="simpleButton"
+                    variant="secondary"
+                    onClick={() => createDocument({
+                      type: "coverLetter",
+                      template: "classic",
+                    })}
+                  >Создать новое сопроводительное письмо</Button>
+                }
+              />
+            }
+          />
         </Tabs.Content>
       </div>
     </Tabs>

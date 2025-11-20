@@ -1,0 +1,11 @@
+.list {
+	display: grid;
+	grid-template-columns: repeat(2, 6fr);
+	gap: 20px;
+}
+
+@include max($laptop-s) {
+	.list {
+		grid-template-columns: 12fr;
+	}
+}
