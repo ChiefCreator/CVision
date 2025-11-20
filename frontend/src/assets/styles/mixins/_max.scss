@@ -1,5 +1,7 @@
+@use "sass:math";
+
 @mixin max($size) {
-  @if (unit($size) == "px") {
+  @if (math.unit($size) == "px") {
     @media (max-width: ($size - .5px)) {
       @content;
     }
