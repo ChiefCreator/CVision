@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Award, Briefcase, Languages, LucideProps } from "lucide-react";
+import { Book, Brain, Briefcase, GraduationCap, KeySquare, Languages, Laptop, Link, LucideProps, Plane, Star, User } from "lucide-react";
 import AddSectionItem from "./AddSectionItem/AddSectionItem";
 import AddSectionSkeleton from "./AddSectionSkeleton";
 
@@ -19,20 +19,24 @@ interface AddSectionProps extends BaseComponent {};
 type SectionIconsMap = Record<string, React.ComponentType<LucideProps & React.RefAttributes<SVGSVGElement>>>;
 
 const sectionIconsMap: SectionIconsMap = {
+  employmentHistory: Briefcase,
+  education: Book,
+  links: Link,
+  skills: KeySquare,
   languages: Languages,
-  courses: Award,
-  internships: Briefcase,
-  hobbies: Languages,
-  extraCurricularActivities: Award,
-  references: Briefcase,
-  customSection: Briefcase
+  courses: GraduationCap,
+  internships: Laptop,
+  hobbies: Plane,
+  extraCurricularActivities: Brain,
+  references: Star,
+  customSection: User,
 }
 
 export default function AddSection({ className }: AddSectionProps) {
   const { toggleSection } = useEditorFormContext();
   const { document, isGetLoading, changeIsAllUpdating } = useDocumentEditorContext();
   const { data: rootSectionTemplates, isLoading: isGetRootSectionTemplatesLoading } = useGetRootSectionTemplates({
-    isDefault: false,
+    isRequired: false,
   });
   const { mutateAsync: createSection } = useCreateSection();
 
