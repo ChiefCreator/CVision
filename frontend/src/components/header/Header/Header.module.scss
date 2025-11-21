@@ -28,11 +28,6 @@
 
 @include min($tablet-l) {
 	.header {
-		position: static;
-	}
-
-	.logo,
-	.burgerMenu {
 		display: none;
 	}
 }

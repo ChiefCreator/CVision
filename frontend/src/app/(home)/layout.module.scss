@@ -12,10 +12,19 @@
 	width: 100%;
 }
 
+.page {
+	padding: var(--container-padding) 0;
+}
+
 @include max($tablet-l) {
 	.sidebar {
 		&[data-performance="static"] {
 			display: none;
 		}
+	}
+
+	.page {
+		padding: 0;
+		padding-bottom: var(--container-padding);
 	}
 }
