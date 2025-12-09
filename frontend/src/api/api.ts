@@ -4,7 +4,7 @@ import { authTokenService } from "@/api/authToken/authTokenService";
 import { getErrorMessage } from "./error";
 
 const options: CreateAxiosDefaults = {
-  baseURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
   headers: {
     "Content-Type": "application/json",
   },

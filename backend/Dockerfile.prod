@@ -7,7 +7,31 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN apk add --no-cache libc6-compat
+
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    font-noto \
+    bash \
+    git \
+    curl \
+    udev \
+    alsa-lib \
+    libx11 \
+    libxcomposite \
+    libxdamage \
+    libxrandr \
+    libxrender \
+    libxext \
+    libxi \
+    libxtst \
+    libc6-compat \
+    pango \
+    cairo
 
 # Stage 2: Build
 FROM base AS build
@@ -29,5 +53,7 @@ RUN pnpm install --frozen-lockfile
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/main.js"]

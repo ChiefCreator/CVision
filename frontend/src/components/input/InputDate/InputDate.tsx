@@ -22,7 +22,7 @@ export default React.memo(function InputDate({ value = "", placeholder, inputRef
 
   const blur = (value?: string) => {
     if ((value && !parseFlexibleDate(value)) || !value) {
-      onChange(formatDate(new Date()));
+      onChange?.(formatDate(new Date()));
     }
   }
 
@@ -40,7 +40,7 @@ export default React.memo(function InputDate({ value = "", placeholder, inputRef
 
       <AdaptivePopoverMonthPicker
         date={value}
-        onChange={onChange}
+        onChange={(date) => onChange?.(date)}
 
         id={id}
         isOpen={isOpen}

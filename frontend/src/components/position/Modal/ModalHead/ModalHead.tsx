@@ -1,5 +1,5 @@
-import { IconButton } from 'src/Components/UI/Button/IconButton/IconButton';
-import { ArrowRightIcon } from 'src/Constants/Icons/icons';
+import IconButton from "@/components/button/IconButton/IconButton";
+import { ArrowRightIcon, XIcon } from "lucide-react";
 
 import style from './ModalHead.module.scss';
 
@@ -28,7 +28,7 @@ export default function ModalHead({
       {hasBackButton && (
         <IconButton
           className={style.backButton}
-          icon={ArrowRightIcon}
+          Icon={ArrowRightIcon}
           iconClassName={style.backButton__icon}
           onClick={onClose}
         />
@@ -39,7 +39,7 @@ export default function ModalHead({
       {hasCloseButton && (
         <IconButton
           className={style.backButton}
-          icon={'/x.svg'}
+          Icon={XIcon}
           iconClassName={style.backButton__icon}
           onClick={onBack}
         />

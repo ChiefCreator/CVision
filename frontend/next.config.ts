@@ -3,7 +3,6 @@ import path from 'path';
 
 import { getCssModuleLocalIdent } from "next/dist/build/webpack/config/blocks/css/loaders/getCssModuleLocalIdent";
 
-
 const SRC_PATH = path.resolve(__dirname, "src");
 
 const GLOBAL_SCSS_IMPORTS = `
@@ -12,7 +11,6 @@ const GLOBAL_SCSS_IMPORTS = `
 `;
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   images: {
     domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
   },

@@ -3,9 +3,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-		max-width: 450px;
+		max-width: 450px !important;
 		height: 100%;
-		padding: var(--container-padding);
+		padding: var(--container-padding) !important;
 	}
 
 	&__body {

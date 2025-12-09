@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import styles from "./IconButton.module.scss";
 import { LucideProps } from "lucide-react";
-
+import styles from "./IconButton.module.scss";
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   Icon: React.ComponentType<React.RefAttributes<SVGSVGElement> & LucideProps>;
