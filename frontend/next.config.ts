@@ -12,7 +12,7 @@ const GLOBAL_SCSS_IMPORTS = `
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["storage.yandexcloud.net", "lh3.googleusercontent.com"],
+    domains: ["localhost", "storage.yandexcloud.net", "lh3.googleusercontent.com"],
   },
   webpack(config, { dev, isServer }) {
     config.resolve.alias.canvas = false; 

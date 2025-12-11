@@ -5,6 +5,10 @@ export function middleware(req: NextRequest) {
 	const protectedRoutes = ["/"];
   const excludedPaths = ["/auth/login", "/auth/register", "/auth"];
 
+  if (pathname.startsWith("/_next/image") || pathname.startsWith("/images")) {
+    return NextResponse.next();
+  }
+
   if (pathname === "/auth") {
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }
@@ -21,5 +25,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|favicon.ico|_next/image|images).*)"],
 };
